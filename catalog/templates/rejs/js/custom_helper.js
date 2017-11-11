@@ -35,3 +35,40 @@ $.fn.extend({
     }
 
 });
+
+$(function() {
+   
+    $(".slides").draggableChildren(".block", {
+        drag: function() {
+            console.log("Dragging");   
+        },
+        stop: function() {
+            console.log("I'm out of place");   
+        }
+    });
+    
+});
+
+function test_func_text(){
+console.log("adding1");
+var n = $(".slides .block").length;
+console.log("adding");
+++n;
+$(".slides").append("<div class='block' id='Block"+(n)+"' onclick='func('.block')'>Block"+(n)+" </div>");
+};
+
+function test_func_img(){
+console.log("adding1");
+var n = $(".slides .block").length;
+console.log("adding");
+++n;
+$(".slides").append("<div><img class='block' id='Block"+(n)+"' onclick='func('.block')' src='https://pbs.twimg.com/profile_images/839721704163155970/LI_TRk1z_400x400.jpg'></div>");
+};
+
+function test_func_slide(){
+console.log("adding1");
+var n = $(".slides .block").length;
+console.log("adding");
+++n;
+$(".slides").append("<section class='block' id='Block"+(n)+"' onclick='func('.block')'>Block"+(n)+" </section>");
+};
