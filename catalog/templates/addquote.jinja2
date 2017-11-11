@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Vendor Piece Quotation</title>
+
+        <!-- CSS -->
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+        <link rel="stylesheet" href="templates/assets/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="templates/assets/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" href="templates/assets/css/form-elements.css">
+        <link rel="stylesheet" href="templates/assets/css/style.css">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Favicon and touch icons -->
+        <link rel="shortcut icon" href="templates/assets/ico/favicon.png">
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="templates/assets/ico/apple-touch-icon-144-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="templates/assets/ico/apple-touch-icon-114-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="templates/assets/ico/apple-touch-icon-72-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" href="templates/assets/ico/apple-touch-icon-57-precomposed.png">
+
+    </head>
+
+    <body>
+        {% block content %}
+        <!-- Top content -->
+        <div class="top-content">
+        	
+            <div class="inner-bg">
+                <div class="container">
+                    {% if request.session.peek_flash()%}  
+                    {% set flash = request.session.pop_flash() %}
+                    {% for message in flash %}
+                    <div class="flashmessage" style="margin: 10px 350px 0px 350px;padding: 15px 10px 15px 30px; background-repeat: no-repeat;background-position: 10px center;color: white;background-color: #ef2b4a;">
+                        {{message['body']}}
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                 {%if nameitem%} 
+                    <div class="row">
+                        <div class="col-sm-8 col-sm-offset-2 text">
+                            <h1><strong>Vendor Piece Quotation</strong></h1>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-sm-offset-3 form-box">
+                        	<div class="form-top">
+                        		<div class="form-top-left">
+                        			<h3>Add Quotation:</h3>
+                        		</div>
+                            </div>
+                            <div class="form-bottom">
+			                    <form role="form" action="submitaddquote?id={{itemid}}" method="post" class="login-form">
+                                <div class="form-group">
+                                        <label class="sr-only" for="name">SKU</label>
+                                        
+                                        <input type="text" name="sku" value="{{sku}}" disabled="disabled" style="color:black;" class="form-username form-control">
+                                        
+                                    </div>
+
+
+                                <div class="form-group">
+                                        <label class="sr-only" for="name">Item Name</label>
+                                        
+                                        <input type="text" name="itemname" placeholder="Item Name" value="{{nameitem}}" disabled="disabled" style="color:black;" class="form-username form-control">
+                                        
+                                    </div>
+			                    	<div class="form-group">
+                                        <label class="sr-only" for="name">Vendor Name</label>
+                                        
+                                        <select name="idven" class="form-username form-control">
+                                            <option hidden>Select a Vendor</option>
+                                            {% if ven1%}
+                                            {%for k in ven1%}
+                                               <option value="{{k['id']}}">{{k['name']}}</option>
+                                            {% endfor %}
+                                            {% endif %}
+                                        </select>
+                                        
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="sr-only" for="name">Quotation(Excluding Taxes) </label>
+                                        <input type="text" name="quotationex" placeholder="Quotation(Excluding Taxes)" class="form-username form-control">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="sr-only" for="name">Excise Duty </label>
+                                        <input type="text" name="exciseduty" placeholder="Excise Duty" class="form-username form-control">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="sr-only" for="name">Taxes </label>
+                                        <input type="text" name="tax" placeholder="Taxes" class="form-username form-control">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="sr-only" for="name">Quotation(Including Taxes) </label>
+                                        <input type="text" name="quotationin" placeholder="Quotation(Including Taxes)" class="form-username form-control">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="sr-only" for="name">Shipping Charges </label>
+                                        <input type="text" name="shipping" placeholder="Shipping Charges" class="form-username form-control">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="sr-only" for="name">Total Cost Price </label>
+                                        <input type="text" name="cost" placeholder="Total Cost Price" class="form-username form-control">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="sr-only" for="name">Warranty </label>
+                                        <input type="text" name="warranty" placeholder="Warranty" class="form-username form-control">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="sr-only" for="name">Delivery Time </label>
+                                        <input type="text" name="delivery" placeholder="Delivery Time" class="form-username form-control">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="sr-only" for="name">Payment Terms </label>
+                                        <input type="text" name="payment" placeholder="Payment Terms" class="form-username form-control">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="sr-only" for="name">Comments </label>
+                                        <input type="text" name="comments" placeholder="Comments" class="form-username form-control">
+                                    </div>
+
+			                        <button type="submit" class="btn">Submit</button>
+			                    </form>
+		                    </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+        </div>
+
+
+        <!-- Javascript -->
+        <script src="templates/assets/js/jquery-1.11.1.min.js"></script>
+        <script src="templates/assets/bootstrap/js/bootstrap.min.js"></script>
+        <script src="templates/assets/js/jquery.backstretch.min.js"></script>
+        <script src="templates/assets/js/scripts.js"></script>
+        
+        <!--[if lt IE 10]>
+            <script src="assets/js/placeholder.js"></script>
+        <![endif]-->
+    {% endblock %}
+    </body>
+
+</html>

@@ -1,0 +1,67 @@
+body {
+    background-color: #fff;
+    font: normal 16px sans-serif;
+    background-image: url("back.jpg");
+}
+h1 {
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: : 40px;
+    font-family: 'Droid Sans', sans-serif;
+    font-weight: bold;
+    color: white;
+}
+.tz-gallery .thumbnail {
+	clear: both;
+}
+.tz-gallery .thumbnail .lightbox img{
+  margin: auto; 
+  clear: right;
+  float: left;
+  transition: 0.2s ease-in-out;
+  box-shadow: 0 2px 3px rgba(0,0,0,0.2);
+}
+
+.tz-gallery .thumbnail .caption p{
+	float: left;
+	vertical-align: top;
+	width: 600px;
+	height: 400px;
+  padding: 10px;
+  margin-top: 50px;
+  margin-left: 50px; 
+  text-align: left;
+  font-family: 'Droid Sans', sans-serif;
+  color: white;
+}
+.tz-gallery .thumbnail .caption1 p{
+  float: right;
+  vertical-align: top;
+  width: 600px;
+  height: 400px;
+  padding: 10px;
+  margin-top: 50px;
+  margin-left: 50px; 
+  text-align: left;
+  font-family: 'Droid Sans', sans-serif;
+  color: white;
+}
+button.btn {
+  width: 200px;
+  height: 50px;
+  margin: 0;
+  padding: 0 10px;
+  vertical-align: middle;
+  background: #fff;
+  border: 0;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 50px;
+  color: black;
+}
+
+.baguetteBox-button {
+    background-color: transparent !important;
+}
+

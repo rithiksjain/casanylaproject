@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Edit Quotation</title>
+
+        <!-- CSS -->
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+        <link rel="stylesheet" href="templates/assets/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="templates/assets/font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="templates/assets/css/form-elements.css">
+        <link rel="stylesheet" href="templates/assets/css/style.css">
+        <link rel="shortcut icon" href="templates/assets/ico/favicon.png">
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="templates/assets/ico/apple-touch-icon-144-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="templates/assets/ico/apple-touch-icon-114-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="templates/assets/ico/apple-touch-icon-72-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" href="templates/assets/ico/apple-touch-icon-57-precomposed.png">
+
+    </head>
+
+    <body>
+        {% block content %}
+        <!-- Top content -->
+        <div class="top-content">
+            
+            <div class="inner-bg">
+                <div class="container">
+                    {% if request.session.peek_flash()%}  
+                    {% set flash = request.session.pop_flash() %}
+                    {% for message in flash %}
+                    <div class="flashmessage" style="margin: 10px 350px 0px 350px;padding: 15px 10px 15px 30px; background-repeat: no-repeat;background-position: 10px center;color: white;background-color: #ef2b4a;">
+                        {{message['body']}}
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                {% if details1%}
+                    <div class="row">
+                        <div class="col-sm-8 col-sm-offset-2 text">
+                            <h1><strong>Edit Quotation</strong></h1>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-sm-offset-3 form-box">
+                            <div class="form-top">
+                                <div class="form-top-left">
+                                    <h3>Make Changes if any:</h3>
+                                </div>
+                            </div>
+                            <div class="form-bottom">
+                                <form role="form" action="submiteditquote?id={{details1['idvenpiece']}}" method="post" class="login-form">
+                                    <div class="form-group">
+                                        <label for="name">Vendor </label>
+                                        <input type="text" name="vendor" value="{{details1['venname']}}" placeholder="Vendor Name" disabled="disabled" style="color: black;" class="form-username form-control">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="name">Quotation(Excluding Taxes) </label>
+                                        <input type="text" name="quotationex" value="{{details1['costexc']}}" placeholder="Quotation(Excluding Taxes)" class="form-username form-control">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="name">Excise Duty </label>
+                                        <input type="text" name="exciseduty" value="{{details1['excise']}}"  placeholder="Excise Duty" class="form-username form-control">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="name">Taxes </label>
+                                        <input type="text" name="tax" value="{{details1['tax']}}" placeholder="Taxes" class="form-username form-control">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="name">Quotation(Including Taxes) </label>
+                                        <input type="text" name="quotationin" value="{{details1['costinc']}}" placeholder="Quotation(Including Taxes)" class="form-username form-control">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="name">Shipping Charges </label>
+                                        <input type="text" name="shipping" value="{{details1['shipping']}}" placeholder="Shipping Charges" class="form-username form-control">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="name">Total Cost Price </label>
+                                        <input type="text" name="cost" value="{{details1['totalcost']}}" placeholder="Total Cost Price" class="form-username form-control">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="name">Warranty </label>
+                                        <input type="text" name="warranty" value="{{details1['warranty']}}" placeholder="Warranty" class="form-username form-control"> 
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="name">Delivery Time </label>
+                                        <input type="text" name="delivery" value="{{details1['delivery']}}" placeholder="Delivery Time" class="form-username form-control">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="name">Payment Terms </label>
+                                        <input type="text" name="payment" value="{{details1['payment']}}" placeholder="Payment Terms" class="form-username form-control">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="name">Comments </label>
+                                        <input type="text" name="comments" value="{{details1['comments']}}" placeholder="Comments" class="form-username form-control">
+                                    </div>
+
+                                    <button type="submit" class="btn">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+        </div>
+
+
+        <!-- Javascript -->
+        <script src="templates/assets/js/jquery-1.11.1.min.js"></script>
+        <script src="templates/assets/bootstrap/js/bootstrap.min.js"></script>
+        <script src="templates/assets/js/jquery.backstretch.min.js"></script>
+        <script src="templates/assets/js/scripts.js"></script>
+        
+        <!--[if lt IE 10]>
+            <script src="assets/js/placeholder.js"></script>
+        <![endif]-->
+    {% endblock %}
+    </body>
+
+</html>

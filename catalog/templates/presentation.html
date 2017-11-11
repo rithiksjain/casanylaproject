@@ -1,0 +1,167 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Presentation</title>
+    <link rel="stylesheet" href="templates/rejs/css/reveal.css">
+    <link rel="stylesheet" href="templates/rejs/css/theme/night.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="templates/rejs/js/custom_helper.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script>
+      
+    </script>
+    <style>
+      .block{
+        border: 2px solid;
+        width: 100px;
+        padding: 20px;
+        color: white;
+      }
+      .block1{
+        border: 2px solid;
+        width: 100px;
+        padding: 20px;
+      }
+      .block2{
+        border: 2px solid;
+        width: 100px;
+        padding: 20px;
+        color: yellow;
+      }
+      .block3{
+        border: 2px solid;
+        width: 100px;
+        padding: 20px;
+        color: yellow;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="reveal">
+    <div class="slides" id="slides">
+    <input type="button" style="float:left" id="addDiv" value="Create more DIV's" />
+      <section data-markdown>
+        <script type="text/template">
+        <div class="block" onclick="func('.block')" style="border: 2px solid;">
+           Welcome to CasaNyla
+        </div>
+        <div class="block3"><img id="output1" src=""></div>
+        <button id="addProduct">Add Product</button>
+
+        <div id="someContainer"></div>
+        </script>  
+      </section>
+      <section data-markdown>
+      <script type="text/template">
+      <div class="block" style="border: 2px solid;">
+        Resizable
+      </div>
+      
+      </script> 
+      </section>
+      <section>
+        
+      </section>
+    </div>
+    </div>
+    <script src="templates/rejs/lib/js/head.min.js"></script>
+    <script src="templates/rejs/js/reveal.js"></script>
+    <script>
+    Reveal.initialize({
+      autoSlide: false,
+      center: true,
+      controls: false,
+      mouseWheel: true,
+      width: "100%",
+      height: "100%",
+      margin: 0,
+      minScale: 1,
+      maxScale: 1,
+      transition: 'concave',
+      dependencies: [
+        {
+          src: 'templates/rejs/plugin/zoom-js/zoom.js',
+          async: true
+        },{ src: 'templates/rejs/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+        { src: 'templates/rejs/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } }
+      ]
+      });
+
+    $(".slides").draggableChildren(".block",{
+      drag: function() {
+            console.log("Dragging");   
+        },
+        stop: function() {
+            console.log("I'm out of place");   
+        }
+
+    });
+    $(".slides").draggableChildren(".block1",{
+      drag: function() {
+            console.log("Dragging");   
+        },
+        stop: function() {
+            console.log("I'm out of place");   
+        }
+
+    });
+    $(".slides").draggableChildren(".block2",{
+      drag: function() {
+            console.log("Dragging");   
+        },
+        stop: function() {
+            console.log("I'm out of place");   
+        }
+
+    });
+    $(".slides").draggableChildren(".block3",{
+      drag: function() {
+            console.log("Dragging");   
+        },
+        stop: function() {
+            console.log("I'm out of place");   
+        }
+
+    });
+
+      function func(element){
+          console.log($(element).position());
+    };
+    /*
+    var i = 1;
+    $("#addDiv").click(function() {
+    $("<div />", { "class":"block", id:"block"+i })
+     .append($("<img />", {src:"", id:"img_"+i } ))
+     .appendTo(".block")
+    i++;
+    });
+    */
+    var i = 1;
+    $("#addProduct").click(function() {
+    $("<div />", { "class":"block", id:"block"+i })
+     .append($("<input />", { type: "text", id:"name"+i }))
+     .appendTo(".block");
+    i++;
+    });
+    /*
+    document.onclick = function(){
+      var imgurl= localStorage.getItem('url');
+      document.getElementById('output').src=imgurl;
+      console.log(imgurl); 
+    };
+    */
+    /*
+    document.onclick = function(){
+      var imgurl= localStorage.getItem('url');
+      document.getElementById('output1').src=imgurl;
+      console.log(imgurl); 
+    };
+    */
+  </script>
+  </body>
+</html>

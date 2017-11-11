@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Item</title>
+    <link rel="stylesheet" href="templates/assets/itemdetailsstyle.css">
+</head>
+<h1>{{details['itemname']}}</h1>
+<body>
+<div class="container gallery-container">
+
+    <div class="tz-gallery">
+
+        <div class="row">
+            <div class="col-sm-6 col-md-4">
+                <div class="thumbnail">
+                    <a class="lightbox" href="{{details['url']}}">
+                        <img src="{{details['url']}}" style="width: 600px;height: 450px;">
+                    </a>
+
+   					<div class="caption">
+                    <p>
+                        Description : {{details['itemdesc']}}<br />
+                        Width : {{details['width']}}<br />
+                        Depth : {{details['depth']}}<br />
+                        Height : {{details['height']}}<br />
+                        Remarks : {{details['remarks']}}<br />
+                    </p>
+
+                    </div>
+                    <a href="/editdetails?det={{details}}">  
+                    <button type="submit" class="btn">Edit Item</button>
+                    </a>
+                    <div class="caption1">
+                    <p>
+                        Cost Price(Exc Taxes) : {{details['costexc']}}<br />
+                        Shipping Charges : {{details['shipping']}}<br />
+                        Cost Price(Inc Taxes) : {{details['costinc']}}<br />
+                        Excise Duty : {{details['excise']}}<br />
+                        Tax : {{details['tax']}}<br />
+                        Comments : {{details['comments']}}<br />
+                        Total Cost Price : {{details['totalcost']}}<br />
+                        Warranty : {{details['warranty']}}<br />
+                        Delivery Time : {{details['delivery']}}<br />
+                        Payment Terms : {{details['payment']}}<br />
+                    </p>
+                    </div>
+                     <a href="/vendoredit?det={{details}}">  
+                    <button type="submit" class="btn">Edit Vendor Details</button>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Home</title>
+
+        <!-- CSS -->
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+        <link rel="stylesheet" href="templates/assets/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="templates/assets/font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="templates/assets/css/form-elements.css">
+        <link rel="stylesheet" href="templates/assets/css/style.css">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Favicon and touch icons -->
+        <link rel="shortcut icon" href="templates/assets/ico/favicon.png">
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="templates/assets/ico/apple-touch-icon-144-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="templates/assets/ico/apple-touch-icon-114-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="templates/assets/ico/apple-touch-icon-72-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" href="templates/assets/ico/apple-touch-icon-57-precomposed.png">
+        <!--<style type="text/css">
+
+           #wrapper {
+             display: flex;
+        }
+            #left {
+                flex: 0 0 20%;
+        }
+            #right {
+                flex: 1;
+        }
+
+        </style>-->
+    </head>
+
+    <body>
+        {% block content %}
+        <!-- Top content -->
+        <div class="top-content">
+            
+            <div class="inner-bg">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-8 col-sm-offset-2 text">
+                            <h1 style="text-align: left;"><strong>View</strong></h1>
+                        </div>
+                    </div>
+                
+                    <div class="row">
+                        <div class="col-sm-6 col-sm-offset-3 form-box">
+                        <div  class="form-bottom" style="background-color: transparent; width: 100%; display: table;">
+                        <div style="display: table-row;">
+                            <div style="display: table-cell;">
+                            <form action="/itemfetch?id={{userid}}" method="post">
+                                    <button type="submit">View Catalog</button>
+                            </form>
+                            </div>
+
+                            <div style="display: table-cell; padding-left: 20px;">
+                            <form action="/viewlist?id={{userid}}" method="post">
+                                    <button type="submit">View Lists</button>
+                            </form>
+                            </div>
+
+                            <div style="display: table-cell; padding-left: 20px;">
+                            <form action="/presentation" method="post">
+                                    <button type="submit">Create Presentation</button>
+                            </form>
+                            </div>
+
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-8 col-sm-offset-2 text">
+                            <h1 style="text-align: left;"><strong>Add/Create</strong></h1>
+                        </div>
+                    </div>
+
+                        <div class="col-sm-6 col-sm-offset-3 form-box">
+                        <div  class="form-bottom" style="background-color: transparent; width: 100%; display: table;">
+                        <div style="display: table-row;">
+                            <div style="display: table-cell;">
+                            <form action="/createlist?id={{userid}}" method="post">
+                                    <button type="submit">Create List</button>
+                            </form>
+                            </div>
+
+                            <div style="display: table-cell;padding-left: 20px;">
+                            <form action="/category">
+                                    <button type="submit">Add Category</button>
+                            </form>
+                            </div>
+
+                            <div style="display: table-cell;padding-left: 20px;">
+                            <form action="/itemtype">
+                                    <button type="submit">Add ItemType</button>
+                            </form>
+                            </div>
+
+                            <div style="display: table-cell;padding-left: 20px;">
+                            <form action="/vendor">
+                                    <button type="submit">Add Vendor</button>
+                            </form>
+                            </div>
+
+                            <div style="display: table-cell;padding-left: 20px;">
+                            <form action="/catalog">
+                                    <button type="submit">Add Item</button>
+                            </form>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+
+        <!-- Javascript -->
+        <script src="templates/assets/js/jquery-1.11.1.min.js"></script>
+        <script src="templates/assets/bootstrap/js/bootstrap.min.js"></script>
+        <script src="templates/assets/js/jquery.backstretch.min.js"></script>
+        <script src="templates/assets/js/scripts1.js"></script>
+        
+        <!--[if lt IE 10]>
+            <script src="assets/js/placeholder.js"></script>
+        <![endif]-->
+    {% endblock %}
+    </body>
+
+</html>

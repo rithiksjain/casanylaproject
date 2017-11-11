@@ -1,0 +1,98 @@
+body {
+    background-color: #fff;
+    min-height: 100vh;
+    font: normal 16px sans-serif;
+    background-image: url("back.jpg");
+}
+
+.gallery-container h1 {
+    text-align: center;
+    margin-top: 70px;
+    font-family: 'Droid Sans', sans-serif;
+    font-weight: bold;
+    color: white;
+}
+
+.gallery-container p.page-description {
+    text-align: center;
+    margin: 30px auto;
+    font-size: 18px;
+    color: #85878c;
+}
+
+
+/* Styles for the gallery */
+
+.tz-gallery {
+    padding: 40px;
+}
+
+
+.tz-gallery .thumbnail {
+    width: 350px;
+    height: 450px;
+    padding: 20px;
+    margin-bottom: 30px;
+    background-color: #fff;
+    border-radius: 4px;
+    border: none;
+    transition: 0.15s ease-in-out;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.06);
+}
+
+.tz-gallery .thumbnail:hover {
+    transform: translateY(-10px) scale(1.02);
+}
+
+.tz-gallery .lightbox img {
+   width: 100%
+   margin-bottom: 30px;
+   transition: 0.2s ease-in-out;
+   box-shadow: 0 2px 3px rgba(0,0,0,0.2);
+}
+
+.tz-gallery .lightbox img:hover {
+   transform: scale(1.05);
+   box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+}
+
+.tz-gallery img {
+    border-radius: 2px;
+}
+
+.tz-gallery .caption{
+    padding: 26px 30px;
+    text-align: center;
+}
+
+.tz-gallery .caption h3 {
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 0;
+}
+
+.tz-gallery .caption p {
+    font-size: 12px;
+    color: #7b7d7d;
+    margin: 0;
+}
+
+.baguetteBox-button {
+    background-color: transparent !important;
+}
+
+.ui-autocomplete {
+   max-height: 400px;
+   overflow-y: auto;
+   overflow-x: hidden;
+}
+
+* html .ui-autocomplete {
+    height: 100px;
+}
+
+.fixed-height {
+           padding: 1px;
+           max-height: 200px;
+           overflow: auto;
+       }

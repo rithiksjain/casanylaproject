@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Item Details</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="templates/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="templates/assets/css/small-business.css" rel="stylesheet">
+
+  </head>
+
+  <body style="background:url(templates/assets/back.jpg); color: #fff;">
+
+    <!-- Page Content -->
+    <div class="container">
+
+      <!-- Heading Row -->
+      <div class="row my-4">
+        <div class="col-lg-8">
+          <a>
+          <img id="save_url" class="img-fluid rounded" src="{{details['url']}}" style="width: 600px;height: 400px;">
+          <button class="btn btn-primary btn-lg" onclick="Function()" style="margin-top: 20px;">Add Image to Presentation</button>
+          </a>
+        </div>
+        <!-- /.col-lg-8 -->
+        <div class="col-lg-4">
+          <h1>{{details['itemname']}}</h1>
+          <p>
+                        Category : {{details['categoryname']}}<br />
+                        ItemType : {{details['itemtypename']}}<br />
+                        Description : {{details['itemdesc']}}<br />
+                        Width : {{details['width']}}<br />
+                        Depth : {{details['depth']}}<br />
+                        Height : {{details['height']}}<br />
+                        Remarks : {{details['remarks']}}<br /></p>
+          <a class="btn btn-primary btn-lg" href="/editdetails?det={{details}}">Edit Item Details</a>
+          <a class="btn btn-primary btn-lg" href="/addquote?id={{details['idcat']}}&name={{details['itemname']}}">Add Quotation</a>
+          <form method="post" action="/itemadded?id={{details['idcat']}}&userid={{userid}}">
+          <p>  Add to list:              
+              <select name="idlist" class="form-username form-control">
+              <option hidden>Select a List</option>
+              {% if listname%}
+              {%for k in listname%}
+              <option value="{{k['listid']}}">{{k['listname']}}</option>
+              {% endfor %}
+              {% endif %}
+              </select>
+          </p> 
+          <input type="submit" value="Add" class="btn btn-primary btn-lg" >
+          </form>
+          <br></br>
+          <!--<a class="btn btn-primary btn-lg" id="save_url" href="/presentation?url={{details['url']}}&idcat={{details['idcat']}}">Add an Image to Presentation</a>-->
+        </div>
+        <!-- /.col-md-4 -->
+      </div>
+      <!-- /.row -->
+
+      <!-- Content Row -->
+      <div class="row">
+      {% if detail %}
+        {% for detail1 in detail %}
+        <div class="col-md-4 mb-4">
+          <div class="card h-100">
+            <div class="card-body">
+              <h2 style="color: black;" class="card-title">Vendor :{{detail1['venname']}}</h2>
+              <p style="color: black;" class="card-text">
+                        Cost Price(Exc Taxes) : {{detail1['costexc']}}<br />
+                        Shipping Charges : {{detail1['shipping']}}<br />
+                        Cost Price(Inc Taxes) : {{detail1['costinc']}}<br />
+                        Excise Duty : {{detail1['excise']}}<br />
+                        Tax : {{detail1['tax']}}<br />
+                        Comments : {{detail1['comments']}}<br />
+                        Total Cost Price : {{detail1['totalcost']}}<br />
+                        Warranty : {{detail1['warranty']}}<br />
+                        Delivery Time : {{detail1['delivery']}}<br />
+                        Payment Terms : {{detail1['payment']}}<br />
+              </p>
+            </div>
+            <div class="card-footer">
+              <a href="/vendoredit?det={{detail1}}" class="btn btn-primary">Edit Quotation</a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+      </div>
+      <!-- /.row -->
+
+    </div>
+    <!-- /.container -->
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="templates/assets/vendor/jquery/jquery.min.js"></script>
+    <script src="templates/assets/vendor/popper/popper.min.js"></script>
+    <script src="templates/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+    function Function() {
+    alert("Item added!");
+    var img_url = document.getElementById('save_url').src;
+    localStorage.setItem('url', img_url);
+    }
+    </script>
+
+  </body>
+
+</html>
