@@ -60,6 +60,7 @@ def getslide():
 '''
 def addslide():
 	id_p=request.params['id']
+	id_slide=[]
 	connection = pymysql.connect(host='127.0.0.1',
                              user='root',
                              password='root',
@@ -70,9 +71,10 @@ def addslide():
 		with connection.cursor() as cursor:
 			sql="INSERT INTO Presentation (pr_id) values(%d)"
 			cursor.execute(sql,(int(id_p)))
-			sql1="SELECT s_id from Presentation where pr_id=%d"
-			cursor.execute(sql,(int(id_p)))
-			project_id=cursor.fetchall()
+			sql1="SELECT LAST_INSERT_ID()";
+			cursor.execute(sql1)
+			idslide=cursor.fetchall()
+			id_slide=idslide[0]['LAST_INSERT_ID()']
 		connection.commit()
 	except NameError:
 	    print('An exception flew by!')
@@ -80,7 +82,7 @@ def addslide():
 		connection.close()
 
 def saveslide():
-	slide_id=request.params['idslide']
+	slide_id=request.params['id_slide']
 	id_cat=request.params['idcat']
 	desc=request.params['desc']
 	pos_x=request.params['pos_y']

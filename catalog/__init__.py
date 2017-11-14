@@ -9,8 +9,6 @@ def main(global_config, **settings):
 	config.include('pyramid_storage')
 	config.add_jinja2_renderer('.html')
 	config.add_static_view('static', 'static', cache_max_age=3600)
-	config.add_static_view('images','images',cache_max_age=3600)
-	#config.add_static_view('images.zip','images.zip',cache_max_age=3600)
 	config.add_static_view('templates/assets','templates/assets',cache_max_age=3600)
 	config.add_static_view('templates/rejs','templates/rejs',cache_max_age=3600)
 	config.add_route('login','/login')

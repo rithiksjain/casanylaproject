@@ -44,18 +44,19 @@
   </head>
 
   <body>
+  <div>
+    <button class="add-block" onclick="console.log('what');test_func_text()">Add a block</button>
+    <button class="add-image" onclick="test_func_img()">Add an image</button>
+    <button class="add-slide" onclick="test_func_slide()">Add a new slide</button>
+    </div>
+
     <div class="reveal">
-    <div class="slides" id="slides">
-    <input type="button" style="float:left" id="addDiv" value="Create more DIV's" />
+    <div><div class="slides" id="slides">
       <section data-markdown>
         <script type="text/template">
         <div class="block" onclick="func('.block')" style="border: 2px solid;">
            Welcome to CasaNyla
         </div>
-        <div class="block3"><img id="output1" src=""></div>
-        <button id="addProduct">Add Product</button>
-
-        <div id="someContainer"></div>
         </script>  
       </section>
       <section data-markdown>
@@ -63,13 +64,13 @@
       <div class="block" style="border: 2px solid;">
         Resizable
       </div>
-      
       </script> 
       </section>
-      <section>
-        
+      <section> 
       </section>
-    </div>
+    </div></div>
+    
+    
     </div>
     <script src="templates/rejs/lib/js/head.min.js"></script>
     <script src="templates/rejs/js/reveal.js"></script>
@@ -94,7 +95,7 @@
       ]
       });
 
-    $(".slides").draggableChildren(".block",{
+    /*$(".slides").draggableChildren(".block",{
       drag: function() {
             console.log("Dragging");   
         },
@@ -129,7 +130,7 @@
             console.log("I'm out of place");   
         }
 
-    });
+    });*/
 
       function func(element){
           console.log($(element).position());

@@ -15,6 +15,9 @@ import glob
 import shutil
 import os
 import json
+src_dir = "catalog/catalog/images"
+dst_dir = "catalog/catalog/listimages"
+dst_dir1 = "catalog/catalog/listimages/*"
 
 @view_config(route_name='login',renderer='templates/login.jinja2')
 def login(request):
