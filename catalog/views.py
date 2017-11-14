@@ -7,6 +7,7 @@ from pyramid.response import FileResponse
 from pyramid_flash_message import MessageQueue
 from pyramid.view import render_view_to_response
 from pyramid.request import Request
+from catalog.presentationlogic import *
 import tempfile
 import pymysql.cursors
 import ast
@@ -51,6 +52,16 @@ def submitlogin(request):
 	finally:
 		connection.close()
 	return {}
+
+@view_config(route_name='addpre')
+def addpre(request):
+	id1=addproject()
+	return render_to_response('templates/presentation1.html',{'id':id1},request=request)
+
+@view_config(route_name='addslide')
+def add_slide(request):
+	s_id=addslide(request)
+	return render_to_response('templates/presentation.html',{'s_id':s_id},request=request)
 
 @view_config(route_name='vendor',renderer='templates/vendorform.jinja2')
 def vendor(request):

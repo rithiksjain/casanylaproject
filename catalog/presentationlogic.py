@@ -1,4 +1,5 @@
 import pymysql.cursors
+from pyramid.request import Request
 
 def addproject():
 	id_p=[]
@@ -30,6 +31,7 @@ def addproject():
 	    print('An exception flew by!')
 	finally:
 		connection.close()
+	return project_id
 '''
 def getslide():
 	project_id=[]
@@ -58,7 +60,7 @@ def getslide():
 		connection.close()
 
 '''
-def addslide():
+def addslide(request):
 	id_p=request.params['id']
 	id_slide=[]
 	connection = pymysql.connect(host='127.0.0.1',
@@ -69,7 +71,7 @@ def addslide():
                              cursorclass=pymysql.cursors.DictCursor)
 	try:
 		with connection.cursor() as cursor:
-			sql="INSERT INTO Presentation (pr_id) values(%d)"
+			sql="INSERT INTO Presentation (pr_id) values(%s)"
 			cursor.execute(sql,(int(id_p)))
 			sql1="SELECT LAST_INSERT_ID()";
 			cursor.execute(sql1)
@@ -80,6 +82,7 @@ def addslide():
 	    print('An exception flew by!')
 	finally:
 		connection.close()
+	return id_slide
 
 def saveslide():
 	slide_id=request.params['id_slide']
