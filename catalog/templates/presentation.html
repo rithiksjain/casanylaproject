@@ -13,32 +13,12 @@
     <script type="text/javascript" src="templates/rejs/js/connector.js"></script>
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/q.js/0.9.2/q.min.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    <script>
-      
-    </script>
     <style>
       .block{
         border: 2px solid;
         width: 100px;
         padding: 20px;
         color: white;
-      }
-      .block1{
-        border: 2px solid;
-        width: 100px;
-        padding: 20px;
-      }
-      .block2{
-        border: 2px solid;
-        width: 100px;
-        padding: 20px;
-        color: yellow;
-      }
-      .block3{
-        border: 2px solid;
-        width: 100px;
-        padding: 20px;
-        color: yellow;
       }
     </style>
   </head>
@@ -53,11 +33,11 @@
     <div class="reveal">
     <div class="slides" id="slides">
       <section data-markdown>
-        <script type="text/template">
+      <script type="text/template">
         <div class="block" onclick="func('.block')" style="border: 2px solid;">
            Welcome to CasaNyla
         </div>
-        </script>  
+      </script>  
       </section>
       <section data-markdown>
       <script type="text/template">
@@ -65,8 +45,6 @@
         Resizable
       </div>
       </script> 
-      </section>
-      <section> 
       </section>
     </div> 
     </div>
@@ -92,7 +70,6 @@
         { src: 'templates/rejs/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } }
       ]
       });
-
     /*$(".slides").draggableChildren(".block",{
       drag: function() {
             console.log("Dragging");   
@@ -100,56 +77,11 @@
         stop: function() {
             console.log("I'm out of place");   
         }
-
-    });
-    $(".slides").draggableChildren(".block1",{
-      drag: function() {
-            console.log("Dragging");   
-        },
-        stop: function() {
-            console.log("I'm out of place");   
-        }
-
-    });
-    $(".slides").draggableChildren(".block2",{
-      drag: function() {
-            console.log("Dragging");   
-        },
-        stop: function() {
-            console.log("I'm out of place");   
-        }
-
-    });
-    $(".slides").draggableChildren(".block3",{
-      drag: function() {
-            console.log("Dragging");   
-        },
-        stop: function() {
-            console.log("I'm out of place");   
-        }
-
-    });*/
+    */
 
       function func(element){
           console.log($(element).position());
     };
-    /*
-    var i = 1;
-    $("#addDiv").click(function() {
-    $("<div />", { "class":"block", id:"block"+i })
-     .append($("<img />", {src:"", id:"img_"+i } ))
-     .appendTo(".block")
-    i++;
-    });
-    
-    var i = 1;
-    $("#addProduct").click(function() {
-    $("<div />", { "class":"block", id:"block"+i })
-     .append($("<input />", { type: "text", id:"name"+i }))
-     .appendTo(".block");
-    i++;
-    });
-    */
     /*
     document.onclick = function(){
       var imgurl= localStorage.getItem('url');
@@ -164,6 +96,6 @@
       console.log(imgurl); 
     };
     */
-  </script>
-  </body>
+</script>
+</body>
 </html>
