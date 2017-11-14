@@ -51,9 +51,9 @@ $(function() {
 
 function test_func_text(){
 console.log("adding1");
-var n = $(".slides .block").length;
-console.log("adding");
+var n =$(".slides .block").length;
 ++n;
+console.log("adding");
 $(".slides").append("<div class='block' id='Block"+(n)+"' onclick='func('.block')'>Block"+(n)+" </div>");
 };
 
