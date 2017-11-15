@@ -63,6 +63,12 @@ $(".slides .present").append("<div class='block' id='Block"+(n)+"' onclick='func
 
 function test_func_slide(){
 console.log("adding1");
+$(".slides").append("<section class='present' data-markdown><script type='text/template'>ABC</script></section>");
+};
+
+/*
+function test_func_slide(){
+console.log("adding1");
 var section = $("<section>Welcome</section>");
 slides.append(section);
 section.attr('data-markdown', '');
@@ -70,3 +76,4 @@ var script = $("<script></script>");
 section.append(script);
 script.attr('type', 'text/template');
 };
+*/
