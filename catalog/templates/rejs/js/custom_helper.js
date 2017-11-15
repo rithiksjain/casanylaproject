@@ -62,7 +62,7 @@ console.log("adding1");
 var n = $(".slides .block").length;
 console.log("adding");
 ++n;
-$(".slides .present").append("<div><img class='block' id='Block"+(n)+"' onclick='func('.block')' src='https://pbs.twimg.com/profile_images/839721704163155970/LI_TRk1z_400x400.jpg'></div>");
+$(".slides .present").append("<div class='block' id='Block"+(n)+"' onclick='func('.block')'><img  src='https://pbs.twimg.com/profile_images/839721704163155970/LI_TRk1z_400x400.jpg'></div>");
 };
 
 function test_func_slide(){
