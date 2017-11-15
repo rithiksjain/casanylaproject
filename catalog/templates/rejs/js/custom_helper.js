@@ -50,17 +50,13 @@ $(function() {
 });
 
 function test_func_text(){
-console.log("adding1");
 var n =$(".slides .block").length;
 ++n;
-console.log("adding");
 $(".slides .present").append("<div class='block' id='Block"+(n)+"' onclick='func('.block')' style='border: 2px solid;'>Block"+(n)+" </div>");
 };
 
 function test_func_img(){
-console.log("adding1");
 var n = $(".slides .block").length;
-console.log("adding");
 ++n;
 $(".slides .present").append("<div class='block' id='Block"+(n)+"' onclick='func('.block')'><img  src='https://pbs.twimg.com/profile_images/839721704163155970/LI_TRk1z_400x400.jpg'></div>");
 };

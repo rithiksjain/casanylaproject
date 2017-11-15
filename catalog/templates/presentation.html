@@ -70,29 +70,14 @@
         { src: 'templates/rejs/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } }
       ]
       });
-    /*$(".slides").draggableChildren(".block",{
-      drag: function() {
-            console.log("Dragging");   
-        },
-        stop: function() {
-            console.log("I'm out of place");   
-        }
-    */
 
       function func(element){
           console.log($(element).position());
-    };
+      };
     /*
     document.onclick = function(){
       var imgurl= localStorage.getItem('url');
       document.getElementById('output').src=imgurl;
-      console.log(imgurl); 
-    };
-    */
-    /*
-    document.onclick = function(){
-      var imgurl= localStorage.getItem('url');
-      document.getElementById('output1').src=imgurl;
       console.log(imgurl); 
     };
     */
