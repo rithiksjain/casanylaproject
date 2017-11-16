@@ -3,12 +3,12 @@ from pyramid.request import Request
 
 def addproject():
 	id_p=[]
-	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+	conn=connection()
+	s = conn.connect()
+	if not s["status"]:
+		print("conn fail") 
+	else:
+		connection=s.connection
 	try:
 		with connection.cursor() as cursor:
 			'''
@@ -30,6 +30,7 @@ def addproject():
 	except NameError:
 	    print('An exception flew by!')
 	finally:
+		# conn.close_connection()
 		connection.close()
 	return project_id
 '''

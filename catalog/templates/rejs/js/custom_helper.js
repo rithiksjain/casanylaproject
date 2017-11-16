@@ -1,5 +1,4 @@
 $.fn.extend({
-
     /**
      * Children of the element with the given selector
      * will automatically be made draggable
@@ -29,11 +28,9 @@ $.fn.extend({
 
           console.log(3);
         });
-
         // Return this for chaining
         return this;
     }
-
 });
 
 $(function() 
@@ -48,12 +45,40 @@ $(function()
     });
     
 });
+var s_d_id = '';
 
 function test_func_text(){
 var n =$(".slides .block").length;
 ++n;
-$(".slides .present").append("<div class='block' id='block"+(n)+"' onclick='func('.block')' style='border: 2px solid;'>Block"+(n)+" </div>");
+$('.slides .present').append("<div class='block' id='block"+(n)+"' onclick='edit_text(`block"+(n)+"`,1); func(`.block`);' style='border: 2px solid;'>Edit here</div>");
+s_d_id="block"+n;
+values="Edit here";
 };
+
+var values = '';
+function GetTextValue() {
+  if (s_d_id){
+    div_id=s_d_id;
+    $('.input').each(function() {
+            values=this.value
+        });
+    edit_text(div_id,0);
+
+  }
+    }
+
+function edit_text(div_id,opt){
+  console.log($("#"+div_id).text());
+  if (opt==1){
+    document.getElementById('input').value=$("#"+div_id).text();
+    values=$("#"+div_id).text();
+  }
+  $('#'+div_id).resizable('destroy');
+  $("#"+div_id).text(values);
+  $('#'+div_id).resizable();
+  // document.getElementById(div_id).innerHTML=values;
+  s_d_id=div_id;
+}
 
 function test_func_img(){
 var n = $(".slides .block").length;
@@ -102,13 +127,14 @@ dict["idcat"] = 1;
 post_call(dict)
 };
 /*
-function test_func_slide(){
-console.log("adding1");
-var section = $("<section>Welcome</section>");
-slides.append(section);
-section.attr('data-markdown', '');
-var script = $("<script></script>");
-section.append(script);
-script.attr('type', 'text/template');
+function imageupload(){
+async_calls = new async_helper()
+var urls = [{'key':'elements', 'url': '/uploadimage'}];
+console.log($('form').serialize());
 };
+
+$('form').submit(function(e){
+console.log(e);
+e.preventDefault();
+});
 */
