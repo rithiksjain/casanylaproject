@@ -126,6 +126,26 @@ dict["width"] = $('#'+array[0]).width();
 dict["idcat"] = 1;
 post_call(dict)
 };
+
+var urls = [{'key':'elements', 'url': '/presentation'}];
+function success_get(data){
+  console.log(data);
+}
+
+function init(p_id,s_id){
+  var url1=[{}];
+  url1[0]["key"]=urls[0].key;
+  url1[0]["url"] = urls[0].url+'/'+p_id+'/'+s_id;
+  console.log(url1);
+  async_call=new async_helper();
+async_call.get_call(url1).then(function(result){
+                success_get(result);
+            },function(error){
+      console.log("Network Error")
+});
+};
+
+init(1,1);
 /*
 function imageupload(){
 async_calls = new async_helper()
