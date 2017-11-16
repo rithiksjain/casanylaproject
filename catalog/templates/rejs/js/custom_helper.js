@@ -36,8 +36,8 @@ $.fn.extend({
 
 });
 
-$(function() {
-   
+$(function() 
+{   
     $(".slides").draggableChildren(".block", {
         drag: function() {
             console.log("Dragging");   
@@ -52,21 +52,17 @@ $(function() {
 function test_func_text(){
 var n =$(".slides .block").length;
 ++n;
-$(".slides .present").append("<div class='block' id='Block"+(n)+"' onclick='func('.block')' style='border: 2px solid;'>Block"+(n)+" </div>");
+$(".slides .present").append("<div class='block' id='block"+(n)+"' onclick='func('.block')' style='border: 2px solid;'>Block"+(n)+" </div>");
 };
 
 function test_func_img(){
 var n = $(".slides .block").length;
 ++n;
-$(".slides .present").append("<div class='block' id='Block"+(n)+"' onclick='func('.block')'><img  src='https://pbs.twimg.com/profile_images/839721704163155970/LI_TRk1z_400x400.jpg'></div>");
+$(".slides .present").append("<div class='block' onclick='func('.block')'><img id='block"+(n)+"' src='/images/3seatersofa.jpg'></div>");
+var imgurl= localStorage.getItem('url');
+document.getElementById('block'+(n)+'').src=imgurl;
 };
 
 function test_func_slide(){
-console.log("adding1");
-var section = $("<section>Welcome</section>");
-slides.append(section);
-section.attr('data-markdown', '');
-var script = $("<script></script>");
-section.append(script);
-script.attr('type', 'text/template');
+$(".slides").append("<section class='present' data-markdown><script type='text/template'>ABC</script></section>");
 };
