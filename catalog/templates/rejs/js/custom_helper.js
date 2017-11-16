@@ -99,8 +99,11 @@ function post_call(data)
       type: "POST",
       url: "/saveslide",
       data : data
-    }).done(function() {
-        console.log("Saved")
+    }).done(function(param) {
+        if (param.status==true)
+          alert('Slide Saved');
+        else
+          alert("Error");
     });
 }
 
@@ -117,6 +120,7 @@ $.each($('#slides').children(),function(i,j)
   };
 });
 
+console.log(array);
 dict={}
 dict["desc"] = array[0];
 dict["pos_x"] = $('#'+array[0]).offset().left;
