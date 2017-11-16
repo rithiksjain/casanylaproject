@@ -55,7 +55,7 @@ s_d_id="block"+n;
 values="Edit here";
 };
 
-var n,divValue,values = '';
+var values = '';
 function GetTextValue() {
   if (s_d_id){
     div_id=s_d_id;
@@ -66,7 +66,6 @@ function GetTextValue() {
 
   }
     }
-
 
 function edit_text(div_id,opt){
   console.log($("#"+div_id).text());
@@ -92,3 +91,15 @@ document.getElementById('block'+(n)+'').src=imgurl;
 function test_func_slide(){
 $(".slides").append("<section class='present' data-markdown><script type='text/template'>ABC</script></section>");
 };
+/*
+function imageupload(){
+async_calls = new async_helper()
+var urls = [{'key':'elements', 'url': '/uploadimage'}];
+console.log($('form').serialize());
+};
+
+$('form').submit(function(e){
+console.log(e);
+e.preventDefault();
+});
+*/

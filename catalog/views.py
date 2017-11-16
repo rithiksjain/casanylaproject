@@ -977,3 +977,31 @@ def download(request):
 	finally:
 		connection.close()
 	return response
+
+@view_config(route_name='uploadimage')
+def uploadimage(request):
+	#slide_id=request.params['id_slide']
+	imagename=request.params['image'].filename
+	request.storage.save(request.POST['image'])
+	urlimage=request.storage.url(imagename)
+	'''
+	connection = pymysql.connect(host='127.0.0.1',
+                             user='root',
+                             password='root',
+                             db='Pieces',
+                             charset='utf8mb4',
+                             cursorclass=pymysql.cursors.DictCursor)
+	try:
+		with connection.cursor() as cursor:
+			sql="INSERT into slide_elements (s_id,temp_url) values(%s,%s)"
+			cursor.execute(sql,(slide_id,urlimage))
+			sql2="SELECT URL FROM slide_elements where s_id=%s" %(slide_id)
+			cursor.execute(sql2)
+			result2=cursor.fetchall()
+		connection.commit()
+	except NameError:
+	    print('An exception flew by!')
+	finally:
+		connection.close()
+	'''
+	return render_to_response('templates/imgdisplay.html',{'url':urlimage},request=request)
