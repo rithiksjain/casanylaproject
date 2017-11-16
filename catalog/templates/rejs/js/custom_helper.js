@@ -1,5 +1,4 @@
 $.fn.extend({
-
     /**
      * Children of the element with the given selector
      * will automatically be made draggable
@@ -29,11 +28,9 @@ $.fn.extend({
 
           console.log(3);
         });
-
         // Return this for chaining
         return this;
     }
-
 });
 
 $(function() 
