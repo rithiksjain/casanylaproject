@@ -100,10 +100,11 @@ function post_call(data)
       url: "/saveslide",
       data : data
     }).done(function(param) {
-        if (param.status==true)
+        console.log(param);
+        /*if (param.status==true)
           alert('Slide Saved');
         else
-          alert("Error");
+          alert("Error");*/
     });
 }
 
@@ -120,15 +121,24 @@ $.each($('#slides').children(),function(i,j)
   };
 });
 
-console.log(array);
-dict={}
-dict["desc"] = array[0];
-dict["pos_x"] = $('#'+array[0]).position().left;
-dict["pos_y"] = $('#'+array[0]).position().top;
-dict["height"] = $('#'+array[0]).height();
-dict["width"] = $('#'+array[0]).width();
+final_array=[];
+$.each(array,function(i)
+{
+dict={};
+dict["desc"] = $('#'+array[i]).text();
+dict["pos_x"] = $('#'+array[i]).position().left;
+dict["pos_y"] = $('#'+array[i]).position().top;
+dict["height"] = $('#'+array[i]).height();
+dict["width"] = $('#'+array[i]).width();
 dict["idcat"] = 1;
-post_call(dict)
+final_array.push(dict);
+});
+console.log(final_array);
+$.each(final_array,function(i,j)
+{
+  console.log(j);
+  post_call(j);
+});
 };
 
 var urls = [{'key':'elements', 'url': '/presentation'}];
