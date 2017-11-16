@@ -123,8 +123,8 @@ $.each($('#slides').children(),function(i,j)
 console.log(array);
 dict={}
 dict["desc"] = array[0];
-dict["pos_x"] = $('#'+array[0]).offset().left;
-dict["pos_y"] = $('#'+array[0]).offset().top;
+dict["pos_x"] = $('#'+array[0]).position().left;
+dict["pos_y"] = $('#'+array[0]).position().top;
 dict["height"] = $('#'+array[0]).height();
 dict["width"] = $('#'+array[0]).width();
 dict["idcat"] = 1;
