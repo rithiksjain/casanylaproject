@@ -58,7 +58,7 @@ $(".slides .present").append("<div class='block' id='block"+(n)+"' onclick='func
 function test_func_img(){
 var n = $(".slides .block").length;
 ++n;
-$(".slides .present").append("<div class='block' onclick='func('.block')'><img id='block"+(n)+"' src='/images/3seatersofa.jpg'></div>");
+$(".slides .present").append("<div class='block' onclick='func('.block')'><img id='block"+(n)+"' src=''></div>");
 var imgurl= localStorage.getItem('url');
 document.getElementById('block'+(n)+'').src=imgurl;
 };
@@ -66,3 +66,14 @@ document.getElementById('block'+(n)+'').src=imgurl;
 function test_func_slide(){
 $(".slides").append("<section class='present' data-markdown><script type='text/template'>ABC</script></section>");
 };
+/*
+function test_func_slide(){
+console.log("adding1");
+var section = $("<section>Welcome</section>");
+slides.append(section);
+section.attr('data-markdown', '');
+var script = $("<script></script>");
+section.append(script);
+script.attr('type', 'text/template');
+};
+*/
