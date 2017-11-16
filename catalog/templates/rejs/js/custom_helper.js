@@ -58,13 +58,48 @@ $(".slides .present").append("<div class='block' id='block"+(n)+"' onclick='func
 function test_func_img(){
 var n = $(".slides .block").length;
 ++n;
-$(".slides .present").append("<div class='block' onclick='func('.block')'><img id='block"+(n)+"' src=''></div>");
+$(".slides .present").append("<div class='block' id='block"+(n)+"' onclick='func('.block')'><img id='block"+(n)+"' src=''></div>");
 var imgurl= localStorage.getItem('url');
 document.getElementById('block'+(n)+'').src=imgurl;
 };
 
 function test_func_slide(){
 $(".slides").append("<section class='present' data-markdown><script type='text/template'>ABC</script></section>");
+};
+
+function post_call(data)
+{
+    console.log("Saving")
+    $.ajax({
+      type: "POST",
+      url: "/saveslide",
+      data : data
+    }).done(function() {
+        console.log("Saved")
+    });
+}
+
+function save_func(){
+array=[]
+$.each($('#slides').children(),function(i,j)
+{
+  if($(j).attr('class')=="present")
+  {
+    $.each($(j).children(),function(k,l)
+    {
+      array.push($(l).attr('id'))
+    });
+  };
+});
+
+dict={}
+dict["desc"] = array[0];
+dict["pos_x"] = $('#'+array[0]).offset().left;
+dict["pos_y"] = $('#'+array[0]).offset().top;
+dict["height"] = $('#'+array[0]).height();
+dict["width"] = $('#'+array[0]).width();
+dict["idcat"] = 1;
+post_call(dict)
 };
 /*
 function test_func_slide(){

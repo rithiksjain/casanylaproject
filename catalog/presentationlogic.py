@@ -84,16 +84,17 @@ def addslide(request):
 		connection.close()
 	return id_slide
 
-def saveslide():
-	slide_id=request.params['id_slide']
+def saveslide(request):
+	print(request.params)
+	resp_dict=dict(status=True)
+	slide_id=1
 	id_cat=request.params['idcat']
 	desc=request.params['desc']
 	pos_x=request.params['pos_y']
 	pos_y=request.params['pos_x']
 	obj_len=request.params['height']
 	obj_wid=request.params['width']
-	tmp_url=request.params['url']
-	if(id_cat!=NULL):
+	if(id_cat!=""):
 		connection = pymysql.connect(host='127.0.0.1',
                              user='root',
                              password='root',
@@ -102,14 +103,16 @@ def saveslide():
                              cursorclass=pymysql.cursors.DictCursor)
 		try:
 			with connection.cursor() as cursor:
-				sql="INSERT INTO slide_elements (s_id,e_id, e_desc, position_x, position_y, object_length, object_breadth) values (%d,%d,%s,%d,%d,%d,%d)"
+				sql="INSERT INTO slide_elements (s_id,e_id, e_desc, position_x, position_y, object_length, object_breadth) values (%s,%s,%s,%s,%s,%s,%s)"
 				cursor.execute(sql,(int(slide_id),int(id_cat),desc,int(pos_x),int(pos_y),int(obj_len),int(obj_wid)))
 			connection.commit()
-		except NameError:
-			print('An exception')
+		except Exception as e:
+			print(e)
+			resp_dict['status']=False
 		finally:
 			connection.close()
 	else:
+		tmp_url=request.params['url']
 		connection = pymysql.connect(host='127.0.0.1',
                              user='root',
                              password='root',
@@ -123,8 +126,10 @@ def saveslide():
 			connection.commit()
 		except NameError:
 			print('An exception')
+			resp_dict['status']=False
 		finally:
 			connection.close()
+	return resp_dict
 
 def editslide():
 	slide_id=request.params['idslide']

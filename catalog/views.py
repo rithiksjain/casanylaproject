@@ -63,6 +63,12 @@ def add_slide(request):
 	s_id=addslide(request)
 	return render_to_response('templates/presentation.html',{'s_id':s_id},request=request)
 
+@view_config(route_name='saveslide' ,renderer='json')
+def save_slide(request):
+	s = saveslide(request)
+	print (s)
+	return s
+
 @view_config(route_name='vendor',renderer='templates/vendorform.jinja2')
 def vendor(request):
 	return {}
