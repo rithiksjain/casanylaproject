@@ -131,7 +131,7 @@ dict["idcat"] = 1;
 post_call(dict)
 };
 
-var urls = [{'key':'elements', 'url': '/presentation'}];
+var urls = [{'key':'elements', 'url': '/slide'}];
 function success_get(data){
   console.log(data);
 }

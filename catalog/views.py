@@ -1011,3 +1011,38 @@ def uploadimage(request):
 		connection.close()
 	'''
 	return render_to_response('templates/imgdisplay.html',{'url':urlimage},request=request)
+
+@view_config(route_name='slide', renderer='json')
+def slide(request):
+	pid=request.matchdict['p_id']
+	sid=request.matchdict['s_id']
+	connection = pymysql.connect(host='127.0.0.1',
+                             user='root',
+                             password='root',
+                             db='Pieces',
+                             charset='utf8mb4',
+                             cursorclass=pymysql.cursors.DictCursor)
+	try:
+		with connection.cursor() as cursor:
+			sql2="SELECT a.*,b.URL from slide_elements a left join Images b on a.e_id=b.idCatalog where a.s_id=%d" %(int(sid))
+			cursor.execute(sql2)
+			res=cursor.fetchall()
+		# resp = [{j:str(i[j]) for j in i } for i in res]
+		resp_text=list()
+		resp_url=list()
+		for i in res:
+			text=1
+			if (i["URL"] or i["temp_url"]):
+				text=0
+			for j in i:
+				i[j]=str(i[j])
+			if not text:
+				resp_url.append(i)
+			else:
+				resp_text.append(i)
+	except NameError:
+	    print('An exception flew by!')
+	finally:
+		connection.close()
+	return {'status':True,'data':dict(text=resp_text,url=resp_url)}
+	

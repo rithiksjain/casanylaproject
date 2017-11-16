@@ -48,5 +48,6 @@ def main(global_config, **settings):
 	config.add_route('submiteditquote','/submiteditquote')
 	config.add_route('submitaddlist','/submitaddlist')
 	config.add_route('uploadimage','/uploadimage')
+	config.add_route('slide','/slide/{p_id}/{s_id}')
 	config.scan()
 	return config.make_wsgi_app()
