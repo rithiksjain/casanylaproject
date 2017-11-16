@@ -27,6 +27,7 @@ class async_helper {
     var urlCalls = [];
     urls = $.isArray(urls_in) ? urls_in : [{'url':urls_in, 'key':'default'}];
     var that=this;
+    console.log(urls);
   	$.each(urls, function(url) {
     	var obj={method: "get",
              url: urls[url].url,
