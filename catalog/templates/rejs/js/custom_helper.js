@@ -83,9 +83,9 @@ function edit_text(div_id,opt){
 function test_func_img(){
 var n = $(".slides .block").length;
 ++n;
-$(".slides .present").append("<div class='block' id='block"+(n)+"' onclick='func('.block')'><img id='block"+(n)+"' src=''></div>");
+$(".slides .present").append("<div class='block' id='block"+(n)+"' onclick='func('.block')'><img src=''></div>");
 var imgurl= localStorage.getItem('url');
-document.getElementById('block'+(n)+'').src=imgurl;
+$($('#block'+(n)).children()).attr("src",imgurl );
 };
 
 function test_func_slide(){
