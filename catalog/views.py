@@ -55,9 +55,11 @@ def submitlogin(request):
 
 @view_config(route_name='addpre')
 def addpre(request):
+	from pyramid.httpexceptions import HTTPFound
 	id1=addproject()
-	return render_to_response('templates/presentation1.html',{'id':id1},request=request)
-
+	url=request.application_url+'/presentation/'+str(id1)
+	return Response(status_int=302, location=url) 
+	
 @view_config(route_name='addslide')
 def add_slide(request):
 	s_id=addslide(request)
@@ -119,7 +121,11 @@ def itemadded(request):
 
 @view_config(route_name='presentation',renderer='templates/presentation.html')
 def itemtype(request):
-	return {}
+	try:
+		p_id=int(request.matchdict['p_id'])
+	except Exception as e:
+		return dict(status=False,s_id=[])
+	return get_all_slides_id(p_id)
 
 @view_config(route_name='catalog')
 def catalog(request):

@@ -80,6 +80,41 @@ function edit_text(div_id,opt){
   s_d_id=div_id;
 }
 
+
+function StorageEvent(e){
+  console.log("i am active");
+  var value=0;
+  if(localStorage.getItem('upload_img_added')!=null){
+    value = localStorage.getItem('upload_img_added');
+  }
+  else if(localStorage.getItem('catalog_img_added')!=null){
+    value = localStorage.getItem('catalog_img_added');    
+  }
+    else{
+      return 0;
+  }
+  console.log(value);
+if (value==1){
+  test_func_img();
+  localStorage.clear();
+  }
+
+}
+  
+function upload(){
+  console.log("upload");
+ localStorage.setItem('upload_img_added',0);
+ window.addEventListener('storage', StorageEvent);
+} 
+
+function add_from_catalog(){
+  localStorage.setItem( 'from_catalog', 1 );
+  localStorage.setItem( 'catalog_img_added', 0 );
+  window.open("/itemfetch?id=1",'_blank');
+  window.addEventListener('storage', StorageEvent);
+}
+
+
 function test_func_img(){
 var n = $(".slides .block").length;
 ++n;
@@ -89,7 +124,7 @@ $($('#block'+(n)).children()).attr("src",imgurl );
 };
 
 function test_func_slide(){
-$(".slides").append("<section class='present' data-markdown><script type='text/template'>ABC</script></section>");
+$(".slides").append("<section class='present' data-markdown><script type='text/template'></script></section>");
 };
 
 function post_call(data)
@@ -160,15 +195,3 @@ async_call.get_call(url1).then(function(result){
 };
 
 init(1,1);
-/*
-function imageupload(){
-async_calls = new async_helper()
-var urls = [{'key':'elements', 'url': '/uploadimage'}];
-console.log($('form').serialize());
-};
-
-$('form').submit(function(e){
-console.log(e);
-e.preventDefault();
-});
-*/

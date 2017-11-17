@@ -7,7 +7,7 @@ class connection(object):
 
 	def connect(self):
 		try:
-			self.conn = pymysql.connect(self.config)
+			self.conn = pymysql.connect(**self.config)
 		except Exception as e:
 			print (e)
 			return dict(status=False,connection="")

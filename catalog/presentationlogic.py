@@ -2,30 +2,21 @@ import pymysql.cursors
 from pyramid.request import Request
 
 def addproject():
-	id_p=[]
-	conn=connection()
+	from catalog.connection_py import connection as conn
+	s_id_list=list()
+	conn=conn()
 	s = conn.connect()
-	if not s["status"]:
-		print("conn fail") 
-	else:
-		connection=s.connection
+	connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
-			'''
-			sql="SELECT * FROM presentation_project";
-			cursor.execute(sql1)
-			id_p1=cursor.fetchall()
-			for a in id_p:
-				id_p.append(b['id'])
-			if(id_p==NULL):
-			'''
-			#else:
 			sql="INSERT INTO presentation_project() values()"
 			cursor.execute(sql)
 			sql1="SELECT LAST_INSERT_ID()";
 			cursor.execute(sql1)
 			pro_id=cursor.fetchall()
-			project_id=pro_id[0]['LAST_INSERT_ID()']
+			project_id=int(pro_id[0]['LAST_INSERT_ID()'])
+			query_1='''insert into Presentation (pr_id) values ({p_id})'''.format(p_id=project_id)
+			cursor.execute(query_1)
 		connection.commit()
 	except NameError:
 	    print('An exception flew by!')
@@ -33,34 +24,72 @@ def addproject():
 		# conn.close_connection()
 		connection.close()
 	return project_id
-'''
-def getslide():
-	project_id=[]
-	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+
+def local_connector():
+	from catalog.connection_py import connection as conn
+	conn=conn()
+	resp = dict(status=True,con='')
+	
+	s = conn.connect()
+	if not s["status"]:
+		print("conn fail")
+		resp["status"]=False
+		return resp
+	else:
+		connection=s["connection"]
+		resp['con']=connection
+	return resp
+
+# def get_slide_elements(s_id):
+# 	elements=[]
+# 	resp = dict(status=True,elements=elements)
+# 	s = local_connector()
+# 	if not s.status:
+# 		resp['status']=False
+# 	connection=s["con"]
+# 	try:
+# 		with connection.cursor() as cursor:
+# 			query="select * from Presentation where flag=0 and s_id={id};".format(id=int(s_id))
+# 			cursor.execute(query)
+# 			s_id_list=cursor.fetchall()
+# 		resp["s_id"]=[i for i in s_id_list]
+# 	except Exception as e:
+# 		print(e)
+# 		resp["status"]=False
+# 	finally:
+# 		connection.close()
+# 	return resp
+
+
+def get_all_slides_id(p_id):
+	from catalog.connection_py import connection as conn
+	s_id_list=list()
+	conn=conn()
+	s = conn.connect()
+	resp = dict(status=True,s_id=s_id_list)
+	if not s["status"]:
+		print("conn fail")
+		resp["status"]=False
+		return resp
+	else:
+		connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
-			sql="SELECT id from presentation_project"
-			cursor.execute(sql)
-			pro_id=cursor.fetchall()
-			for a in pro_id:
-				project_id.append(a)
-			sql1="SELECT s_id from Presentation where pr_id=%d" %(int(project_id)
-			cursor.execute(sql1)
-			id_slide=cursor.fetchall()
-			slide_id=id_slide[0]['s_id']
-			sql2="SELECT * from slide_elements where s_id=%d" %(int(slide_id))
-		connection.commit()
-	except NameError:
-		print('An exception flew by!')
+			print("here")
+			query="select s_id from Presentation where flag=0 and pr_id={pr_id};".format(pr_id=int(p_id))
+			cursor.execute(query)
+			s_id_list=cursor.fetchall()
+		resp["s_id"]=[i['s_id'] for i in s_id_list]
+	except Exception as e:
+		print(e)
+		resp["status"]=False
 	finally:
 		connection.close()
+	# print(resp)
+	return resp
 
-'''
+
+
 def addslide(request):
 	id_p=request.params['id']
 	id_slide=[]
@@ -86,8 +115,6 @@ def addslide(request):
 	return id_slide
 
 def saveslide(request):
-	print("##################")
-	print(request.params)
 	resp_dict=dict(status=True)
 	slide_id=1
 	id_cat=request.params['idcat']

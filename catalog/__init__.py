@@ -29,7 +29,7 @@ def main(global_config, **settings):
 	config.add_route('filter','/filter')
 	config.add_route('createlist','/createlist')
 	config.add_route('itemadded','/itemadded')
-	config.add_route('presentation','/presentation')
+	config.add_route('presentation','/presentation/{p_id}')
 	config.add_route('addpre','/addpre')
 	config.add_route('addslide','/addslide')
 	config.add_route('saveslide','/saveslide')

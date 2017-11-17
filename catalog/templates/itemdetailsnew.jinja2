@@ -104,9 +104,12 @@
     <script src="templates/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript">
     function Function() {
-    alert("Item added!");
+    // alert("Item added!");
     var img_url = document.getElementById('save_url').src;
     localStorage.setItem('url', img_url);
+    localStorage.setItem( 'catalog_img_added', 1);
+    window.close(); 
+
     }
     </script>
 

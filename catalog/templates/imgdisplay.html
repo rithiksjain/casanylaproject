@@ -10,6 +10,12 @@ Wait for 5 seconds {{url}}
 <script type="text/javascript">
 	var url1="{{url}}";
     localStorage.setItem('url', url1);
+    localStorage.setItem( 'upload_img_added', 1);
+    setTimeout(
+  function() 
+  {  }, 50000);
+
+    window.close();
 </script>
 </body>
 </html>
