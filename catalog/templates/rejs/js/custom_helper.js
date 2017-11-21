@@ -52,8 +52,12 @@ var n =$(".slides .block").length;
 ++n;
 $('.slides .present').append("<div class='block' id='block"+(n)+"' onclick='edit_text(`block"+(n)+"`,1); func(`.block`);' style='border: 2px solid;'>Edit here</div>");
 s_d_id="block"+n;
+$('#splbtn').effect( "transfer", { to: "#main", className: "ui-effects-transfer" }, 1000 );
+// edit_text(s_d_id,1);
 values="Edit here";
 };
+
+
 
 var values = '';
 function GetTextValue() {
@@ -103,6 +107,7 @@ if (value==1){
   
 function upload(){
   console.log("upload");
+  $('#uploaddiv').hide(500);
  localStorage.setItem('upload_img_added',0);
  window.addEventListener('storage', StorageEvent);
 } 
@@ -123,9 +128,28 @@ var imgurl= localStorage.getItem('url');
 $($('#block'+(n)).children()).attr("src",imgurl );
 };
 
-function test_func_slide(){
-$(".slides").append("<section class='present' data-markdown><script type='text/template'></script></section>");
+// function test_func_slide(slide_id){
+// $(".slides").append("<section class='present' class='slide_el' id='"+slide_id+"'' data-markdown><script type='text/template'></script></section>");    
+// };
+function test_func_slide(){  
+  // Reveal.add('<h3>Slide title</h3>') 
+
+$(".slides").append("<section class='present' data-markdown><script type='text/template'></script><div>ABC</div></section>");
 };
+
+
+// function add_slide(){
+//   console.log("adding slide");
+//   url='/addslide?id='+pr_id;
+//   async_call.get_call(url1).then(function(result)
+//     {
+//       console.log(result.default);
+//       // test_func_slide()
+//     },
+//     function(error){
+//     console.log("Network Error")
+// });
+// }
 
 function post_call(data)
 {
@@ -166,6 +190,11 @@ dict["pos_y"] = $('#'+array[i]).position().top;
 dict["height"] = $('#'+array[i]).height();
 dict["width"] = $('#'+array[i]).width();
 dict["idcat"] = 1;
+//extra code here revert back if required
+dict["s_id"]=c_slide;
+
+// till this point
+
 final_array.push(dict);
 });
 console.log(final_array);
@@ -176,20 +205,42 @@ $.each(final_array,function(i,j)
 });
 };
 
-var urls = [{'key':'elements', 'url': '/slide'}];
-function success_get(data){
-  console.log(data);
+function post_init(result){
+  if (result.elements.status){
+    // call successful
+    var data = result.elements.data;
+    console.log(data);
+  }
+  else{
+    //call failed
+  }
 }
 
+function slide_data(result){
+  // this is for each slide rearrange slide elements here
+
+}
+
+
+var urls = [{'key':'elements', 'url': '/slide'}];
+
 function init(p_id,s_id){
+  c_slide=s_id;
   var url1=[{}];
   url1[0]["key"]=urls[0].key;
   url1[0]["url"] = urls[0].url+'/'+p_id+'/'+s_id;
-  console.log(url1);
-  async_call=new async_helper();
-async_call.get_call(url1).then(function(result){
-                success_get(result);
-            },function(error){
+  // console.log(url1);
+
+  async_call=new async_helper();    
+  async_call.get_call(url1).then(function(result){
+  // console.log(result);
+  if (s_id==0){
+    post_init(result);
+    }
+  else{
+    slide_specific(result);
+  }
+    },function(error){
       console.log("Network Error")
 });
 };
@@ -210,3 +261,4 @@ function download() {
     });
     doc.save('sample_file.pdf');
 };
+ // init(1,1,1);

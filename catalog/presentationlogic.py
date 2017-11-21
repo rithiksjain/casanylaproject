@@ -66,7 +66,7 @@ def get_all_slides_id(p_id):
 	s_id_list=list()
 	conn=conn()
 	s = conn.connect()
-	resp = dict(status=True,s_id=s_id_list)
+	resp = dict(status=True,s_id=s_id_list,pr_id=p_id)
 	if not s["status"]:
 		print("conn fail")
 		resp["status"]=False
@@ -75,7 +75,6 @@ def get_all_slides_id(p_id):
 		connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
-			print("here")
 			query="select s_id from Presentation where flag=0 and pr_id={pr_id};".format(pr_id=int(p_id))
 			cursor.execute(query)
 			s_id_list=cursor.fetchall()
@@ -85,7 +84,7 @@ def get_all_slides_id(p_id):
 		resp["status"]=False
 	finally:
 		connection.close()
-	# print(resp)
+	print(resp)
 	return resp
 
 
@@ -116,7 +115,7 @@ def addslide(request):
 
 def saveslide(request):
 	resp_dict=dict(status=True)
-	slide_id=1
+	slide_id=request.params['s_id']
 	id_cat=request.params['idcat']
 	desc=request.params['desc']
 	pos_x=request.params['pos_y']
@@ -155,7 +154,7 @@ def saveslide(request):
                              cursorclass=pymysql.cursors.DictCursor)
 		try:
 			with connection.cursor() as cursor:
-				sql1="INSERT INTO slide_elements (s_id,position_x, position_y, object_length, object_breadth, temp_url) values (%s,%s,%s,%s,%s,%s)"
+				sql1="INSERT INTO slide_elements (s_id,position_x, position_y, object_length, object_breadth, temp_url) values (%s,%s,%s,%s,%s,%s) "
 				cursor.execute(sql,(int(slide_id),int(pos_x),int(pos_y),int(obj_len),int(obj_wid),tmp_url))
 				sql1="SELECT LAST_INSERT_ID()";
 				cursor.execute(sql1)

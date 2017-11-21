@@ -24,10 +24,14 @@
     </script>
     <style>
       .block{
-        border: 2px solid;
+        /*border: 2px solid;*/
         width: 100px;
         padding: 20px;
         color: white;
+      }
+      .reveal section div{
+        border:none;
+        box-shadow: none;
       }
       .btn {
   background: #3498db;
@@ -55,6 +59,7 @@
   background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
   text-decoration: none;
 }
+.ui-effects-transfer { border: 2px dotted white; }
     </style>
 </head>
 
@@ -66,15 +71,17 @@
     <button class="btn add-image" onclick="test_func_img()">Add an image</button>
     <div id="editor"></div>
     <button class="btn download" onclick="download()">Download as PDF</button>
+    <button class="btn add-block" onclick="test_func_text()" id="splbtn">Add Text</button>
+    <button class="btn add-image" onclick="$('#uploaddiv').show(500);">Add an image</button>
     
     <button class="btn add-slide" onclick="test_func_slide()">Add a new slide</button>
     <button class="btn save" onclick="save_func()">Save</button>
     </div>
 <div id="main" style="position:absolute;top:0;right:0;">
 <input type=text class="input" id="input" value=""/>
-<input type=button class="btn bt" onclick="GetTextValue()" id="btSubmit" value=Submit />
+<input type=button class="btn bt" onclick="GetTextValue()" id="btSubmit" value=Edit />
 </div>
-<div style="margin-top:10px;" style="color:white">
+<div style="margin-top:10px;display:none;"  id="uploaddiv">
 <form action="/uploadimage" method="post" enctype="multipart/form-data" target="_blank">
 <input type="file" name="image" placeholder="Select an image" style="color:white"><br/>
 <button type="Submit" class="btn" onclick="upload();">Upload</button>
@@ -83,20 +90,11 @@
 </div>
 <div class="reveal" style="float:Left;">
   <div class="slides" id="slides">
-    <section data-markdown>
+  <!--revert it in case of get call does not work-->
+    <section data-markdown class="slide_el">
     <script type="text/template">
-      <!-- <div class="block" id="block" onclick="func('.block')" style="border: 2px solid;">
-        Welcome to CasaNyla
-      </div> -->
+     
     </script>  
-    </section>
-
-    <section data-markdown>
-    <script type="text/template">
-      <!-- <div class="block" style="border: 2px solid;">
-        Resizable
-      </div> -->
-    </script> 
     </section>
   </div> 
 </div>
@@ -106,7 +104,9 @@
   <script src="/templates/rejs/lib/js/head.min.js"></script>
   <script src="/templates/rejs/js/reveal.js"></script>
   <script>
-  // slides = {{slide_id}};
+  // s_id = {{s_id}};
+  pr_id={{pr_id}};
+  c_slide=0;//current slide
   // status = {{status}};
     Reveal.initialize({
       autoSlide: false,
@@ -126,7 +126,9 @@
         },{ src: '/templates/rejs/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
         { src: '/templates/rejs/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } }
       ]
+      
       });
+    init(pr_id,0);
 
       function func(element){
           console.log($(element).position());

@@ -1028,27 +1028,38 @@ def slide(request):
                              db='Pieces',
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
+	resp_text=list()
+	resp_url=list()
+	slides=list()
+	resp = dict(status=True,data=dict(text=resp_text,url=resp_url,slides=slides))
 	try:
 		with connection.cursor() as cursor:
-			sql2="SELECT a.*,b.URL from slide_elements a left join Images b on a.e_id=b.idCatalog where a.s_id=%d" %(int(sid))
+			if int(sid):
+				sql2="select p.s_id,p.p_id,a.id,b.URL,a.temp_url,a.position_x,a.position_y,a.object_length,a.object_breadth from Presentation p left join slide_elements a on p.s_id=a.s_id and p.flag=0 left join Images b on a.e_id=b.idCatalog where a.s_id={s_id} and p.pr_id={p_id} order by p.s_id;".format(s_id=int(sid),p_id=int(pid))
+			else:
+				sql2="select p.s_id,p.p_id,a.id,b.URL,a.temp_url,a.position_x,a.position_y,a.object_length,a.object_breadth from Presentation p left join slide_elements a on p.s_id=a.s_id and p.flag=0 left join Images b on a.e_id=b.idCatalog where p.pr_id={p_id} order by p.s_id;".format(p_id=int(pid))
+			# print(sql2)
 			cursor.execute(sql2)
 			res=cursor.fetchall()
-		# resp = [{j:str(i[j]) for j in i } for i in res]
-		resp_text=list()
-		resp_url=list()
+		# required_fields=("URL","temp_url","s_id","e_id","position_x","position_y","object_length","object_breadth","id")
+		p_s_id=0
 		for i in res:
-			text=1
-			if (i["URL"] or i["temp_url"]):
-				text=0
-			for j in i:
-				i[j]=str(i[j])
-			if not text:
-				resp_url.append(i)
-			else:
-				resp_text.append(i)
-	except NameError:
-	    print('An exception flew by!')
+			c_s_id=int(i["s_id"])
+			if i["id"]:
+				if (i["URL"] or i["temp_url"]):
+					resp_url.append(i)
+				else:
+					resp_text.append(i)
+			if c_s_id!=p_s_id:
+				# s = dict(s_id=c_s_id,p_id=i["p_id"])#p_id = page id ,s_id=slide id
+				s=c_s_id
+				slides.append(s)
+				p_s_id=c_s_id
+
+	except Exception as e:
+		resp["status"]=False
+		print(e)
 	finally:
 		connection.close()
-	return {'status':True,'data':dict(text=resp_text,url=resp_url)}
+	return resp
 	
