@@ -195,3 +195,18 @@ async_call.get_call(url1).then(function(result){
 };
 
 init(1,1);
+
+var doc = new jsPDF();
+var specialElementHandlers = {
+    '#editor': function (element, renderer) {
+        return true;
+    }
+};
+
+function download() {
+    doc.fromHTML($('.reveal').html(), 15, 15, {
+        'width': 170,
+            'elementHandlers': specialElementHandlers
+    });
+    doc.save('sample_file.pdf');
+};
