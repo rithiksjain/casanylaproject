@@ -191,10 +191,10 @@ $.each(arr,function(i)
 {
 dict={};
 dict["desc"] = $('#'+arr[i]).text();
-dict["pos_x"] = $('#'+arr[i]).position().left;
-dict["pos_y"] = $('#'+arr[i]).position().top;
-dict["height"] = $('#'+arr[i]).height();
-dict["width"] = $('#'+arr[i]).width();
+dict["pos_x"] = parseInt($('#'+arr[i]).position().left);
+dict["pos_y"] = parseInt($('#'+arr[i]).position().top);
+dict["height"] = parseInt($('#'+arr[i]).height());
+dict["width"] = parseInt($('#'+arr[i]).width());
 dict["idcat"] = 1;
 //extra code here revert back if required
 dict["s_id"]=c_slide;
