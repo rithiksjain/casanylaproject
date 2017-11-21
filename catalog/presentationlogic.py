@@ -60,7 +60,6 @@ def local_connector():
 # 		connection.close()
 # 	return resp
 
-
 def get_all_slides_id(p_id):
 	from catalog.connection_py import connection as conn
 	s_id_list=list()
@@ -86,8 +85,6 @@ def get_all_slides_id(p_id):
 		connection.close()
 	print(resp)
 	return resp
-
-
 
 def addslide(request):
 	id_p=request.params['id']
