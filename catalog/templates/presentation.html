@@ -67,14 +67,11 @@
 <div style="float:left;">
   <div>
     <button class="btn add-block" onclick="add_from_catalog()">Add from catalog</button>
-    <button class="btn add-block" onclick="test_func_text()">Add a block</button>
-    <button class="btn add-image" onclick="test_func_img()">Add an image</button>
-    <div id="editor"></div>
-    <button class="btn download" onclick="download()">Download as PDF</button>
     <button class="btn add-block" onclick="test_func_text()" id="splbtn">Add Text</button>
     <button class="btn add-image" onclick="$('#uploaddiv').show(500);">Add an image</button>
-    
     <button class="btn add-slide" onclick="test_func_slide()">Add a new slide</button>
+    <div id="editor"></div>
+    <button class="btn download" onclick="download()">Download as PDF</button>
     <button class="btn save" onclick="save_func()">Save</button>
     </div>
 <div id="main" style="position:absolute;top:0;right:0;">
@@ -93,7 +90,6 @@
   <!--revert it in case of get call does not work-->
     <section data-markdown class="slide_el">
     <script type="text/template">
-     
     </script>  
     </section>
   </div> 

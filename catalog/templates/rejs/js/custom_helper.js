@@ -57,8 +57,6 @@ $('#splbtn').effect( "transfer", { to: "#main", className: "ui-effects-transfer"
 values="Edit here";
 };
 
-
-
 var values = '';
 function GetTextValue() {
   if (s_d_id){
@@ -83,7 +81,6 @@ function edit_text(div_id,opt){
   // document.getElementById(div_id).innerHTML=values;
   s_d_id=div_id;
 }
-
 
 function StorageEvent(e){
   console.log("i am active");
@@ -133,10 +130,8 @@ $($('#block'+(n)).children()).attr("src",imgurl );
 // };
 function test_func_slide(){  
   // Reveal.add('<h3>Slide title</h3>') 
-
-$(".slides").append("<section class='present' data-markdown><script type='text/template'></script><div>ABC</div></section>");
+$(".slides").append("<section class='present' data-markdown><script type='text/template'></script><div></div></section>");
 };
-
 
 // function add_slide(){
 //   console.log("adding slide");
@@ -215,6 +210,7 @@ function post_init(result){
     // call successful
     var data = result.elements.data;
     console.log(data);
+
   }
   else{
     //call failed
@@ -260,6 +256,13 @@ var specialElementHandlers = {
 };
 
 function download() {
+    var doc = new jsPDF();
+    var specialElementHandlers = {
+    '#editor': function (element, renderer) {
+        return true;
+    }
+    };
+    
     doc.fromHTML($('.reveal').html(), 15, 15, {
         'width': 170,
             'elementHandlers': specialElementHandlers
