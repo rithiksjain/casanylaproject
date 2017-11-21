@@ -205,7 +205,7 @@ $.each(final_array,function(i,j)
 });
 };
 
-function post_init(result,opt){
+function post_init(result){
   if (result.elements.status){
     // call successful
     var data = result.elements.data;
@@ -216,7 +216,8 @@ function post_init(result,opt){
   }
 }
 
-function slide_data(){
+function slide_data(result){
+  // this is for each slide rearrange slide elements here
 
 }
 
@@ -227,14 +228,14 @@ function init(p_id,s_id){
   c_slide=s_id;
   var url1=[{}];
   url1[0]["key"]=urls[0].key;
-  url1[0]["url"] = urls[0].url+'/'+p_id+'/'+s_id;    
+  url1[0]["url"] = urls[0].url+'/'+p_id+'/'+s_id;
   // console.log(url1);
 
   async_call=new async_helper();    
   async_call.get_call(url1).then(function(result){
   // console.log(result);
   if (s_id==0){
-    post_init(result);    
+    post_init(result);
     }
   else{
     slide_specific(result);
