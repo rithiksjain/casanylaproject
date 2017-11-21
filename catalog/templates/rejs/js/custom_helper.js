@@ -250,4 +250,20 @@ function init(p_id,s_id){
 });
 };
 
+init(1,1);
+
+var doc = new jsPDF();
+var specialElementHandlers = {
+    '#editor': function (element, renderer) {
+        return true;
+    }
+};
+
+function download() {
+    doc.fromHTML($('.reveal').html(), 15, 15, {
+        'width': 170,
+            'elementHandlers': specialElementHandlers
+    });
+    doc.save('sample_file.pdf');
+};
  // init(1,1,1);
