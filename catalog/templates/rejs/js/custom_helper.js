@@ -168,36 +168,41 @@ function post_call(data)
 }
 
 function save_func(){
-array=[]
+arr=[]
 $.each($('#slides').children(),function(i,j)
 {
-  if($(j).attr('class')=="present")
+  // console.log(j);
+  if($(j).hasClass('present'))
   {
+    // console.log(j);
     $.each($(j).children(),function(k,l)
     {
-      array.push($(l).attr('id'))
+      // console.log("property");
+      // console.log(l);
+      arr.push($(l).attr('id'))
     });
   };
 });
 
+console.log(arr);
+
 final_array=[];
-$.each(array,function(i)
+$.each(arr,function(i)
 {
 dict={};
-dict["desc"] = $('#'+array[i]).text();
-dict["pos_x"] = $('#'+array[i]).position().left;
-dict["pos_y"] = $('#'+array[i]).position().top;
-dict["height"] = $('#'+array[i]).height();
-dict["width"] = $('#'+array[i]).width();
+dict["desc"] = $('#'+arr[i]).text();
+dict["pos_x"] = $('#'+arr[i]).position().left;
+dict["pos_y"] = $('#'+arr[i]).position().top;
+dict["height"] = $('#'+arr[i]).height();
+dict["width"] = $('#'+arr[i]).width();
 dict["idcat"] = 1;
 //extra code here revert back if required
 dict["s_id"]=c_slide;
-
 // till this point
-
 final_array.push(dict);
 });
-console.log(final_array);
+
+// console.log(final_array);
 $.each(final_array,function(i,j)
 {
   console.log(j);
