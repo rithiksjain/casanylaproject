@@ -1,12 +1,14 @@
 from pyramid.config import Configurator
 from pyramid.session import UnencryptedCookieSessionFactoryConfig
-
+from pyramid import renderers
 def main(global_config, **settings):
 	my_session_factory = UnencryptedCookieSessionFactoryConfig('itsaseekreet')
 	config = Configurator(settings=settings,session_factory=my_session_factory)
 	config.include('pyramid_flash_message')
 	config.include('pyramid_jinja2')
 	config.include('pyramid_storage')
+	json_renderer = renderers.JSON()
+	config.add_renderer('json', json_renderer)
 	config.add_jinja2_renderer('.html')
 	config.add_static_view('static', 'static', cache_max_age=3600)
 	config.add_static_view('templates/assets','templates/assets',cache_max_age=3600)

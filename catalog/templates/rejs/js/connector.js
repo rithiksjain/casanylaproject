@@ -41,12 +41,9 @@ class async_helper {
     Q.all(urlCalls)
 	    .then(
 	    function(results) {
-        console.log(results);
-        console.log(results[0].responseJSON);
-        // results=results[0].responseText
 	        var resp = {};
 	        $.each(urls, function(i){
-            resp[urls[i].key] = results[i].responseJSON;
+            resp[urls[i].key] = results[i];
 	            // resp[urls[i].key] = results[i].data;
 	        });
 	        /*deferred.resolve(
