@@ -206,7 +206,8 @@ $.each(final_array,function(i,j)
 };
 
 function post_init(result){
-  if (result.elements.status==true){
+  console.log(result);
+  if (result.elements.status){
     // call successful
     var data = result.elements.data;
     console.log(data);
@@ -257,6 +258,10 @@ function init(p_id,s_id){
 
 //init(1,1);
 /*
+=======
+// init(1,1);
+
+>>>>>>> 10f9de4b6552fb4df8c7cc5d8ce6319c26a2fc11
 var doc = new jsPDF();
 var specialElementHandlers = {
     '#editor': function (element, renderer) {
