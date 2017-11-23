@@ -206,6 +206,7 @@ $.each(final_array,function(i,j)
 };
 
 function post_init(result){
+  console.log(result);
   if (result.elements.status){
     // call successful
     var data = result.elements.data;
@@ -246,7 +247,7 @@ function init(p_id,s_id){
 });
 };
 
-init(1,1);
+// init(1,1);
 
 var doc = new jsPDF();
 var specialElementHandlers = {
