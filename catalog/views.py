@@ -62,9 +62,9 @@ def addpre(request):
 
 @view_config(route_name='addslide', renderer='json')
 def add_slide(request):
-	s=addslide(request)
-	print(s)
-	return s
+	add=addslide(request)
+	print(add)
+	return add
 
 @view_config(route_name='saveslide' ,renderer='json')
 def save_slide(request):

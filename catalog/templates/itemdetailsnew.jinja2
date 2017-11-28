@@ -106,7 +106,9 @@
     function Function() {
     // alert("Item added!");
     var img_url = document.getElementById('save_url').src;
+    var catalog_id = {{details['idcat']}};
     localStorage.setItem('url', img_url);
+    localStorage.setItem('id_cat',catalog_id);
     localStorage.setItem( 'catalog_img_added', 1);
     window.close(); 
 

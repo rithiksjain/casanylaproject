@@ -50,8 +50,8 @@ var s_d_id = '';
 function test_func_text(){
 var n =$(".slides .block").length;
 ++n;
-$('.slides .present').append("<div class='block' id='block"+(n)+"' onclick='edit_text(`block"+(n)+"`,1); func(`.block`);' style='border: 2px solid;'>Edit here</div>");
-s_d_id="block"+n;
+$('.slides .present').append("<div class='block' id='blocktemp_"+(n)+"' onclick='edit_text(`blocktemp_"+(n)+"`,1); func(`.block`);' style='border: 2px solid;'>Edit here</div>");
+s_d_id="blocktemp_"+n;
 $('#splbtn').effect( "transfer", { to: "#main", className: "ui-effects-transfer" }, 1000 );
 // edit_text(s_d_id,1);
 values="Edit here";
@@ -120,9 +120,9 @@ function add_from_catalog(){
 function test_func_img(){
 var n = $(".slides .block").length;
 ++n;
-$(".slides .present").append("<div class='block' id='block"+(n)+"' onclick='func('.block')'><img src=''></div>");
+$(".slides .present").append("<div class='block' id='blocktemp_"+(n)+"' onclick='func('.block')'><img src=''></div>");
 var imgurl= localStorage.getItem('url');
-$($('#block'+(n)).children()).attr("src",imgurl );
+$($('#blocktemp_'+(n)).children()).attr("src",imgurl );
 };
 
 // function test_func_slide(slide_id){
@@ -133,8 +133,17 @@ function test_func_slide(){
   temp={}
   temp["id"]=pr_id;
   addslide(temp);
-$(".slides").append("<section class='present' data-markdown><script type='text/template'></script><div></div></section>");
 };
+
+function addSlideFrontend(id,na_present){
+  if(na_present==0){
+    $($(".slides").children()[0]).attr("id","slide_"+id);
+  }
+  else{
+    $(".slides").append("<section id='slide_"+id+"' data-markdown ><script type='text/template'></script><div></div></section>");  
+  }
+}
+
 
 function addslide(data)
 {
@@ -145,6 +154,9 @@ function addslide(data)
     data : data
   }).done(function(p){
     console.log(p);
+    if (p.status){
+      addSlideFrontend(p.slide_id);
+    }
   });
 }
 
@@ -161,6 +173,12 @@ function addslide(data)
 // });
 // }
 
+function change_div_id(present_id,changed_id){
+  $("#"+present_id).attr("id",changed_id);
+}
+
+
+
 function post_call(data)
 {
     console.log("Saving")
@@ -169,11 +187,23 @@ function post_call(data)
       url: "/saveslide",
       data : data
     }).done(function(param) {
-        console.log(param);
-        /*if (param.status==true)
-          alert('Slide Saved');
-        else
-          alert("Error");*/
+        if (param.status==true)
+        {
+          if (data["temp_id"])
+          {
+            console.log(data["temp_id"]);
+            changed_id = "blockdb_"+param.block_id;
+            console.log(changed_id);
+            change_div_id(data["temp_id"],changed_id);
+          }
+          else{
+                      console.log(data["id"]);
+          }
+
+        }
+        else{
+
+        }
     });
 }
 
@@ -181,36 +211,48 @@ function save_func(){
 arr=[]
 $.each($('#slides').children(),function(i,j)
 {
-  // console.log(j);
   if($(j).hasClass('present'))
-  {
-    // console.log(j);
+  { 
+    c_slide=parseInt(j.id.slice(j.id.indexOf('_')+1,j.id.length));
+    // return 0;
     $.each($(j).children(),function(k,l)
     {
-      // console.log("property");
-      // console.log(l);
-      arr.push($(l).attr('id'))
+       arr.push($(l).attr('id'))
     });
   };
 });
 
 console.log(arr);
-
+var cat_id = localStorage.getItem('id_cat');
 final_array=[];
 $.each(arr,function(i)
 {
-dict={};
-dict["desc"] = $('#'+arr[i]).text();
-dict["pos_x"] = parseInt($('#'+arr[i]).position().left);
-dict["pos_y"] = parseInt($('#'+arr[i]).position().top);
-dict["height"] = parseInt($('#'+arr[i]).height());
-dict["width"] = parseInt($('#'+arr[i]).width());
-dict["idcat"] = 302;
-//extra code here revert back if required
-dict["s_id"]=c_slide;
-// till this point
-final_array.push(dict);
-});
+  dict={};
+
+    block_id=arr[i].slice(arr[i].indexOf('_')+1,arr[i].length)
+    block_id_prep_text=arr[i].slice(0,arr[i].indexOf('_'))
+
+    if (block_id_prep_text=="blocktemp")
+    {
+    dict["temp_id"]=arr;
+    dict["id"]="";
+        }
+    else
+    {
+    dict["id"]=block_id;
+    dict["temp_id"]="";
+      }
+
+    dict["desc"] = $('#'+arr[i]).text();
+    dict["pos_x"] = parseInt($('#'+arr[i]).position().left);
+    dict["pos_y"] = parseInt($('#'+arr[i]).position().top);
+    dict["height"] = parseInt($('#'+arr[i]).height());
+    dict["width"] = parseInt($('#'+arr[i]).width());
+    dict["idcat"] = 1;
+    dict["s_id"]=c_slide;
+
+    final_array.push(dict);
+  });
 
 // console.log(final_array);
 $.each(final_array,function(i,j)
@@ -225,7 +267,12 @@ function post_init(result){
   if (result.elements.status){
     // call successful
     var data = result.elements.data;
-    console.log(data);
+    //create slides
+    $.each(data.slides,function(i,j){
+      console.log(j);
+      addSlideFrontend(j,na_present=i);
+    });
+    console.log(data.slides);
     slide_data(data);
   }
   else{
@@ -244,7 +291,7 @@ function slide_data(result){
   var posy=result.elements.data.text[i]['position_y'];
   var wid=result.elements.data.text[i]['object_breadth'];
   var len=result.elements.data.text[i]['object_length'];
-  $("blockdb"+(a)+"").css({"width":"wid","height":"len", "position.top":"posy","position.left":"posx"});
+  $("blockdb_"+(a)+"").css({"width":"wid","height":"len", "position.top":"posy","position.left":"posx"});
   });
 }
 
