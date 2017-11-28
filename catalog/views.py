@@ -58,12 +58,13 @@ def addpre(request):
 	from pyramid.httpexceptions import HTTPFound
 	id1=addproject()
 	url=request.application_url+'/presentation/'+str(id1)
-	return Response(status_int=302, location=url) 
-	
-@view_config(route_name='addslide')
+	return Response(status_int=302, location=url)
+
+@view_config(route_name='addslide', renderer='json')
 def add_slide(request):
-	s_id=addslide(request)
-	return render_to_response('templates/presentation.html',{'s_id':s_id},request=request)
+	s=addslide(request)
+	print(s)
+	return s
 
 @view_config(route_name='saveslide' ,renderer='json')
 def save_slide(request):
@@ -1035,9 +1036,9 @@ def slide(request):
 	try:
 		with connection.cursor() as cursor:
 			if int(sid):
-				sql2="select p.s_id,p.p_id,a.id,b.URL,a.temp_url,a.position_x,a.position_y,a.object_length,a.object_breadth from Presentation p left join slide_elements a on p.s_id=a.s_id and p.flag=0 left join Images b on a.e_id=b.idCatalog where a.s_id={s_id} and p.pr_id={p_id} order by p.s_id;".format(s_id=int(sid),p_id=int(pid))
+				sql2="select p.s_id,p.pr_id,a.id,b.URL,a.temp_url,a.position_x,a.position_y,a.object_length,a.object_breadth from Presentation p left join slide_elements a on p.s_id=a.s_id and p.flag=0 left join Images b on a.e_id=b.idCatalog where a.s_id={s_id} and p.pr_id={p_id} order by p.s_id;".format(s_id=int(sid),p_id=int(pid))
 			else:
-				sql2="select p.s_id,p.p_id,a.id,b.URL,a.temp_url,a.position_x,a.position_y,a.object_length,a.object_breadth from Presentation p left join slide_elements a on p.s_id=a.s_id and p.flag=0 left join Images b on a.e_id=b.idCatalog where p.pr_id={p_id} order by p.s_id;".format(p_id=int(pid))
+				sql2="select p.s_id,p.pr_id,a.id,b.URL,a.temp_url,a.position_x,a.position_y,a.object_length,a.object_breadth from Presentation p left join slide_elements a on p.s_id=a.s_id and p.flag=0 left join Images b on a.e_id=b.idCatalog where p.pr_id={p_id} order by p.s_id;".format(p_id=int(pid))
 			# print(sql2)
 			cursor.execute(sql2)
 			res=cursor.fetchall()

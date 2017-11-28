@@ -68,7 +68,7 @@
   <div>
     <button class="btn add-block" onclick="add_from_catalog()">Add from catalog</button>
     <button class="btn add-block" onclick="test_func_text()" id="splbtn">Add Text</button>
-    <button class="btn add-image" onclick="$('#uploaddiv').show(500);">Add an image</button>
+    <button class="btn add-image" onclick="$('#upladdiv').show(500);">Add an image</button>
     <button class="btn add-slide" onclick="test_func_slide()">Add a new slide</button>
     <div id="editor"></div>
     <button class="btn download" onclick="download()">Download as PDF</button>
@@ -101,7 +101,7 @@
   <script src="/templates/rejs/js/reveal.js"></script>
   <script>
   // s_id = {{s_id}};
-  pr_id={{pr_id}};
+  var pr_id={{pr_id}};
   c_slide=0;//current slide
   // status = {{status}};
     Reveal.initialize({

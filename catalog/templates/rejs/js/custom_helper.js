@@ -129,9 +129,24 @@ $($('#block'+(n)).children()).attr("src",imgurl );
 // $(".slides").append("<section class='present' class='slide_el' id='"+slide_id+"'' data-markdown><script type='text/template'></script></section>");    
 // };
 function test_func_slide(){  
-  // Reveal.add('<h3>Slide title</h3>') 
+  // Reveal.add('<h3>Slide title</h3>')
+  temp={}
+  temp["id"]=pr_id;
+  addslide(temp);
 $(".slides").append("<section class='present' data-markdown><script type='text/template'></script><div></div></section>");
 };
+
+function addslide(data)
+{
+  console.log("Adding")
+  $.ajax({
+    type: "POST",
+    url: "/addslide",
+    data : data
+  }).done(function(p){
+    console.log(p);
+  });
+}
 
 // function add_slide(){
 //   console.log("adding slide");
@@ -190,7 +205,7 @@ dict["pos_x"] = parseInt($('#'+arr[i]).position().left);
 dict["pos_y"] = parseInt($('#'+arr[i]).position().top);
 dict["height"] = parseInt($('#'+arr[i]).height());
 dict["width"] = parseInt($('#'+arr[i]).width());
-dict["idcat"] = 1;
+dict["idcat"] = 302;
 //extra code here revert back if required
 dict["s_id"]=c_slide;
 // till this point

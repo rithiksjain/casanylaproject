@@ -87,6 +87,7 @@ def get_all_slides_id(p_id):
 	return resp
 
 def addslide(request):
+	resp_dict=dict(status=True)
 	id_p=request.params['id']
 	id_slide=[]
 	connection = pymysql.connect(host='127.0.0.1',
@@ -103,12 +104,14 @@ def addslide(request):
 			cursor.execute(sql1)
 			idslide=cursor.fetchall()
 			id_slide=idslide[0]['LAST_INSERT_ID()']
+			resp_dict['slide_id']=id_slide
 		connection.commit()
-	except NameError:
-	    print('An exception flew by!')
+	except Exception as e:
+	    print(e)
+	    resp_dict['status']=False
 	finally:
 		connection.close()
-	return id_slide
+	return resp_dict
 
 def saveslide(request):
 	resp_dict=dict(status=True)
