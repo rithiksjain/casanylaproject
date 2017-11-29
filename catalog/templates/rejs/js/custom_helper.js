@@ -273,7 +273,7 @@ function post_init(result){
       addSlideFrontend(j,na_present=i);
     });
     console.log(data.slides);
-    slide_data(data);
+    slide_data(result);
   }
   else{
     //call failed
@@ -282,17 +282,33 @@ function post_init(result){
 
 function slide_data(result){
   // this is for each slide rearrange slide elements here
-  console.log("hellabbo");
-  $.each(result,function(i){
-  var a=result.elements.data.text[i]['id'];
-  console.log(a);
-  console.log("hey");
-  var posx=result.elements.data.text[i]['position_x'];
-  var posy=result.elements.data.text[i]['position_y'];
-  var wid=result.elements.data.text[i]['object_breadth'];
-  var len=result.elements.data.text[i]['object_length'];
-  $("blockdb_"+(a)+"").css({"width":"wid","height":"len", "position.top":"posy","position.left":"posx"});
-  });
+  console.log(result);
+  css_data = result.elements.data.text;
+  console.log(css_data);
+  for (i= 0; i < css_data.length; ++i) {
+  a = css_data[i]['id'];
+  posx=css_data[i]['position_x'];
+  posy=css_data[i]['position_y'];
+  wid=css_data[i]['object_breadth'];
+  len=css_data[i]['object_length'];
+  text=css_data[i]['e_desc'];
+  $('.slides .present').append("<div class='block' id='blockdb_"+(a)+"' onclick='edit_text(`blockdb_"+(a)+"`,1); func(`.block`);' style='border: 2px solid;'></div>");
+  //$("#blockdb_"+(a)+"").css({"width":"wid","height":"len","position":"relative","top":"posy","left":"posx"});
+  document.getElementById("blockdb_"+(a)+"").innerHTML=text;
+  $("#blockdb_"+(a)+"").css('width', wid);
+  $("#blockdb_"+(a)+"").css('height', len);
+  $("#blockdb_"+(a)+"").css('top', posx);
+  $("#blockdb_"+(a)+"").css('left', posy);
+  $("#blockdb_"+(a)+"").css('position', 'relative');
+  /*
+  document.getElementById("blockdb_"+(a)+"").style.position = "relative";
+  document.getElementById("blockdb_"+(a)+"").style.top = "posy"; 
+  document.getElementById("blockdb_"+(a)+"").style.left = "posx";
+  document.getElementById("blockdb_"+(a)+"").style.width = "wid";
+  document.getElementById("blockdb_"+(a)+"").style.height = "len";
+  console.log(len);
+  */
+  }
 }
 
 
