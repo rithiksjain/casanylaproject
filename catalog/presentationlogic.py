@@ -154,7 +154,7 @@ def saveslide(request):
                              cursorclass=pymysql.cursors.DictCursor)
 		try:
 			with connection.cursor() as cursor:
-				sql1="INSERT INTO slide_elements (s_id,position_x, position_y, object_length, object_breadth, temp_url) values (%s,%s,%s,%s,%s,%s) "
+				sql="INSERT INTO slide_elements (s_id,position_x, position_y, object_length, object_breadth, temp_url) values (%s,%s,%s,%s,%s,%s) "
 				cursor.execute(sql,(int(slide_id),int(pos_x),int(pos_y),int(obj_len),int(obj_wid),tmp_url))
 				sql1="SELECT LAST_INSERT_ID()";
 				cursor.execute(sql1)
@@ -162,8 +162,8 @@ def saveslide(request):
 				id_block=idblock[0]['LAST_INSERT_ID()']
 				resp_dict['block_id']=id_block
 			connection.commit()
-		except NameError:
-			print('An exception')
+		except Exception as e:
+			print(e)
 			resp_dict['status']=False
 		finally:
 			connection.close()

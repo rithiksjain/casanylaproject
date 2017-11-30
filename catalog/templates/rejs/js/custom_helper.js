@@ -248,7 +248,16 @@ $.each(arr,function(i)
     dict["pos_y"] = parseInt($('#'+arr[i]).position().top);
     dict["height"] = parseInt($('#'+arr[i]).height());
     dict["width"] = parseInt($('#'+arr[i]).width());
-    dict["idcat"] = 1;
+    
+    if(dict["desc"]=="")
+      dict["url"] = $($('#'+arr[i]).children()).attr('src');
+    else
+      dict["url"]="";
+
+    if(dict["url"]=="")
+        dict["idcat"] = 1;
+    else
+      dict["idcat"] = "";
     dict["s_id"]=c_slide;
 
     final_array.push(dict);
