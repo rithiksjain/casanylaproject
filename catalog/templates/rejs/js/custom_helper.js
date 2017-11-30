@@ -291,9 +291,11 @@ function post_init(result){
 
 function slide_data(result){
   // this is for each slide rearrange slide elements here
-  console.log(result);
   css_data = result.elements.data.text;
+  css_url = result.elements.data.url;
+  console.log(css_url);
   console.log(css_data);
+
   for (i= 0; i < css_data.length; ++i) {
   a = css_data[i]['id'];
   posx=css_data[i]['position_x'];
@@ -309,14 +311,22 @@ function slide_data(result){
   $("#blockdb_"+(a)+"").css('top', posx);
   $("#blockdb_"+(a)+"").css('left', posy);
   $("#blockdb_"+(a)+"").css('position', 'relative');
-  /*
-  document.getElementById("blockdb_"+(a)+"").style.position = "relative";
-  document.getElementById("blockdb_"+(a)+"").style.top = "posy"; 
-  document.getElementById("blockdb_"+(a)+"").style.left = "posx";
-  document.getElementById("blockdb_"+(a)+"").style.width = "wid";
-  document.getElementById("blockdb_"+(a)+"").style.height = "len";
-  console.log(len);
-  */
+  }
+
+  for (j= 0; j < css_url.length; ++j) {
+  b = css_url[j]['id'];
+  posx=css_url[j]['position_x'];
+  posy=css_url[j]['position_y'];
+  wid=css_url[j]['object_breadth'];
+  len=css_url[j]['object_length'];
+  url=css_url[j]['temp_url']
+  $('.slides .present').append("<div class='block' id='blocktemp_"+(b)+"' onclick='func('.block')'><img src=''></div>");
+  $($('#blocktemp_'+(b)).children()).attr("src",url);
+  $("#blocktemp_"+(b)+"").css('width', wid);
+  $("#blocktemp_"+(b)+"").css('height', len);
+  $("#blocktemp_"+(b)+"").css('top', posx);
+  $("#blocktemp_"+(b)+"").css('left', posy);
+  $("#blocktemp_"+(b)+"").css('position', 'relative');
   }
 }
 
