@@ -225,6 +225,7 @@ $.each($('#slides').children(),function(i,j)
 console.log(arr);
 var cat_id = localStorage.getItem('id_cat');
 final_array=[];
+console.log("AAA");
 $.each(arr,function(i)
 {
   dict={};
@@ -235,7 +236,7 @@ $.each(arr,function(i)
     if (block_id_prep_text=="blocktemp")
     {
     dict["temp_id"]=arr;
-    dict["id"]="";
+    dict["id"]=0;
         }
     else
     {
@@ -261,6 +262,7 @@ $.each(arr,function(i)
     dict["s_id"]=c_slide;
 
     final_array.push(dict);
+    console.log("BBB");
   });
 
 // console.log(final_array);
@@ -293,9 +295,7 @@ function slide_data(result){
   // this is for each slide rearrange slide elements here
   css_data = result.elements.data.text;
   css_url = result.elements.data.url;
-  console.log(css_url);
-  console.log(css_data);
-
+  
   for (i= 0; i < css_data.length; ++i) {
   a = css_data[i]['id'];
   posx=css_data[i]['position_x'];
@@ -320,13 +320,13 @@ function slide_data(result){
   wid=css_url[j]['object_breadth'];
   len=css_url[j]['object_length'];
   url=css_url[j]['temp_url']
-  $('.slides .present').append("<div class='block' id='blocktemp_"+(b)+"' onclick='func('.block')'><img src=''></div>");
-  $($('#blocktemp_'+(b)).children()).attr("src",url);
-  $("#blocktemp_"+(b)+"").css('width', wid);
-  $("#blocktemp_"+(b)+"").css('height', len);
-  $("#blocktemp_"+(b)+"").css('top', posx);
-  $("#blocktemp_"+(b)+"").css('left', posy);
-  $("#blocktemp_"+(b)+"").css('position', 'relative');
+  $('.slides .present').append("<div class='block' id='blockdb_"+(b)+"' onclick='func('.block')'><img src=''></div>");
+  $($('#blockdb_'+(b)).children()).attr("src",url);
+  $("#blockdb_"+(b)+"").css('width', wid);
+  $("#blockdb_"+(b)+"").css('height', len);
+  $("#blockdb_"+(b)+"").css('top', posx);
+  $("#blockdb_"+(b)+"").css('left', posy);
+  $("#blockdb_"+(b)+"").css('position', 'relative');
   }
 }
 

@@ -122,51 +122,50 @@ def saveslide(request):
 	pos_y=request.params['pos_x']
 	obj_len=request.params['height']
 	obj_wid=request.params['width']
-	if(id_cat!=""):
-		connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
+	block_id=request.params['id']
+	id_list=[]
+	connection = pymysql.connect(host='127.0.0.1',
+                           	 user='root',
                              password='root',
                              db='Pieces',
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
-		try:
-			with connection.cursor() as cursor:
-				sql="INSERT INTO slide_elements (s_id,e_id, e_desc, position_x, position_y, object_length, object_breadth) values (%s,%s,%s,%s,%s,%s,%s)"
-				cursor.execute(sql,(int(slide_id),int(id_cat),desc,int(pos_x),int(pos_y),int(obj_len),int(obj_wid)))
-				sql1="SELECT LAST_INSERT_ID()";
-				cursor.execute(sql1)
-				idblock=cursor.fetchall()
-				id_block=idblock[0]['LAST_INSERT_ID()']
-				resp_dict['block_id']=id_block
-				connection.commit()
-		except Exception as e:
-			print(e)
-			resp_dict['status']=False
-		finally:
-			connection.close()
-	else:
-		tmp_url=request.params['url']
-		connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
-		try:
-			with connection.cursor() as cursor:
-				sql="INSERT INTO slide_elements (s_id,position_x, position_y, object_length, object_breadth, temp_url) values (%s,%s,%s,%s,%s,%s) "
-				cursor.execute(sql,(int(slide_id),int(pos_x),int(pos_y),int(obj_len),int(obj_wid),tmp_url))
-				sql1="SELECT LAST_INSERT_ID()";
-				cursor.execute(sql1)
-				idblock=cursor.fetchall()
-				id_block=idblock[0]['LAST_INSERT_ID()']
-				resp_dict['block_id']=id_block
-			connection.commit()
-		except Exception as e:
-			print(e)
-			resp_dict['status']=False
-		finally:
-			connection.close()
+	try:
+		with connection.cursor() as cursor:
+			sql="SELECT id from slide_elements"
+			cursor.execute(sql)
+			id_list1=cursor.fetchall()
+			for a in id_list1:
+				id_list2=a['id']
+				id_list.append(id_list2)
+			if (int(block_id)!=0):
+				sql1="UPDATE slide_elements SET s_id=%s,e_id=%s, e_desc=%s, position_x=%s, position_y=%s, object_length=%s, object_breadth=%s where id=%s"
+				cursor.execute(sql1,(int(slide_id),int(id_cat),desc,int(pos_x),int(pos_y),int(obj_len),int(obj_wid),int(block_id)))
+				resp_dict['block_id']=block_id
+			else:
+ 				if(id_cat!=""):
+ 					sql2="INSERT INTO slide_elements (s_id,e_id, e_desc, position_x, position_y, object_length, object_breadth) values (%s,%s,%s,%s,%s,%s,%s)"
+ 					cursor.execute(sql2,(int(slide_id),int(id_cat),desc,int(pos_x),int(pos_y),int(obj_len),int(obj_wid)))
+ 					sql3="SELECT LAST_INSERT_ID()";
+ 					cursor.execute(sql3)
+ 					idblock=cursor.fetchall()
+ 					id_block=idblock[0]['LAST_INSERT_ID()']
+ 					resp_dict['block_id']=id_block
+ 				else:
+ 					tmp_url=request.params['url']
+ 					sql4="INSERT INTO slide_elements (s_id,position_x, position_y, object_length, object_breadth, temp_url) values (%s,%s,%s,%s,%s,%s) "
+ 					cursor.execute(sql4,(int(slide_id),int(pos_x),int(pos_y),int(obj_len),int(obj_wid),tmp_url))
+ 					sql5="SELECT LAST_INSERT_ID()";
+ 					cursor.execute(sql5)
+ 					idblock=cursor.fetchall()
+ 					id_block=idblock[0]['LAST_INSERT_ID()']
+ 					resp_dict['block_id']=id_block
+		connection.commit()
+	except Exception as e:
+		print(e)
+		resp_dict['status']=False
+	finally:
+		connection.close()
 	return resp_dict
 
 def editslide():
