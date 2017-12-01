@@ -50,7 +50,7 @@ var s_d_id = '';
 function test_func_text(){
 var n =$(".slides .block").length;
 ++n;
-$('.slides .present').append("<div class='block' id='blocktemp_"+(n)+"' onclick='edit_text(`blocktemp_"+(n)+"`,1); func(`.block`);' style='border: 2px solid;'>Edit here</div>");
+$('.slides .present').append("<div class='block' id='blocktemp_"+(n)+"' onclick='edit_text(`blocktemp_"+(n)+"`,1); func(`.block`);' style='border: 2px solid; position:absolute; top:50px; left:50px;'>Edit here</div>");
 s_d_id="blocktemp_"+n;
 $('#splbtn').effect( "transfer", { to: "#main", className: "ui-effects-transfer" }, 1000 );
 // edit_text(s_d_id,1);
@@ -120,7 +120,7 @@ function add_from_catalog(){
 function test_func_img(){
 var n = $(".slides .block").length;
 ++n;
-$(".slides .present").append("<div class='block' id='blocktemp_"+(n)+"' onclick='func('.block')'><img src=''></div>");
+$(".slides .present").append("<div class='block' id='blocktemp_"+(n)+"' onclick='func('.block')' style='position:absolute; top:70px; left:70px;'><img src=''></div>");
 var imgurl= localStorage.getItem('url');
 $($('#blocktemp_'+(n)).children()).attr("src",imgurl );
 };
