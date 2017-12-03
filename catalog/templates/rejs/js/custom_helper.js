@@ -82,6 +82,34 @@ function edit_text(div_id,opt){
   s_d_id=div_id;
 }
 
+function RemoveValue() {
+  if (s_d_id){
+    div_id=s_d_id;
+    delete_element(div_id);
+  }
+}
+
+function delete_element(div_id){
+  var div = document.getElementById(div_id);
+  div.remove();
+  del={}
+  del["id"]=parseInt(div_id.slice(div_id.indexOf('_')+1,div_id.length));
+  console.log(del["id"]);
+  delete_ele(del);
+}
+
+function delete_ele(data)
+{
+  console.log("Deleting")
+  $.ajax({
+    type: "POST",
+    url: "/delete",
+    data : data
+  }).done(function(d){
+    console.log(d);
+  });
+}
+
 function StorageEvent(e){
   console.log("i am active");
   var value=0;
@@ -303,7 +331,7 @@ function slide_data(result){
   wid=css_data[i]['object_breadth'];
   len=css_data[i]['object_length'];
   text=css_data[i]['e_desc'];
-  $('.slides .present').append("<div class='block' id='blockdb_"+(a)+"' onclick='edit_text(`blockdb_"+(a)+"`,1); func(`.block`);' style='border: 2px solid;'></div>");
+  $('#slide_'+a).append("<div class='block' id='blockdb_"+(a)+"' onclick='edit_text(`blockdb_"+(a)+"`,1); func(`.block`);' style='border: 2px solid;'></div>");
   //$("#blockdb_"+(a)+"").css({"width":"wid","height":"len","position":"relative","top":"posy","left":"posx"});
   document.getElementById("blockdb_"+(a)+"").innerHTML=text;
   $("#blockdb_"+(a)+"").css('width', wid);
@@ -356,22 +384,15 @@ function init(p_id,s_id){
 };
 
 //init(1,1);
-/*
+
 var doc = new jsPDF();
 var specialElementHandlers = {
     '#editor': function (element, renderer) {
         return true;
     }
 };
-*/
-function download() {
-    var doc = new jsPDF();
-    var specialElementHandlers = {
-    '#editor': function (element, renderer) {
-        return true;
-    }
-    };
-    
+
+function download() {    
     doc.fromHTML($('.reveal').html(), 15, 15, {
         'width': 170,
             'elementHandlers': specialElementHandlers

@@ -72,6 +72,12 @@ def save_slide(request):
 	print (s)
 	return s
 
+@view_config(route_name='delete_ele', renderer='json')
+def delete(request):
+	d = delete_element(request)
+	print(d)
+	return d
+
 @view_config(route_name='vendor',renderer='templates/vendorform.jinja2')
 def vendor(request):
 	return {}

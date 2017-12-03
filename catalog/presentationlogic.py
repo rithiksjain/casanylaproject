@@ -191,6 +191,27 @@ def editslide():
 	finally:
 		connection.close()
 
+def delete_element(request):
+	resp_dict=dict(status=True)
+	s_id=request.params['id']
+	connection = pymysql.connect(host='127.0.0.1',
+                             user='root',
+                             password='root',
+                             db='Pieces',
+                             charset='utf8mb4',
+                             cursorclass=pymysql.cursors.DictCursor)
+	try:
+		with connection.cursor() as cursor:
+			sql="UPDATE slide_elements SET flag=1 where id=%d"
+			cursor.execute(sql,(int(s_id)))
+		connection.commit()
+	except Exception as e:
+		print(e)
+		resp_dict['status']=False
+	finally:
+		connection.close()
+	return resp_dict
+'''	
 def deleteslide():
 	slide_id=request.params['idslide']
 	connection = pymysql.connect(host='127.0.0.1',
@@ -208,3 +229,4 @@ def deleteslide():
 		print('An exception')
 	finally:
 		connection.close()
+'''
