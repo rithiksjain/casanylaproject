@@ -138,6 +138,12 @@ def save_slide(request):
 	print (s)
 	return s
 
+@view_config(route_name='delete_ele', renderer='json')
+def delete(request):
+	d = delete_element(request)
+	print(d)
+	return d
+
 @view_config(route_name='vendor',renderer='templates/vendorform.jinja2')
 def vendor(request):
 	return {}
@@ -1102,9 +1108,9 @@ def slide(request):
 	try:
 		with connection.cursor() as cursor:
 			if int(sid):
-				sql2="select p.s_id,p.pr_id,a.id,b.URL,a.temp_url,a.position_x,a.position_y,a.object_length,a.object_breadth,a.e_desc from Presentation p left join slide_elements a on p.s_id=a.s_id and p.flag=0 left join Images b on a.e_id=b.idCatalog where a.s_id={s_id} and p.pr_id={p_id} order by p.s_id;".format(s_id=int(sid),p_id=int(pid))
+				sql2="select p.s_id,p.pr_id,a.id,b.URL,a.temp_url,a.position_x,a.position_y,a.object_length,a.object_breadth,a.e_desc from Presentation p left join slide_elements a on p.s_id=a.s_id and p.flag=0 and a.flag=0 left join Images b on a.e_id=b.idCatalog where a.s_id={s_id} and p.pr_id={p_id}  order by p.s_id;".format(s_id=int(sid),p_id=int(pid))
 			else:
-				sql2="select p.s_id,p.pr_id,a.id,b.URL,a.temp_url,a.position_x,a.position_y,a.object_length,a.object_breadth,a.e_desc from Presentation p left join slide_elements a on p.s_id=a.s_id and p.flag=0 left join Images b on a.e_id=b.idCatalog where p.pr_id={p_id} order by p.s_id;".format(p_id=int(pid))
+				sql2="select p.s_id,p.pr_id,a.id,b.URL,a.temp_url,a.position_x,a.position_y,a.object_length,a.object_breadth,a.e_desc from Presentation p left join slide_elements a on p.s_id=a.s_id and p.flag=0 and a.flag=0 left join Images b on a.e_id=b.idCatalog where p.pr_id={p_id}  order by p.s_id;".format(p_id=int(pid))
 			# print(sql2)
 			cursor.execute(sql2)
 			res=cursor.fetchall()

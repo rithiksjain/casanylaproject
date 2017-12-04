@@ -70,6 +70,7 @@
     <button class="btn add-block" onclick="test_func_text()" id="splbtn">Add Text</button>
     <button class="btn add-image" onclick="$('#uploaddiv').show(500);">Add an image</button>
     <button class="btn add-slide" onclick="test_func_slide()">Add a new slide</button>
+    <button class="btn add-slide" onclick="RemoveValue()">Delete Element</button>
     <div id="editor"></div>
     <button class="btn download" onclick="download()">Download as PDF</button>
     <button class="btn save" onclick="save_func()">Save</button>
@@ -126,9 +127,10 @@
       });
     init(pr_id,0);
 
-      function func(element){
-          console.log($(element).position());
-      };
+  function func(element){
+      console.log($(element).position());
+      //s_d_id=$($(element)[0]).attr('id');
+  };
     /*
     document.onclick = function(){
       var imgurl= localStorage.getItem('url');

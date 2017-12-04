@@ -82,6 +82,41 @@ function edit_text(div_id,opt){
   s_d_id=div_id;
 }
 
+
+
+function RemoveValue() {
+  if (s_d_id){
+    div_id=s_d_id;
+    delete_element(div_id);
+  }
+}
+
+function delete_element(div_id){
+  var div = document.getElementById(div_id);
+  div.remove();
+  console.log(div_id);
+  del={}
+  block_id_prep_text=div_id.slice(0,div_id.indexOf('_'))
+  if (block_id_prep_text=="blocktemp"){
+    return 0;
+  }
+  del["id"]=parseInt(div_id.slice(div_id.indexOf('_')+1,div_id.length));
+  console.log(del["id"]);
+  delete_ele(del);
+}
+
+function delete_ele(data)
+{
+  console.log("Deleting")
+  $.ajax({
+    type: "POST",
+    url: "/delete",
+    data : data
+  }).done(function(d){
+    console.log(d);
+  });
+}
+
 function StorageEvent(e){
   console.log("i am active");
   var value=0;
@@ -116,6 +151,10 @@ function add_from_catalog(){
   window.addEventListener('storage', StorageEvent);
 }
 
+// $(".slides .block").on( "click", function() {
+//   console.log("^^^^^^^^^");
+//   console.log(this);
+// });
 
 function test_func_img(){
 var n = $(".slides .block").length;
@@ -140,7 +179,7 @@ function addSlideFrontend(id,na_present){
     $($(".slides").children()[0]).attr("id","slide_"+id);
   }
   else{
-    $(".slides").append("<section id='slide_"+id+"' data-markdown ><script type='text/template'></script><div></div></section>");  
+    $(".slides").append("<section id='slide_"+id+"' data-markdown ></section>");//<script type='text/template'></script><div></div>  
   }
 }
 
@@ -160,18 +199,6 @@ function addslide(data)
   });
 }
 
-// function add_slide(){
-//   console.log("adding slide");
-//   url='/addslide?id='+pr_id;
-//   async_call.get_call(url1).then(function(result)
-//     {
-//       console.log(result.default);
-//       // test_func_slide()
-//     },
-//     function(error){
-//     console.log("Network Error")
-// });
-// }
 
 function change_div_id(present_id,changed_id){
   $("#"+present_id).attr("id",changed_id);
@@ -208,7 +235,7 @@ function post_call(data)
 }
 
 function save_func(){
-arr=[]
+arr=[];
 $.each($('#slides').children(),function(i,j)
 {
   if($(j).hasClass('present'))
@@ -217,15 +244,15 @@ $.each($('#slides').children(),function(i,j)
     // return 0;
     $.each($(j).children(),function(k,l)
     {
+      console.log(l);
        arr.push($(l).attr('id'))
     });
   };
 });
 
 console.log(arr);
-var cat_id = localStorage.getItem('id_cat');
+// var cat_id = localStorage.getItem('id_cat');
 final_array=[];
-console.log("AAA");
 $.each(arr,function(i)
 {
   dict={};
@@ -262,7 +289,6 @@ $.each(arr,function(i)
     dict["s_id"]=c_slide;
 
     final_array.push(dict);
-    console.log("BBB");
   });
 
 // console.log(final_array);
@@ -283,7 +309,6 @@ function post_init(result){
       console.log(j);
       addSlideFrontend(j,na_present=i);
     });
-    console.log(data.slides);
     slide_data(result);
   }
   else{
@@ -295,7 +320,7 @@ function slide_data(result){
   // this is for each slide rearrange slide elements here
   css_data = result.elements.data.text;
   css_url = result.elements.data.url;
-  
+  // console.log(result);
   for (i= 0; i < css_data.length; ++i) {
   a = css_data[i]['id'];
   posx=css_data[i]['position_x'];
@@ -303,7 +328,7 @@ function slide_data(result){
   wid=css_data[i]['object_breadth'];
   len=css_data[i]['object_length'];
   text=css_data[i]['e_desc'];
-  $('.slides .present').append("<div class='block' id='blockdb_"+(a)+"' onclick='edit_text(`blockdb_"+(a)+"`,1); func(`.block`);' style='border: 2px solid;'></div>");
+  $('#slide_'+css_data[i]['s_id']).append("<div class='block' id='blockdb_"+(a)+"' onclick='edit_text(`blockdb_"+(a)+"`,1);func(`.block`);' style='border: 2px solid;'></div>");
   //$("#blockdb_"+(a)+"").css({"width":"wid","height":"len","position":"relative","top":"posy","left":"posx"});
   document.getElementById("blockdb_"+(a)+"").innerHTML=text;
   $("#blockdb_"+(a)+"").css('width', wid);
@@ -320,7 +345,7 @@ function slide_data(result){
   wid=css_url[j]['object_breadth'];
   len=css_url[j]['object_length'];
   url=css_url[j]['temp_url']
-  $('.slides .present').append("<div class='block' id='blockdb_"+(b)+"' onclick='func('.block')'><img src=''></div>");
+  $('#slide_'+css_url[j]['s_id']).append("<div class='block' id='blockdb_"+(b)+"' onclick='func(`.block`);' style='position:absolute;'><img src=''></div>");
   $($('#blockdb_'+(b)).children()).attr("src",url);
   $("#blockdb_"+(b)+"").css('width', wid);
   $("#blockdb_"+(b)+"").css('height', len);
@@ -356,22 +381,15 @@ function init(p_id,s_id){
 };
 
 //init(1,1);
-/*
+
 var doc = new jsPDF();
 var specialElementHandlers = {
     '#editor': function (element, renderer) {
         return true;
     }
 };
-*/
-function download() {
-    var doc = new jsPDF();
-    var specialElementHandlers = {
-    '#editor': function (element, renderer) {
-        return true;
-    }
-    };
-    
+
+function download() {    
     doc.fromHTML($('.reveal').html(), 15, 15, {
         'width': 170,
             'elementHandlers': specialElementHandlers
