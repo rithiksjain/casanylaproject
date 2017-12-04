@@ -345,7 +345,7 @@ function slide_data(result){
   wid=css_url[j]['object_breadth'];
   len=css_url[j]['object_length'];
   url=css_url[j]['temp_url']
-  $('#slide_'+css_url[j]['s_id']).append("<div class='block' id='blockdb_"+(b)+"' onclick='func(`.block`);'><img src=''></div>");
+  $('#slide_'+css_url[j]['s_id']).append("<div class='block' id='blockdb_"+(b)+"' onclick='func(`.block`);' style='position:absolute;'><img src=''></div>");
   $($('#blockdb_'+(b)).children()).attr("src",url);
   $("#blockdb_"+(b)+"").css('width', wid);
   $("#blockdb_"+(b)+"").css('height', len);

@@ -116,17 +116,20 @@ def addslide(request):
 def saveslide(request):
 	resp_dict=dict(status=True)
 	slide_id=request.params['s_id']
+	'''
 	try:
 		id_cat=int(request.params['idcat'])
 	except:
 		id_cat=0
+	'''
+	id_cat=request.params['idcat']
 	desc=request.params['desc']
 	pos_x=request.params['pos_y']
 	pos_y=request.params['pos_x']
 	obj_len=request.params['height']
 	obj_wid=request.params['width']
 	block_id=request.params['id']
-	print("{},{},{},{},{},{},{},{}".format(slide_id,id_cat,desc,pos_x,pos_y,obj_len,obj_wid,block_id))
+	#print("{},{},{},{},{},{},{},{}".format(slide_id,id_cat,desc,pos_x,pos_y,obj_len,obj_wid,block_id))
 	id_list=[]
 	connection = pymysql.connect(host='127.0.0.1',
                            	 user='root',
@@ -144,7 +147,7 @@ def saveslide(request):
 				id_list.append(id_list2)
 			if (int(block_id)!=0):
 				sql1="UPDATE slide_elements SET s_id=%d, e_desc='%s', position_x=%d, position_y=%d, object_length=%d, object_breadth=%d where id=%d"%(int(slide_id),desc,int(pos_x),int(pos_y),int(obj_len),int(obj_wid),int(block_id))
-				print(sql1)
+				#print(sql1)
 				cursor.execute(sql1)
 				resp_dict['block_id']=block_id
 			else:
