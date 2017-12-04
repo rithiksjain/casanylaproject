@@ -1,4 +1,4 @@
-from pyramid.view import view_config
+from pyramid.view import (view_config, view_defaults)
 from pyramid.renderers import render_to_response
 from pyramid.renderers import render
 from pyramid.response import Response
@@ -8,6 +8,7 @@ from pyramid_flash_message import MessageQueue
 from pyramid.view import render_view_to_response
 from pyramid.request import Request
 from catalog.presentationlogic import *
+from pyramid.httpexceptions import HTTPFound
 import tempfile
 import pymysql.cursors
 import ast
@@ -16,14 +17,78 @@ import glob
 import shutil
 import os
 import json
+from pyramid.security import (
+	remember,
+	forget,
+)
+
+from .security import (
+    USERS,
+    check_password
+)
+
 src_dir = "catalog/catalog/images"
 dst_dir = "catalog/catalog/listimages"
 dst_dir1 = "catalog/catalog/listimages/*"
 
-@view_config(route_name='login',renderer='templates/login.jinja2')
-def login(request):
+@view_config(renderer='templates/home1.jinja2')
+class Login:
+	def __init__(self, request):
+		self.request = request
+		self.logged_in = request.authenticated_userid
+
+	@view_config(route_name='home')
+	def home(self):
+		return {'name': 'Home View'}
+
+	@view_config(route_name='hello')
+	def hello(self):
+		return {'name': 'Hello View'}
+
+
+	@view_config(route_name='login',renderer='templates/login.jinja2')
+	def login(self):
+	        request = self.request
+	        login_url = request.route_url('login')
+	        referrer = request.url
+	        if referrer == login_url:
+	        	referrer = '/home1'  
+	        came_from = request.params.get('came_from', referrer)
+	        message = ''
+	        login = ''
+	        password = ''
+	        if 'form.submitted' in request.params:
+	        	print("1")
+	        	login = request.params['uname']
+	        	password = request.params['password']
+	        	hashed_pw = USERS.get(login)
+	        	if hashed_pw and check_password(password, hashed_pw):
+	        		print("2")
+	        		headers = remember(request, login)
+	        		return HTTPFound(location=came_from,headers=headers)
+	        	message = 'Failed login'
+
+	        return dict(
+	            name='Login',
+	            message=message,
+	            url=request.application_url + '/login',
+	            came_from=came_from,
+	            login=login,
+	            password=password,
+	        )
+
+	@view_config(route_name='logout')
+	def logout(self):
+	    request = self.request
+	    headers = forget(request)
+	    url = request.route_url('home')
+	    return HTTPFound(location=url,headers=headers)
+
+@view_config(route_name='home1',renderer='templates/home1.jinja2')
+def home(request):
 	return {}
 
+'''
 @view_config(route_name='submitlogin')
 def submitlogin(request):
 	name=request.params['uname']
@@ -52,6 +117,7 @@ def submitlogin(request):
 	finally:
 		connection.close()
 	return {}
+'''
 
 @view_config(route_name='addpre')
 def addpre(request):

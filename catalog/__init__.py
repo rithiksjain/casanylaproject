@@ -1,8 +1,20 @@
+import os
+import logging
+
 from pyramid.config import Configurator
 from pyramid.session import UnencryptedCookieSessionFactoryConfig
+from pyramid.authentication import AuthTktAuthenticationPolicy
+from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid import renderers
+
+from .security import groupfinder
+
+
 def main(global_config, **settings):
 	my_session_factory = UnencryptedCookieSessionFactoryConfig('itsaseekreet')
+	authn_policy = AuthTktAuthenticationPolicy(settings['secret'], callback=groupfinder,
+        hashalg='sha512')
+	authz_policy = ACLAuthorizationPolicy()                                    
 	config = Configurator(settings=settings,session_factory=my_session_factory)
 	config.include('pyramid_flash_message')
 	config.include('pyramid_jinja2')
@@ -13,8 +25,13 @@ def main(global_config, **settings):
 	config.add_static_view('static', 'static', cache_max_age=3600)
 	config.add_static_view('templates/assets','templates/assets',cache_max_age=3600)
 	config.add_static_view('templates/rejs','templates/rejs',cache_max_age=3600)
+	config.set_authentication_policy(authn_policy)
+	config.set_authorization_policy(authz_policy)
 	config.add_route('login','/login')
-	config.add_route('submitlogin','/submitlogin')
+	config.add_route('logout','/logout')
+	config.add_route('home1','/home1')
+	config.add_route('home','/home')
+	config.add_route('hello','/hello')
 	config.add_route('itemfetch','/itemfetch')
 	config.add_route('vendor','/vendor')
 	config.add_route('itemtype','/itemtype')

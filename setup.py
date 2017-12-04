@@ -14,6 +14,7 @@ requires = [
     'pyramid_jinja2',
     'pyramid_debugtoolbar',
     'waitress',
+    'bcrypt',
 ]
 
 tests_require = [
@@ -44,9 +45,8 @@ setup(
         'testing': tests_require,
     },
     install_requires=requires,
-    entry_points={
-        'paste.app_factory': [
-            'main = catalog:main',
-        ],
-    },
+    entry_points="""\
+        [paste.app_factory]
+        main = tutorial:main
+    """,
 )

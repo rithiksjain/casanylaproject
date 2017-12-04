@@ -46,6 +46,12 @@
     <body>
         {% block content %}
         <!-- Top content -->
+        <div style="float: right;">
+            <form action="/logout" method="post">
+                <button type="submit">Logout</button>
+            </form>
+        {{request.authenticated_userid}}
+        </div>
         <div class="top-content">
             
             <div class="inner-bg">
