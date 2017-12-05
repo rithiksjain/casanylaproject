@@ -56,7 +56,7 @@ function func(element){
 function test_func_text(){
 var n =$(".slides .block").length;
 ++n;
-$('.slides .present').append("<div class='block' id='blocktemp_"+(n)+"' onclick='edit_text($(this),1);' style='border: 2px solid; position:absolute; top:50px; left:50px;'>Edit here</div>");
+$('.slides .present').append("<div class='block' id='blocktemp_"+(n)+"' onclick='edit_text($(this),1);' style='border: 2px solid; position:absolute; top:50px; left:50px;color:black;'>Edit here</div>");
 s_d_id="blocktemp_"+n;
 $('#splbtn').effect( "transfer", { to: "#main", className: "ui-effects-transfer" }, 1000 );
 // edit_text(s_d_id,1);
