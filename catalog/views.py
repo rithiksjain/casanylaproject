@@ -31,7 +31,7 @@ src_dir = "catalog/catalog/images"
 dst_dir = "catalog/catalog/listimages"
 dst_dir1 = "catalog/catalog/listimages/*"
 
-@view_config(renderer='templates/home1.jinja2')
+'''@view_config(renderer='templates/home1.jinja2')
 class Login:
 	def __init__(self, request):
 		self.request = request
@@ -62,6 +62,7 @@ class Login:
 	        	login = request.params['uname']
 	        	password = request.params['password']
 	        	hashed_pw = USERS.get(login)
+	        	print(hashed_pw)
 	        	if hashed_pw and check_password(password, hashed_pw):
 	        		print("2")
 	        		headers = remember(request, login)
@@ -87,8 +88,13 @@ class Login:
 @view_config(route_name='home1',renderer='templates/home1.jinja2')
 def home(request):
 	return {}
-
 '''
+
+
+@view_config(route_name='login',renderer='templates/login.jinja2')
+def login(request):
+	return {}
+
 @view_config(route_name='submitlogin')
 def submitlogin(request):
 	name=request.params['uname']
@@ -117,7 +123,7 @@ def submitlogin(request):
 	finally:
 		connection.close()
 	return {}
-'''
+
 
 @view_config(route_name='addpre')
 def addpre(request):

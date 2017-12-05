@@ -31,6 +31,7 @@ def main(global_config, **settings):
 	config.add_route('logout','/logout')
 	config.add_route('home1','/home1')
 	config.add_route('home','/home')
+	config.add_route('submitlogin','/submitlogin')
 	config.add_route('hello','/hello')
 	config.add_route('itemfetch','/itemfetch')
 	config.add_route('vendor','/vendor')
