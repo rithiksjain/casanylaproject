@@ -398,7 +398,7 @@ function init(p_id,s_id){
 
 var doc = new jsPDF();
 var specialElementHandlers = {
-    '#editor': function (element, renderer) {
+    '.reveal': function (element, renderer) {
         return true;
     }
 };
@@ -410,3 +410,22 @@ function download() {
     });
     doc.save('sample_file.pdf');
 };
+
+/*
+$(document).ready(function() {
+
+        $("#down").click(function() {
+
+    var pdf = new jsPDF();
+    var specialElementHandlers = {
+    '.reveal': function (element, renderer) {
+        return true;
+        }
+    };
+
+    pdf.addHTML($('.reveal').first(), function() {
+        pdf.save("pre.pdf");
+    });
+    });
+});
+*/
