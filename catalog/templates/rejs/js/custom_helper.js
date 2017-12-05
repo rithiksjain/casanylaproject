@@ -50,7 +50,7 @@ var s_d_id = '';
 function test_func_text(){
 var n =$(".slides .block").length;
 ++n;
-$('.slides .present').append("<div class='block' id='blocktemp_"+(n)+"' onclick='edit_text(`blocktemp_"+(n)+"`,1); func(`.block`);' style='border: 2px solid; position:absolute; top:50px; left:50px;'>Edit here</div>");
+$('.slides .present').append("<div class='block' id='blocktemp_"+(n)+"' onclick='edit_text(`blocktemp_"+(n)+"`,1); func(`.block`);' style='border: 2px solid; position:absolute; top:50px; left:50px;color:black;'>Edit here</div>");
 s_d_id="blocktemp_"+n;
 $('#splbtn').effect( "transfer", { to: "#main", className: "ui-effects-transfer" }, 1000 );
 // edit_text(s_d_id,1);
@@ -179,7 +179,7 @@ function addSlideFrontend(id,na_present){
     $($(".slides").children()[0]).attr("id","slide_"+id);
   }
   else{
-    $(".slides").append("<section id='slide_"+id+"' data-markdown ></section>");//<script type='text/template'></script><div></div>  
+    $(".slides").prepend("<section id='slide_"+id+"' data-markdown data-state=intro> </section>");//<script type='text/template'></script><div></div>  
   }
 }
 
@@ -336,6 +336,7 @@ function slide_data(result){
   $("#blockdb_"+(a)+"").css('top', posx);
   $("#blockdb_"+(a)+"").css('left', posy);
   $("#blockdb_"+(a)+"").css('position', 'relative');
+  $("#blockdb_"+(a)+"").css('color', 'black');
   }
 
   for (j= 0; j < css_url.length; ++j) {
