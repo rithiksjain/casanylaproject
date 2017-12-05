@@ -47,10 +47,16 @@ $(function()
 });
 var s_d_id = '';
 
+function func(element){
+      // console.log($(element).position());
+      console.log("hola");
+      s_d_id=$($(element)[0]).attr('id');
+  }
+
 function test_func_text(){
 var n =$(".slides .block").length;
 ++n;
-$('.slides .present').append("<div class='block' id='blocktemp_"+(n)+"' onclick='edit_text(`blocktemp_"+(n)+"`,1); func(`.block`);' style='border: 2px solid; position:absolute; top:50px; left:50px;color:black;'>Edit here</div>");
+$('.slides .present').append("<div class='block' id='blocktemp_"+(n)+"' onclick='edit_text($(this),1);' style='border: 2px solid; position:absolute; top:50px; left:50px;'>Edit here</div>");
 s_d_id="blocktemp_"+n;
 $('#splbtn').effect( "transfer", { to: "#main", className: "ui-effects-transfer" }, 1000 );
 // edit_text(s_d_id,1);
@@ -69,8 +75,14 @@ function GetTextValue() {
   }
     }
 
-function edit_text(div_id,opt){
-  console.log($("#"+div_id).text());
+function edit_text(element,opt){
+  if (opt==0){
+  div_id = element;  
+  }
+  else{
+  div_id = $($(element)[0]).attr('id');
+  }
+  // console.log($("#"+div_id).text());
   if (opt==1){
     document.getElementById('input').value=$("#"+div_id).text();
     values=$("#"+div_id).text();
@@ -159,7 +171,7 @@ function add_from_catalog(){
 function test_func_img(){
 var n = $(".slides .block").length;
 ++n;
-$(".slides .present").append("<div class='block' id='blocktemp_"+(n)+"' onclick='func('.block')' style='position:absolute; top:70px; left:70px;'><img src=''></div>");
+$(".slides .present").append("<div class='block' id='blocktemp_"+(n)+"' onclick='func($(this))' style='position:absolute; top:70px; left:70px;'><img src=''></div>");
 var imgurl= localStorage.getItem('url');
 $($('#blocktemp_'+(n)).children()).attr("src",imgurl );
 };
@@ -328,7 +340,7 @@ function slide_data(result){
   wid=css_data[i]['object_breadth'];
   len=css_data[i]['object_length'];
   text=css_data[i]['e_desc'];
-  $('#slide_'+css_data[i]['s_id']).append("<div class='block' id='blockdb_"+(a)+"' onclick='edit_text(`blockdb_"+(a)+"`,1);func(`.block`);' style='border: 2px solid;'></div>");
+  $('#slide_'+css_data[i]['s_id']).append("<div class='block' id='blockdb_"+(a)+"' onclick='edit_text($(this),1);' style='border: 2px solid;'></div>");
   //$("#blockdb_"+(a)+"").css({"width":"wid","height":"len","position":"relative","top":"posy","left":"posx"});
   document.getElementById("blockdb_"+(a)+"").innerHTML=text;
   $("#blockdb_"+(a)+"").css('width', wid);
@@ -346,7 +358,7 @@ function slide_data(result){
   wid=css_url[j]['object_breadth'];
   len=css_url[j]['object_length'];
   url=css_url[j]['temp_url']
-  $('#slide_'+css_url[j]['s_id']).append("<div class='block' id='blockdb_"+(b)+"' onclick='func(`.block`);' style='position:absolute;'><img src=''></div>");
+  $('#slide_'+css_url[j]['s_id']).append("<div class='block' id='blockdb_"+(b)+"' onclick='func($(this));' style='position:absolute;'><img src=''></div>");
   $($('#blockdb_'+(b)).children()).attr("src",url);
   $("#blockdb_"+(b)+"").css('width', wid);
   $("#blockdb_"+(b)+"").css('height', len);
@@ -397,4 +409,3 @@ function download() {
     });
     doc.save('sample_file.pdf');
 };
- // init(1,1,1);

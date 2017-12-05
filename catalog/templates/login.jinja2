@@ -13,14 +13,17 @@
 
 <body>
   <div class="wrapper">
+<!--   <form class="login" method="post" action="{{url}}"> -->
   <form class="login" method="post" action="/submitlogin">
     <p class="title">Log in</p>
-    <input type="text" name="uname" placeholder="Username" autofocus/>
+    <span tal:replace="message"/>
+    <input type="hidden" name="came_from" value="{{came_from}}"/>
+    <input type="text" name="uname" placeholder="Username" value="{{login}}" autofocus/>
     <i class="fa fa-user"></i>
-    <input type="password" name="password" placeholder="Password" />
+    <input type="password" name="password" placeholder="Password" value="{{password}}"/>
     <!--<i class="fa fa-key"></i>
     <a href="#">Forgot your password?</a>-->
-    <button>
+    <button type="submit" name="form.submitted">
       <i class="spinner"></i>
       <span class="state">Log in</span>
     </button>
