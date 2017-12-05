@@ -191,7 +191,7 @@ function addSlideFrontend(id,na_present){
     $($(".slides").children()[0]).attr("id","slide_"+id);
   }
   else{
-    $(".slides").prepend("<section id='slide_"+id+"' data-markdown data-state=intro> </section>");//<script type='text/template'></script><div></div>  
+    $(".slides").prepend("<section id='slide_"+id+"' data-markdown data-state=intro> </section>");  
   }
 }
 
@@ -394,6 +394,7 @@ function init(p_id,s_id){
 };
 
 //init(1,1);
+
 
 var doc = new jsPDF();
 var specialElementHandlers = {
