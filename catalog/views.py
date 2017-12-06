@@ -130,6 +130,7 @@ def logout(request):
     return HTTPFound(location=url,headers=headers)
 
 @view_config(route_name='addpre')
+@is_loggedin
 def addpre(request):
 	from pyramid.httpexceptions import HTTPFound
 	id1=addproject()
@@ -137,18 +138,21 @@ def addpre(request):
 	return Response(status_int=302, location=url)
 
 @view_config(route_name='addslide', renderer='json')
+@is_loggedin
 def add_slide(request):
 	add=addslide(request)
 	print(add)
 	return add
 
 @view_config(route_name='saveslide' ,renderer='json')
+@is_loggedin
 def save_slide(request):
 	s = saveslide(request)
 	print (s)
 	return s
 
 @view_config(route_name='delete_ele', renderer='json')
+@is_loggedin
 def delete(request):
 	d = delete_element(request)
 	print(d)
