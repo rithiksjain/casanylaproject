@@ -365,6 +365,10 @@ function slide_data(result){
   $("#blockdb_"+(b)+"").css('left', posy);
   $("#blockdb_"+(b)+"").css('position', 'relative');
   }
+  if(project_init==1){
+    project_init=0;
+    reveal_init();
+  }
 }
 
 
@@ -381,7 +385,7 @@ function init(p_id,s_id){
   async_call.get_call(url1).then(function(result){
   // console.log(result);
   if (s_id==0){
-    //result={"data": {"text": [{"object_breadth": 100, "temp_url": null, "p_id": 0, "URL": null, "id": 1, "position_x": 21, "object_length": 156, "position_y": 265, "s_id": 1}, {"object_breadth": 100, "temp_url": null, "p_id": 0, "URL": null, "id": 2, "position_x": -1, "object_length": 156, "position_y": 432, "s_id": 1}, {"object_breadth": 100, "temp_url": null, "p_id": 0, "URL": null, "id": 3, "position_x": -36, "object_length": 156, "position_y": 661, "s_id": 1}, {"object_breadth": 64, "temp_url": null, "p_id": 0, "URL": null, "id": 4, "position_x": -150, "object_length": 10, "position_y": 616, "s_id": 1}, {"object_breadth": 44, "temp_url": null, "p_id": 0, "URL": null, "id": 5, "position_x": -114, "object_length": 143, "position_y": 239, "s_id": 1}, {"object_breadth": 282, "temp_url": null, "p_id": 0, "URL": null, "id": 6, "position_x": 47, "object_length": 57, "position_y": 382, "s_id": 1}, {"object_breadth": 100, "temp_url": null, "p_id": 0, "URL": null, "id": 7, "position_x": -56, "object_length": 52, "position_y": 502, "s_id": 1}, {"object_breadth": 100, "temp_url": null, "p_id": 0, "URL": null, "id": 8, "position_x": 20, "object_length": 154, "position_y": 0, "s_id": 1}, {"object_breadth": 100, "temp_url": null, "p_id": 0, "URL": null, "id": 9, "position_x": -89, "object_length": 52, "position_y": 313, "s_id": 1}, {"object_breadth": 100, "temp_url": null, "p_id": 0, "URL": null, "id": 10, "position_x": -114, "object_length": 154, "position_y": 66, "s_id": 1}, {"object_breadth": 100, "temp_url": null, "p_id": 0, "URL": null, "id": 11, "position_x": -122, "object_length": 52, "position_y": 372, "s_id": 1}, {"object_breadth": 100, "temp_url": null, "p_id": 0, "URL": null, "id": 12, "position_x": 20, "object_length": 144, "position_y": 0, "s_id": 1}, {"object_breadth": 100, "temp_url": null, "p_id": 0, "URL": null, "id": 13, "position_x": 54, "object_length": 52, "position_y": 336, "s_id": 1}], "url": [], "slides": [1]}, "status": true};
+    project_init=1;
     post_init(result);
     }
   else{
