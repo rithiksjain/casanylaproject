@@ -31,8 +31,10 @@ def addproject():
 			project_id=int(pro_id[0]['LAST_INSERT_ID()'])
 			name="project_"
 			name+=str(project_id)
-			query_1='''insert into Presentation (pr_id,presentation_name) values (%s,%s)'''
-			cursor.execute(query_1,(project_id,name))
+			sql2="UPDATE presentation_project set presentation_name=%s where id=%s"
+			cursor.execute(sql2,(name,project_id))
+			query_1='''insert into Presentation (pr_id) values (%s)'''
+			cursor.execute(query_1,(project_id))
 		connection.commit()
 	except NameError:
 	    print('An exception flew by!')
