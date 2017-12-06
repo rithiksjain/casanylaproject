@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Presentation</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.8.1/baguetteBox.min.css">
+    <link rel="stylesheet" href="templates/assets/gallery-clean.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.css" rel="stylesheet"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script type="text/javascript">
+    function myfunction() {
+        var namelist={{name|safe}};
+        $('#list').autocomplete({
+            source: namelist,
+            minLength: 0,
+            scroll: true
+        }).focus(function() {
+            $(this).autocomplete("search", "");
+        });
+
+        
+        $('#ui-id-1').click(function(){
+            //alert("clicked");
+            $("#listform").submit();
+        });
+    }
+  </script>
+</head>
+<body onload="myfunction()">
+<div class="container gallery-container">
+    <h1>Presentations</h1>
+    <div>
+    <form name="subviewlist" id="listform" method="post" action="subviewproject">
+        <label for="list" style="color: white;">Select a list: </label>
+        <input type="text" id="list" value="{{p_name}}" name="name" autocomplete="on" />
+    </form>
+    </div>
+    <div>
+        <form method="post" action="presentation/{{p_id}}">
+            <button type="submit">Go to Presentation</button>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.8.1/baguetteBox.min.js"></script>
+<script>
+    baguetteBox.run('.tz-gallery');
+</script>
+</body>
+</html>
