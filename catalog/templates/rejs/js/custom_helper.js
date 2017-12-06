@@ -365,10 +365,10 @@ function slide_data(result){
   $("#blockdb_"+(b)+"").css('left', posy);
   $("#blockdb_"+(b)+"").css('position', 'relative');
   }
-/*  if(project_init==1){
+  if(project_init==1){
     project_init=0;
-    reveal_init();
-  }*/
+    Reveal.slide(0);
+  }
 }
 
 
