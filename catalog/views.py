@@ -515,7 +515,7 @@ def viewpresentation(request):
                              cursorclass=pymysql.cursors.DictCursor)
 	try:
 		with connection.cursor() as cursor:
-			sql="SELECT pr_id,presentation_name from Presentation"
+			sql="SELECT id,presentation_name from presentation_project"
 			cursor.execute(sql)
 			result1=cursor.fetchall()
 			for b in result1:
@@ -995,11 +995,11 @@ def subviewproject(request):
                              cursorclass=pymysql.cursors.DictCursor)
 	try:
 		with connection.cursor() as cursor:
-			sql="SELECT pr_id from Presentation where presentation_name=%s"
+			sql="SELECT id from presentation_project where presentation_name=%s"
 			cursor.execute(sql,(p_name))
 			res=cursor.fetchall()
-			p_id=res[0]['pr_id']
-			sql1="SELECT presentation_name from Presentation"
+			p_id=res[0]['id']
+			sql1="SELECT presentation_name from presentation_project"
 			cursor.execute(sql1)
 			result1=cursor.fetchall()
 			for b in result1:
