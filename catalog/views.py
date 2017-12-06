@@ -504,6 +504,33 @@ def viewlist(request):
 		connection.close()
 	return render_to_response('templates/viewlist.jinja2',{'namelist':namelist2,'userid':userid},request=request)
 
+@view_config(route_name='viewpresentation')
+def viewpresentation(request):
+	projectname=[]
+	connection = pymysql.connect(host='127.0.0.1',
+                             user='root',
+                             password='root',
+                             db='Pieces',
+                             charset='utf8mb4',
+                             cursorclass=pymysql.cursors.DictCursor)
+	try:
+		with connection.cursor() as cursor:
+			sql="SELECT pr_id,presentation_name from Presentation"
+			cursor.execute(sql)
+			result1=cursor.fetchall()
+			for b in result1:
+				projectname.append(b['presentation_name'])
+			projectname1=[str(i) for i in projectname]
+			projectname1=[x for x in projectname1 if x!='None']
+		connection.commit()
+	except NameError:
+		print('An exception')
+	finally:
+		connection.close()
+	return render_to_response('templates/viewproject.jinja2',{'name':projectname1},request=request)
+
+
+
 @view_config(route_name='filter')
 def filter(request):
 	itemname=request.params['iditem']
@@ -954,6 +981,37 @@ def submitaddlist(request):
 	request.session.pop_flash()
 	request.flash_message.add('New List is added!')
 	return render_to_response('templates/addlist.jinja2',{'id':userid},request=request)
+
+@view_config(route_name='subviewproject')
+def subviewproject(request):
+	p_name=request.params['name']
+	projectname1=[]
+	projectname=[]
+	connection = pymysql.connect(host='127.0.0.1',
+                             user='root',
+                             password='root',
+                             db='Pieces',
+                             charset='utf8mb4',
+                             cursorclass=pymysql.cursors.DictCursor)
+	try:
+		with connection.cursor() as cursor:
+			sql="SELECT pr_id from Presentation where presentation_name=%s"
+			cursor.execute(sql,(p_name))
+			res=cursor.fetchall()
+			p_id=res[0]['pr_id']
+			sql1="SELECT presentation_name from Presentation"
+			cursor.execute(sql1)
+			result1=cursor.fetchall()
+			for b in result1:
+				projectname.append(b['presentation_name'])
+			projectname1=[str(i) for i in projectname]
+			projectname1=[x for x in projectname1 if x!='None']
+		connection.commit()
+	except NameError:
+	    print('An exception flew by!')
+	finally:
+		connection.close()
+	return render_to_response('templates/viewproject.jinja2',{'p_id':p_id,'p_name':p_name,'name':projectname1},request=request)
 
 @view_config(route_name='subviewlist')
 def subviewlist(request):

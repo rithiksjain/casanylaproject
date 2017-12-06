@@ -58,6 +58,8 @@ def main(global_config, **settings):
 	config.add_route('saveslide','/saveslide')
 	config.add_route('delete_ele','/delete')
 	config.add_route('viewlist','/viewlist')
+	config.add_route('viewpresentation','/viewpresentation')
+	config.add_route('subviewproject','/subviewproject')
 	config.add_route('subviewlist','/subviewlist')
 	config.add_route('download','/download')
 	config.add_route('submit','/submitvendor')

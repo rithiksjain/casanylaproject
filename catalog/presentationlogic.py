@@ -29,8 +29,10 @@ def addproject():
 			cursor.execute(sql1)
 			pro_id=cursor.fetchall()
 			project_id=int(pro_id[0]['LAST_INSERT_ID()'])
-			query_1='''insert into Presentation (pr_id) values ({p_id})'''.format(p_id=project_id)
-			cursor.execute(query_1)
+			name="project_"
+			name+=str(project_id)
+			query_1='''insert into Presentation (pr_id,presentation_name) values (%s,%s)'''
+			cursor.execute(query_1,(project_id,name))
 		connection.commit()
 	except NameError:
 	    print('An exception flew by!')
@@ -161,7 +163,6 @@ def saveslide(request):
 				id_list.append(id_list2)
 			if (int(block_id)!=0):
 				sql1="UPDATE slide_elements SET s_id=%d, e_desc='%s', position_x=%d, position_y=%d, object_length=%d, object_breadth=%d where id=%d"%(int(slide_id),desc,int(pos_x),int(pos_y),int(obj_len),int(obj_wid),int(block_id))
-				#print(sql1)
 				cursor.execute(sql1)
 				resp_dict['block_id']=block_id
 			else:
