@@ -20,7 +20,9 @@ import json
 from pyramid.security import (
 	remember,
 	forget,
+	unauthenticated_userid,
 )
+
 
 from .security import (
     USERS,
@@ -93,37 +95,45 @@ def home(request):
 
 @view_config(route_name='login',renderer='templates/login.jinja2')
 def login(request):
-	return {}
+	message=''
+	if request.method=="POST":
+		name=request.params['uname']
+		password=request.params['password']
+		from catalog.connection_py import connection as conn
+		conn=conn()
+		s = conn.connect()
+		connection=s["connection"]
+		try:
+			with connection.cursor() as cursor:
+				sql="SELECT * FROM `User`"
+				cursor.execute(sql)
+				result=cursor.fetchall()
+				for res in result:
+					user=res['UserName']
+					pwd=res['Password']
+					if name==user and password==pwd:
+						headers = remember(request, res['idUser'])
+						return HTTPFound(location='/submitlogin',headers=headers)
+					else:
+						message="wrong creds"
+		except Exception as e:
+			message="something went wrong"
+			print (e)
+		connection.close()
+	came_from = request.params.get('came_from', request.url)
+	return dict(name='Login',message=message,came_from=came_from)
 
 @view_config(route_name='submitlogin')
+@is_loggedin
 def submitlogin(request):
-	name=request.params['uname']
-	password=request.params['password']
-	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
-	try:
-		with connection.cursor() as cursor:
-			sql="SELECT * FROM `User`"
-			cursor.execute(sql)
-			result=cursor.fetchall()
-			for res in result:
-				user=res['UserName']
-				pwd=res['Password']
-				if name==user and password==pwd:
-					return render_to_response('templates/home.jinja2',{'userid':res['idUser'],'uname':res['Name']},request=request)
-			else:
-				return render_to_response('templates/login.jinja2',{},request=request)
-		connection.commit()
-	except NameError:
-		print('An exception')
-	finally:
-		connection.close()
-	return {}
+	return render_to_response('templates/home.jinja2',{},request=request)
 
+@view_config(route_name='logout')
+@is_loggedin
+def logout(request):
+    headers = forget(request)
+    url = request.route_url('login')
+    return HTTPFound(location=url,headers=headers)
 
 @view_config(route_name='addpre')
 def addpre(request):

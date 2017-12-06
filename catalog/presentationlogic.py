@@ -1,5 +1,19 @@
 import pymysql.cursors
 from pyramid.request import Request
+from pyramid.security import unauthenticated_userid
+from pyramid.httpexceptions import HTTPFound
+
+def is_loggedin(original):
+    def sub_func(*args,**kwargs):
+        try:
+        	user_id = unauthenticated_userid(args[1])
+        except Exception as e:
+        	user_id=None
+        if user_id is None:
+        	url="/login"
+        	return HTTPFound(location=url)
+        return original(args[1])
+    return sub_func
 
 def addproject():
 	from catalog.connection_py import connection as conn
