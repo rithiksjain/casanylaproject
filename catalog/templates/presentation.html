@@ -65,35 +65,35 @@
 .ui-effects-transfer { border: 2px dotted white; }
 
 html.intro body {
-background:url("http://localhost:6543/static/images/cover.JPG");
+background:url("/static/images_template/cover.JPG");
 background-size: 100% 100%;
 background-position: top center !important;
 background-repeat: no-repeat !important;
 background-attachment: fixed;
 }
 html.intro1 body {
-background:url("http://localhost:6543/static/images/s_3.JPG");
+background:url("/static/images_template/s_3.JPG");
 background-size: 100% 100%;
 background-position: top center !important;
 background-repeat: no-repeat !important;
 background-attachment: fixed;
 }
 html.intro2 body {
-background:url("http://localhost:6543/static/images/s_4.JPG");
+background:url("/static/images_template/s_4.JPG");
 background-size: 100% 100%;
 background-position: top center !important;
 background-repeat: no-repeat !important;
 background-attachment: fixed;
 }
 html.intro3 body {
-background:url("http://localhost:6543/static/images/s_5.JPG");
+background:url("/static/images_template/s_5.JPG");
 background-size: 100% 100%;
 background-position: top center !important;
 background-repeat: no-repeat !important;
 background-attachment: fixed;
 }
 html.intro4 body {
-background:url("http://localhost:6543/static/images/s_6.JPG");
+background:url("/static/images_template/s_6.JPG");
 background-size: 100% 100%;
 background-position: top center !important;
 background-repeat: no-repeat !important;
@@ -104,7 +104,7 @@ background-attachment: fixed;
       var link = document.createElement( 'link' );
       link.rel = 'stylesheet';
       link.type = 'text/css';
-      link.href = window.location.search.match( /print-pdf/gi ) ? '/templates/rejs/css/print/pdf.css';
+/*      link.href = window.location.search.match( /print-pdf/gi ) ? '/templates/rejs/css/print/pdf.css';*/
       document.getElementsByTagName( 'head' )[0].appendChild( link );
     </script>
 
@@ -136,6 +136,8 @@ background-attachment: fixed;
 <div class="reveal" style="float:Left;">
   <div class="slides" id="slides">
   <!--revert it in case of get call does not work-->
+    <section data-markdown data-state=intro>
+    </section>
     <section data-markdown data-state=intro1>
     </section>
     <section data-markdown data-state=intro2>
@@ -155,6 +157,30 @@ background-attachment: fixed;
   s_id = {{s_id}};
   pr_id={{pr_id}};
   c_slide=0;//current slide
+    /*function reveal_init(){
+          Reveal.initialize({
+      autoSlide: false,
+      center: true,
+      controls: false,
+      mouseWheel: true,
+      width: "100%",
+      height: "100%",
+      margin: 0,
+      minScale: 0.2,
+      maxScale: 1.5,
+      slideNumber: true,
+      transition: 'concave',
+      dependencies: [
+        {
+          src: '/templates/rejs/plugin/zoom-js/zoom.js',
+          async: true
+        },{ src: '/templates/rejs/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+        { src: '/templates/rejs/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+        { src: '/templates/rejs/lib/js/fullscreen-img.js' }
+      ]
+      
+      });
+    }*/
     Reveal.initialize({
       autoSlide: false,
       center: true,
@@ -178,6 +204,8 @@ background-attachment: fixed;
       
       });
     init(pr_id,0);
+    var project_init=0;
+    // reveal_init();
   </script>
 </body>
 </html>

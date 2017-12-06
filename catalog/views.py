@@ -130,6 +130,7 @@ def logout(request):
     return HTTPFound(location=url,headers=headers)
 
 @view_config(route_name='addpre')
+@is_loggedin
 def addpre(request):
 	from pyramid.httpexceptions import HTTPFound
 	id1=addproject()
@@ -137,18 +138,21 @@ def addpre(request):
 	return Response(status_int=302, location=url)
 
 @view_config(route_name='addslide', renderer='json')
+@is_loggedin
 def add_slide(request):
 	add=addslide(request)
 	print(add)
 	return add
 
 @view_config(route_name='saveslide' ,renderer='json')
+@is_loggedin
 def save_slide(request):
 	s = saveslide(request)
 	print (s)
 	return s
 
 @view_config(route_name='delete_ele', renderer='json')
+@is_loggedin
 def delete(request):
 	d = delete_element(request)
 	print(d)
@@ -515,7 +519,7 @@ def viewpresentation(request):
                              cursorclass=pymysql.cursors.DictCursor)
 	try:
 		with connection.cursor() as cursor:
-			sql="SELECT pr_id,presentation_name from Presentation"
+			sql="SELECT id,presentation_name from presentation_project"
 			cursor.execute(sql)
 			result1=cursor.fetchall()
 			for b in result1:
@@ -995,11 +999,11 @@ def subviewproject(request):
                              cursorclass=pymysql.cursors.DictCursor)
 	try:
 		with connection.cursor() as cursor:
-			sql="SELECT pr_id from Presentation where presentation_name=%s"
+			sql="SELECT id from presentation_project where presentation_name=%s"
 			cursor.execute(sql,(p_name))
 			res=cursor.fetchall()
-			p_id=res[0]['pr_id']
-			sql1="SELECT presentation_name from Presentation"
+			p_id=res[0]['id']
+			sql1="SELECT presentation_name from presentation_project"
 			cursor.execute(sql1)
 			result1=cursor.fetchall()
 			for b in result1:
