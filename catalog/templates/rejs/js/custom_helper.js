@@ -48,7 +48,6 @@ $(function()
 var s_d_id = '';
 
 function func(element){
-      // console.log($(element).position());
       console.log("hola");
       s_d_id=$($(element)[0]).attr('id');
   }
