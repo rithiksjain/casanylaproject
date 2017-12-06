@@ -23,12 +23,6 @@ from pyramid.security import (
 	unauthenticated_userid,
 )
 
-
-from .security import (
-    USERS,
-    check_password
-)
-
 src_dir = "catalog/catalog/images"
 dst_dir = "catalog/catalog/listimages"
 dst_dir1 = "catalog/catalog/listimages/*"

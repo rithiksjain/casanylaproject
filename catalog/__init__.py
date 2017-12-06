@@ -7,8 +7,6 @@ from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid import renderers
 
-from .security import groupfinder
-
 logging.basicConfig()
 log = logging.getLogger(__file__)
 
