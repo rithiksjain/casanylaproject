@@ -9,11 +9,16 @@ from pyramid import renderers
 
 from .security import groupfinder
 
+logging.basicConfig()
+log = logging.getLogger(__file__)
+
+here = os.path.dirname(os.path.abspath(__file__))
 
 def main(global_config, **settings):
+	settings = {}
+	settings['jinja2.directories'] = here
 	my_session_factory = UnencryptedCookieSessionFactoryConfig('itsaseekreet')
-	authn_policy = AuthTktAuthenticationPolicy(settings['secret'], callback=groupfinder,
-        hashalg='sha512')
+	authn_policy = AuthTktAuthenticationPolicy('sosecret', hashalg='sha512')
 	authz_policy = ACLAuthorizationPolicy()                                    
 	config = Configurator(settings=settings,session_factory=my_session_factory)
 	config.include('pyramid_flash_message')

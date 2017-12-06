@@ -66,13 +66,13 @@
                         <div  class="form-bottom" style="background-color: transparent; width: 100%; display: table;">
                         <div style="display: table-row;">
                             <div style="display: table-cell;">
-                            <form action="/itemfetch?id={{userid}}" method="post">
+                            <form action="/itemfetch?id={{request.authenticated_userid}}" method="post">
                                     <button type="submit">View Catalog</button>
                             </form>
                             </div>
 
                             <div style="display: table-cell; padding-left: 20px;">
-                            <form action="/viewlist?id={{userid}}" method="post">
+                            <form action="/viewlist?id={{request.authenticated_userid}}" method="post">
                                     <button type="submit">View Lists</button>
                             </form>
                             </div>
@@ -104,7 +104,7 @@
                         <div  class="form-bottom" style="background-color: transparent; width: 100%; display: table;">
                         <div style="display: table-row;">
                             <div style="display: table-cell;">
-                            <form action="/createlist?id={{userid}}" method="post">
+                            <form action="/createlist?id={{request.authenticated_userid}}" method="post">
                                     <button type="submit">Create List</button>
                             </form>
                             </div>
