@@ -190,7 +190,8 @@ function addSlideFrontend(id,na_present){
     $($(".slides").children()[0]).attr("id","slide_"+id);
   }
   else{
-    $(".slides").prepend("<section id='slide_"+id+"' data-markdown data-state=intro> </section>");  
+    // $('.slides .present').insertAfter("<section id='slide_"+id+"' data-markdown data-state=intro> </section>");  
+    $("<section id='slide_"+id+"' data-markdown data-state=intro> </section>").insertAfter($('.slides .present'));  
   }
 }
 
