@@ -432,3 +432,63 @@ $(document).ready(function() {
     });
 });
 */
+
+function generateImagesForPDF(imagesToCapture, originalPresentationState) {
+    // Use the lodash defer method to help with timing issues.
+    _.defer(function () {
+        var clone = $('.reveal').clone();
+        $('.ui.snapshot').html(clone);
+
+        // Grab the HTML from the cloned container.
+        var snapshotContainer = $('.ui.snapshot .ui.slides');
+
+        // Grab the canvas that contains the slide.
+        html2canvas(snapshotContainer[0]).then(function (canvas) {
+            // Convert the canvas to an image and push into the array.
+            imagesToCapture.push(canvas.toDataURL('image/jpeg'));
+
+            // Empty out the contents of the container.
+            $('.ui.snapshot').empty();
+
+            if (Reveal.isLastSlide()) {
+                // If we are done, then send imagesToCapture off to PDF generation and cleanup.
+                var exportedPresentation = new jsPDF();
+                for (var i = 0; i < imagesToCapture.length; i++) {
+                    exportedPresentation.addImage(imagesToCapture[i], 'JPEG', 15, 40, 180, 160);
+
+                    if (i < (imagesToCapture.length - 1)) {
+                        exportedPresentation.addPage();
+                    }
+                }
+
+                exportedPresentation.save('presentation.pdf');
+                Reveal.setState(originalPresentationState);
+                $('body').addClass('dimmable');
+            }
+            else {
+                Reveal.next();
+                generateImagesForPDF(imagesToCapture, originalPresentationState);
+            }
+        });
+    });
+}
+
+
+function rewindAndBegin() {
+    var originalPresentationState,
+        imagesToCapture = [];
+
+    // Save off the original state of the presentation so that we can return there when we are finished.
+    originalPresentationState = Reveal.getState();
+
+    // Rewind the presentation back to the start.
+    var beginningPresentationState = _.clone(originalPresentationState);
+    beginningPresentationState.indexv = 0;
+    beginningPresentationState.indexh = 0;
+    Reveal.setState(beginningPresentationState);
+
+    $('body').removeClass('dimmable');
+    generateImagesForPDF(imagesToCapture, originalPresentationState);
+}
+
+
