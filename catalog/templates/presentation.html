@@ -102,6 +102,7 @@ background-attachment: fixed;
 </head>
 
 <body>
+{%if is_loggedin%}
 <div style="float:left;">
   <div>
     <button class="btn add-block" onclick="add_from_catalog()">Add from catalog</button>
@@ -124,6 +125,7 @@ background-attachment: fixed;
 </form>
 </div>
 </div>
+{% endif %}
 <div class="reveal" style="float:Left;">
   <div class="slides" id="slides">
   <!--revert it in case of get call does not work-->
