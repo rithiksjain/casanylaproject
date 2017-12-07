@@ -3,17 +3,26 @@ from pyramid.request import Request
 from pyramid.security import unauthenticated_userid
 from pyramid.httpexceptions import HTTPFound
 
-def is_loggedin(original):
-    def sub_func(*args,**kwargs):
-        try:
-        	user_id = unauthenticated_userid(args[1])
-        except Exception as e:
-        	user_id=None
-        if user_id is None:
-        	url="/login"
-        	return HTTPFound(location=url)
-        return original(args[1])
-    return sub_func
+def is_loggedin(is_loggedin_flag=0):
+	def deco_func(original):
+		def sub_func(*args,**kwargs):
+			try:
+				user_id = unauthenticated_userid(args[1])
+			except Exception as e:
+				user_id=None
+			if is_loggedin_flag:
+				if user_id is None:
+					return original(args[1],0)
+				else:
+					return original(args[1],1)
+					
+			if user_id is None:
+				url="/login"
+				return HTTPFound(location=url)
+			return original(args[1])
+		return sub_func
+	return deco_func
+
 
 def addproject():
 	from catalog.connection_py import connection as conn
@@ -37,7 +46,7 @@ def addproject():
 			cursor.execute(query_1,(project_id))
 		connection.commit()
 	except NameError:
-	    print('An exception flew by!')
+		print('An exception flew by!')
 	finally:
 		# conn.close_connection()
 		connection.close()
@@ -109,11 +118,11 @@ def addslide(request):
 	id_p=request.params['id']
 	id_slide=[]
 	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+							 user='root',
+							 password='root',
+							 db='Pieces',
+							 charset='utf8mb4',
+							 cursorclass=pymysql.cursors.DictCursor)
 	try:
 		with connection.cursor() as cursor:
 			sql="INSERT INTO Presentation (pr_id) values(%s)"
@@ -125,8 +134,8 @@ def addslide(request):
 			resp_dict['slide_id']=id_slide
 		connection.commit()
 	except Exception as e:
-	    print(e)
-	    resp_dict['status']=False
+		print(e)
+		resp_dict['status']=False
 	finally:
 		connection.close()
 	return resp_dict
@@ -150,11 +159,11 @@ def saveslide(request):
 	#print("{},{},{},{},{},{},{},{}".format(slide_id,id_cat,desc,pos_x,pos_y,obj_len,obj_wid,block_id))
 	id_list=[]
 	connection = pymysql.connect(host='127.0.0.1',
-                           	 user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+							 user='root',
+							 password='root',
+							 db='Pieces',
+							 charset='utf8mb4',
+							 cursorclass=pymysql.cursors.DictCursor)
 	try:
 		with connection.cursor() as cursor:
 			sql="SELECT id from slide_elements where flag=0;"
@@ -168,23 +177,23 @@ def saveslide(request):
 				cursor.execute(sql1)
 				resp_dict['block_id']=block_id
 			else:
- 				if(id_cat!=""):
- 					sql2="INSERT INTO slide_elements (s_id,e_id, e_desc, position_x, position_y, object_length, object_breadth) values (%s,%s,%s,%s,%s,%s,%s)"
- 					cursor.execute(sql2,(int(slide_id),int(id_cat),desc,int(pos_x),int(pos_y),int(obj_len),int(obj_wid)))
- 					sql3="SELECT LAST_INSERT_ID()";
- 					cursor.execute(sql3)
- 					idblock=cursor.fetchall()
- 					id_block=idblock[0]['LAST_INSERT_ID()']
- 					resp_dict['block_id']=id_block
- 				else:
- 					tmp_url=request.params['url']
- 					sql4="INSERT INTO slide_elements (s_id,position_x, position_y, object_length, object_breadth, temp_url) values (%s,%s,%s,%s,%s,%s) "
- 					cursor.execute(sql4,(int(slide_id),int(pos_x),int(pos_y),int(obj_len),int(obj_wid),tmp_url))
- 					sql5="SELECT LAST_INSERT_ID()";
- 					cursor.execute(sql5)
- 					idblock=cursor.fetchall()
- 					id_block=idblock[0]['LAST_INSERT_ID()']
- 					resp_dict['block_id']=id_block
+				if(id_cat!=""):
+					sql2="INSERT INTO slide_elements (s_id,e_id, e_desc, position_x, position_y, object_length, object_breadth) values (%s,%s,%s,%s,%s,%s,%s)"
+					cursor.execute(sql2,(int(slide_id),int(id_cat),desc,int(pos_x),int(pos_y),int(obj_len),int(obj_wid)))
+					sql3="SELECT LAST_INSERT_ID()";
+					cursor.execute(sql3)
+					idblock=cursor.fetchall()
+					id_block=idblock[0]['LAST_INSERT_ID()']
+					resp_dict['block_id']=id_block
+				else:
+					tmp_url=request.params['url']
+					sql4="INSERT INTO slide_elements (s_id,position_x, position_y, object_length, object_breadth, temp_url) values (%s,%s,%s,%s,%s,%s) "
+					cursor.execute(sql4,(int(slide_id),int(pos_x),int(pos_y),int(obj_len),int(obj_wid),tmp_url))
+					sql5="SELECT LAST_INSERT_ID()";
+					cursor.execute(sql5)
+					idblock=cursor.fetchall()
+					id_block=idblock[0]['LAST_INSERT_ID()']
+					resp_dict['block_id']=id_block
 		connection.commit()
 	except Exception as e:
 		print(e)
@@ -201,11 +210,11 @@ def editslide():
 	obj_len=request.params['height']
 	obj_wid=request.params['width']
 	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+							 user='root',
+							 password='root',
+							 db='Pieces',
+							 charset='utf8mb4',
+							 cursorclass=pymysql.cursors.DictCursor)
 	try:
 		with connection.cursor() as cursor:
 			sql="UPDATE slide_elements SET position_x=%d, position_y=%d, object_length=%d, object_breadth=%d where s_id=%d"
@@ -221,11 +230,11 @@ def delete_element(request):
 	id=request.params['id']
 	print(id)
 	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+							 user='root',
+							 password='root',
+							 db='Pieces',
+							 charset='utf8mb4',
+							 cursorclass=pymysql.cursors.DictCursor)
 	try:
 		with connection.cursor() as cursor:
 			sql="UPDATE slide_elements SET flag=1 where id=%d"%(int(id))
@@ -241,11 +250,11 @@ def delete_element(request):
 def deleteslide():
 	slide_id=request.params['idslide']
 	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+							 user='root',
+							 password='root',
+							 db='Pieces',
+							 charset='utf8mb4',
+							 cursorclass=pymysql.cursors.DictCursor)
 	try:
 		with connection.cursor() as cursor:
 			sql="UPDATE presentation SET flag=1 where s_id=%d"

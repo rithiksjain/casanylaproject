@@ -88,8 +88,12 @@ def home(request):
 
 
 @view_config(route_name='login',renderer='templates/login.jinja2')
-def login(request):
+@is_loggedin(1)
+def login(request,is_loggedin):
 	message=''
+	if is_loggedin:
+		return HTTPFound(location="/submitlogin")
+
 	if request.method=="POST":
 		name=request.params['uname']
 		password=request.params['password']
@@ -118,19 +122,19 @@ def login(request):
 	return dict(name='Login',message=message,came_from=came_from)
 
 @view_config(route_name='submitlogin')
-@is_loggedin
+@is_loggedin()
 def submitlogin(request):
 	return render_to_response('templates/home.jinja2',{},request=request)
 
 @view_config(route_name='logout')
-@is_loggedin
+@is_loggedin()
 def logout(request):
     headers = forget(request)
     url = request.route_url('login')
     return HTTPFound(location=url,headers=headers)
 
 @view_config(route_name='addpre')
-@is_loggedin
+@is_loggedin()
 def addpre(request):
 	from pyramid.httpexceptions import HTTPFound
 	id1=addproject()
@@ -138,52 +142,59 @@ def addpre(request):
 	return Response(status_int=302, location=url)
 
 @view_config(route_name='addslide', renderer='json')
-@is_loggedin
+@is_loggedin()
 def add_slide(request):
 	add=addslide(request)
 	print(add)
 	return add
 
 @view_config(route_name='saveslide' ,renderer='json')
-@is_loggedin
+@is_loggedin()
 def save_slide(request):
 	s = saveslide(request)
 	print (s)
 	return s
 
 @view_config(route_name='delete_ele', renderer='json')
-@is_loggedin
+@is_loggedin()
 def delete(request):
 	d = delete_element(request)
 	print(d)
 	return d
 
 @view_config(route_name='vendor',renderer='templates/vendorform.jinja2')
+@is_loggedin()
 def vendor(request):
 	return {}
 
 @view_config(route_name='category',renderer='templates/category.jinja2')
+@is_loggedin()
 def category(request):
 	return {}
 
 @view_config(route_name='material',renderer='templates/material.jinja2')
+@is_loggedin()
 def material(request):
 	return {}
 
 @view_config(route_name='fabric',renderer='templates/fabric.jinja2')
+@is_loggedin()
 def fabric(request):
 	return {}
 
 @view_config(route_name='itemtype',renderer='templates/itemtype.jinja2')
+@is_loggedin()
 def itemtype(request):
 	return {}
 
 @view_config(route_name='createlist')
+@is_loggedin()
 def createlist(request):
 	userid=request.params['id']
 	return render_to_response('templates/addlist.jinja2',{'id':userid},request=request)
 
 @view_config(route_name='itemadded')
+@is_loggedin()
 def itemadded(request):
 	listid=request.params['idlist']
 	catalogid=request.params['id']
@@ -207,15 +218,21 @@ def itemadded(request):
 	return render_to_response('templates/submitlist.jinja2',{},request=request)
 
 @view_config(route_name='presentation',renderer='templates/presentation.html')
-def itemtype(request):
+@is_loggedin(1)
+def itemtype(request,is_loggedin):
 	try:
 		p_id=int(request.matchdict['p_id'])
 	except Exception as e:
-		return dict(status=False,s_id=[])
-	return get_all_slides_id(p_id)
+		s_id=[]
+		return dict(status=False,s_id=[],is_loggedin=is_loggedin)
+	resp = get_all_slides_id(p_id)
+	resp.update({'is_loggedin':is_loggedin})
+	return resp
 
 @view_config(route_name='catalog')
+@is_loggedin()
 def catalog(request):
+
 	connection = pymysql.connect(host='127.0.0.1',
                              user='root',
                              password='root',
@@ -250,6 +267,7 @@ def catalog(request):
 
 
 @view_config(route_name='quotation')
+@is_loggedin()
 def quotation(request):
 	connection = pymysql.connect(host='127.0.0.1',
                              user='root',
@@ -282,6 +300,7 @@ def quotation(request):
 	return render_to_response('templates/vendorpiece.jinja2',{'ven1':ven1,'name1':name1},request=request)
 
 @view_config(route_name='addquote')
+@is_loggedin()
 def quotation(request):
 	itemid=request.params['id']
 	nameitem=request.params['name']
@@ -312,7 +331,9 @@ def quotation(request):
 	return render_to_response('templates/addquote.jinja2',{'sku':sku,'itemid':itemid,'nameitem':nameitem,'ven1':ven1},request=request)
 
 @view_config(route_name='itemfetch')
+@is_loggedin()
 def itemfetch(request):
+
 	userid=request.params['id']
 	connection = pymysql.connect(host='127.0.0.1',
                              user='root',
@@ -355,6 +376,7 @@ def itemfetch(request):
 	return render_to_response('templates/itemfetch.jinja2',{'userid':userid,'item':item,'typename':typename1,'catname':catname1},request=request)
 
 @view_config(route_name='itemdetails')
+@is_loggedin()
 def itemdetails(request):
 	idcat=request.params['id']
 	userid=request.params['userid']
@@ -408,6 +430,7 @@ def itemdetails(request):
 	return render_to_response('templates/itemdetailsnew.jinja2',{'userid':userid,'details':details,'detail':detail,'listname':listname},request=request)
 
 @view_config(route_name='editdetails')
+@is_loggedin()
 def editdetails(request):
 	details=request.params['det']
 	details1 = ast.literal_eval(details)
@@ -443,12 +466,14 @@ def editdetails(request):
 	return render_to_response('templates/edititem.jinja2',{'details1':details1,'typename':typename1,'catname':catname1},request=request)
 
 @view_config(route_name='vendoredit')
+@is_loggedin()
 def vendoredit(request):
 	details=request.params['det']
 	details1 = ast.literal_eval(details)
 	return render_to_response('templates/editvendor.jinja2',{'details1':details1},request=request)
 
 @view_config(route_name='search')
+@is_loggedin()
 def search(request):
 	ids=[]
 	item4=[]
@@ -483,6 +508,7 @@ def search(request):
 	return render_to_response('templates/itemfetch.jinja2',{'item':item4},request=request)
 
 @view_config(route_name='viewlist')
+@is_loggedin()
 def viewlist(request):
 	userid=request.params['id']
 	connection = pymysql.connect(host='127.0.0.1',
@@ -509,6 +535,7 @@ def viewlist(request):
 	return render_to_response('templates/viewlist.jinja2',{'namelist':namelist2,'userid':userid},request=request)
 
 @view_config(route_name='viewpresentation')
+@is_loggedin()
 def viewpresentation(request):
 	projectname=[]
 	connection = pymysql.connect(host='127.0.0.1',
@@ -536,6 +563,7 @@ def viewpresentation(request):
 
 
 @view_config(route_name='filter')
+@is_loggedin()
 def filter(request):
 	itemname=request.params['iditem']
 	catname1=request.params['idcat']
@@ -666,6 +694,7 @@ def filter(request):
 		return render_to_response('templates/itemfetch.jinja2',{},request=request)
 
 @view_config(route_name='submit')
+@is_loggedin()
 def vendorsubmit(request):
 	name=request.params['name']
 	address=request.params['address']
@@ -691,6 +720,7 @@ def vendorsubmit(request):
 	return render_to_response('templates/vendorform.jinja2',{},request=request)
 
 @view_config(route_name='submitcat')
+@is_loggedin()
 def submitcat(request):
 	catname=request.params['name']
 	desc=request.params['description']
@@ -715,6 +745,7 @@ def submitcat(request):
 	return render_to_response('templates/category.jinja2',{},request=request)
 
 @view_config(route_name='submitcatalog')
+@is_loggedin()
 def submitcatalog(request):
 	sku=request.params['SKU']
 	idcat=request.params['idcat']
@@ -757,6 +788,7 @@ def submitcatalog(request):
 	return render_to_response('templates/catalog.jinja2',{},request=request)
 
 @view_config(route_name='submitmat')
+@is_loggedin()
 def submitmat(request):
 	name=request.params['name']
 	quantity=request.params['quantity']
@@ -781,6 +813,7 @@ def submitmat(request):
 	return render_to_response('templates/material.jinja2',{},request=request)
 
 @view_config(route_name='submitfab')
+@is_loggedin()
 def submitfab(request):
 	length=request.params['len']
 	fabtype=request.params['type']
@@ -807,6 +840,7 @@ def submitfab(request):
 	return render_to_response('templates/fabric.jinja2',{},request=request)
 
 @view_config(route_name='submititem')
+@is_loggedin()
 def submititem(request):
 	typename=request.params['typename']
 	typedesc=request.params['typedesc']
@@ -831,6 +865,7 @@ def submititem(request):
 	return render_to_response('templates/itemtype.jinja2',{},request=request)
 
 @view_config(route_name='submitquot')
+@is_loggedin()
 def submitquot(request):
 	idven=request.params['idven']
 	idcat2=request.params['iditem']
@@ -865,6 +900,7 @@ def submitquot(request):
 	return render_to_response('templates/vendorpiece.jinja2',{},request=request)
 
 @view_config(route_name='submitaddquote')
+@is_loggedin()
 def submitaddquote(request):
 	idven=request.params['idven']
 	idcat2=request.params['id']
@@ -899,6 +935,7 @@ def submitaddquote(request):
 	return render_to_response('templates/addquote.jinja2',{},request=request)
 
 @view_config(route_name='submitedititem')
+@is_loggedin()
 def submitedititem(request):
 	iditemtype=request.params['iditemtype']
 	idcategory=request.params['idcategory']
@@ -929,6 +966,7 @@ def submitedititem(request):
 	return render_to_response('templates/edititem.jinja2',{},request=request)
 
 @view_config(route_name='submiteditquote')
+@is_loggedin()
 def submiteditquote(request):
 	idvenpiece=request.params['id']
 	quotationex=request.params['quotationex']
@@ -963,6 +1001,7 @@ def submiteditquote(request):
 	return render_to_response('templates/editvendor.jinja2',{},request=request)
 
 @view_config(route_name='submitaddlist')
+@is_loggedin()
 def submitaddlist(request):
 	listname=request.params['name']
 	listdesc=request.params['description']
@@ -987,6 +1026,7 @@ def submitaddlist(request):
 	return render_to_response('templates/addlist.jinja2',{'id':userid},request=request)
 
 @view_config(route_name='subviewproject')
+@is_loggedin()
 def subviewproject(request):
 	p_name=request.params['name']
 	projectname1=[]
@@ -1018,6 +1058,7 @@ def subviewproject(request):
 	return render_to_response('templates/viewproject.jinja2',{'p_id':p_id,'p_name':p_name,'name':projectname1},request=request)
 
 @view_config(route_name='subviewlist')
+@is_loggedin()
 def subviewlist(request):
 	listname=request.params['listname']
 	userid=request.params['id']
@@ -1074,6 +1115,7 @@ def subviewlist(request):
 	return render_to_response('templates/viewlist.jinja2',{'listname':listname,'item':item,'namelist':namelist2,'userid':userid},request=request)
 
 @view_config(route_name='download')
+@is_loggedin()
 def download(request):
 	listname=request.params['listname']
 	newList=[]
@@ -1136,6 +1178,7 @@ def download(request):
 	return response
 
 @view_config(route_name='uploadimage')
+@is_loggedin()
 def uploadimage(request):
 	#slide_id=request.params['id_slide']
 	imagename=request.params['image'].filename
@@ -1164,6 +1207,7 @@ def uploadimage(request):
 	return render_to_response('templates/imgdisplay.html',{'url':urlimage},request=request)
 
 @view_config(route_name='slide', renderer='json')
+@is_loggedin()
 def slide(request):
 	pid=request.matchdict['p_id']
 	sid=request.matchdict['s_id']

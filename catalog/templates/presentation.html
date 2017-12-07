@@ -92,16 +92,20 @@ background-attachment: fixed;
 }
 </style>
 <script>
+if (window.location.search.match( /print-pdf/gi )){
       var link = document.createElement( 'link' );
       link.rel = 'stylesheet';
       link.type = 'text/css';
-/*      link.href = window.location.search.match( /print-pdf/gi ) ? '/templates/rejs/css/print/pdf.css';*/
+      link.href =  '/templates/rejs/css/print/paper.css';//print/pdf.css';
       document.getElementsByTagName( 'head' )[0].appendChild( link );
+  
+}
     </script>
 
 </head>
 
 <body>
+{%if is_loggedin%}
 <div style="float:left;">
   <div>
     <button class="btn add-block" onclick="add_from_catalog()">Add from catalog</button>
@@ -124,6 +128,7 @@ background-attachment: fixed;
 </form>
 </div>
 </div>
+{% endif %}
 <div class="reveal" style="float:Left;">
   <div class="slides" id="slides">
   <!--revert it in case of get call does not work-->
