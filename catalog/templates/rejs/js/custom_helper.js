@@ -463,6 +463,7 @@ function generateImagesForPDF(imagesToCapture, originalPresentationState) {
 
                 exportedPresentation.save('presentation.pdf');
                 Reveal.setState(originalPresentationState);
+               $("#headerblock").css("display","block");
                 $('body').addClass('dimmable');
             }
             else {
@@ -475,6 +476,7 @@ function generateImagesForPDF(imagesToCapture, originalPresentationState) {
 
 
 function rewindAndBegin() {
+    $("#headerblock").css("display","none");
     var originalPresentationState,
         imagesToCapture = [];
 
