@@ -19,4 +19,4 @@ Data.fs*
 .DS_Store
 coverage
 test
-#catalog/static/images/
+catalog/static/images/
