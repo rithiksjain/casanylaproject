@@ -92,7 +92,7 @@ def get_all_slides_id(p_id):
 	s_id_list=list()
 	conn=conn()
 	s = conn.connect()
-	resp = dict(status=True,s_id=s_id_list,pr_id=p_id)
+	resp = dict(status=True,s_id=s_id_list,pr_id=p_id,p_name="")
 	if not s["status"]:
 		print("conn fail")
 		resp["status"]=False
@@ -102,9 +102,13 @@ def get_all_slides_id(p_id):
 	try:
 		with connection.cursor() as cursor:
 			query="select s_id from Presentation where flag=0 and pr_id={pr_id};".format(pr_id=int(p_id))
+			query_name="select presentation_name from presentation_project where id={pr_id};".format(pr_id=int(p_id))
 			cursor.execute(query)
 			s_id_list=cursor.fetchall()
+			cursor.execute(query_name)
+			p_name = cursor.fetchall()[0]["presentation_name"]
 		resp["s_id"]=[i['s_id'] for i in s_id_list]
+		resp["p_name"]=p_name
 	except Exception as e:
 		print(e)
 		resp["status"]=False

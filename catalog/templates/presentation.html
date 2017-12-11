@@ -96,6 +96,8 @@ background-attachment: fixed;
 
 <body>
 {%if is_loggedin%}
+<div style="margin-left: 50%;"><b>{{p_name}}</b></div>
+
 <div style="float:left;" id="headerblock">
   <div>
     <button class="btn add-block" onclick="add_from_catalog()">Add from catalog</button>
@@ -107,7 +109,7 @@ background-attachment: fixed;
     <button class="btn download" onclick="rewindAndBegin()">Download as PDF</button>
     <button class="btn save" onclick="save_func()">Save</button>
     </div>
-<div id="main" style="position:absolute;top:0;right:0;">
+<div id="main" style="position:absolute;top:20px;right:0;">
 <input type=text class="input" id="input" value=""/>
 <input type=button class="btn bt" onclick="GetTextValue()" id="btSubmit" value=Edit />
 </div>
@@ -117,6 +119,7 @@ background-attachment: fixed;
 <button type="Submit" class="btn" onclick="upload();">Upload</button>
 </form>
 </div>
+
 </div>
 {% endif %}
 <div class="ui snapshot"></div>
