@@ -444,7 +444,7 @@ function generateImagesForPDF(imagesToCapture, originalPresentationState) {
         var snapshotContainer = $('.ui.snapshot .ui.slides');
 
         // Grab the canvas that contains the slide.
-        html2canvas(snapshotContainer[0], {width: 600, height: 450}).then(function (canvas) {
+        html2canvas(snapshotContainer[0]).then(function (canvas) {
             // Convert the canvas to an image and push into the array.
             imagesToCapture.push(canvas.toDataURL('image/jpeg'));
 
@@ -453,9 +453,9 @@ function generateImagesForPDF(imagesToCapture, originalPresentationState) {
 
             if (Reveal.isLastSlide()) {
                 // If we are done, then send imagesToCapture off to PDF generation and cleanup.
-                var exportedPresentation = new jsPDF();
+                var exportedPresentation = new jsPDF('p', 'mm', [450,600]);
                 for (var i = 0; i < imagesToCapture.length; i++) {
-                    exportedPresentation.addImage(imagesToCapture[i], 'JPEG', 15, 40, 180, 160);
+                    exportedPresentation.addImage(imagesToCapture[i], 'JPEG', 15, 40, 420, 420);
                     exportedPresentation.internal.scaleFactor = 30;
 
                     if (i < (imagesToCapture.length - 1)) {
