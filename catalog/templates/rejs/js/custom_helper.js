@@ -192,6 +192,8 @@ function addSlideFrontend(id,na_present){
   else{
     // $('.slides .present').insertAfter("<section id='slide_"+id+"' data-markdown data-state=intro> </section>");  
     $("<section id='slide_"+id+"' data-markdown data-state=intro> </section>").insertAfter($('.slides .present'));  
+    var indices = Reveal.getIndices( document.getElementById("slide_"+id+"") );
+    Reveal.slide( indices.h, indices.v );
   }
 }
 
