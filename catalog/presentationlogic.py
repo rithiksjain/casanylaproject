@@ -24,7 +24,7 @@ def is_loggedin(is_loggedin_flag=0):
 	return deco_func
 
 
-def addproject():
+def addproject(request):
 	pname = request.params['p_name']
 	style = request.params['s_name']
 	apartment = request.params['a_name']
@@ -102,13 +102,20 @@ def get_all_slides_id(p_id):
 	try:
 		with connection.cursor() as cursor:
 			query="select s_id from Presentation where flag=0 and pr_id={pr_id};".format(pr_id=int(p_id))
-			query_name="select presentation_name from presentation_project where id={pr_id};".format(pr_id=int(p_id))
+			query_name="select presentation_name, apartment_name, style_name, client_name from presentation_project where id={pr_id};".format(pr_id=int(p_id))
 			cursor.execute(query)
 			s_id_list=cursor.fetchall()
 			cursor.execute(query_name)
-			p_name = cursor.fetchall()[0]["presentation_name"]
+			res=cursor.fetchall()
+			p_name = res[0]["presentation_name"]
+			a_name = res[0]["apartment_name"]
+			s_name = res[0]["style_name"]
+			c_name = res[0]["client_name"]
 		resp["s_id"]=[i['s_id'] for i in s_id_list]
 		resp["p_name"]=p_name
+		resp["a_name"]=a_name
+		resp["s_name"]=s_name
+		resp["c_name"]=c_name
 	except Exception as e:
 		print(e)
 		resp["status"]=False

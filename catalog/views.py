@@ -137,7 +137,7 @@ def logout(request):
 @is_loggedin()
 def addpre(request):
 	from pyramid.httpexceptions import HTTPFound
-	id1=addproject()
+	id1=addproject(request)
 	url=request.application_url+'/presentation/'+str(id1)
 	return Response(status_int=302, location=url)
 
