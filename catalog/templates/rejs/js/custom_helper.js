@@ -401,7 +401,7 @@ function init(p_id,s_id){
 
 //init(1,1);
 
-
+/*
 var doc = new jsPDF();
 var specialElementHandlers = {
     '.reveal': function (element, renderer) {
@@ -416,7 +416,7 @@ function download() {
     });
     doc.save('sample_file.pdf');
 };
-
+*/
 /*
 $(document).ready(function() {
 
@@ -496,5 +496,3 @@ function rewindAndBegin() {
     $('body').removeClass('dimmable');
     generateImagesForPDF(imagesToCapture, originalPresentationState);
 }
-
-
