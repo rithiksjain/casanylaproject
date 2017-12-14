@@ -219,7 +219,7 @@ def itemadded(request):
 
 @view_config(route_name='presentation',renderer='templates/presentation.html')
 @is_loggedin(1)
-def itemtype(request,is_loggedin):
+def presentation(request,is_loggedin):
 	try:
 		p_id=int(request.matchdict['p_id'])
 	except Exception as e:
@@ -1039,10 +1039,14 @@ def subviewproject(request):
                              cursorclass=pymysql.cursors.DictCursor)
 	try:
 		with connection.cursor() as cursor:
-			sql="SELECT id from presentation_project where presentation_name=%s"
+			sql="SELECT id, apartment_name, style_name, client_name from presentation_project where presentation_name=%s"
 			cursor.execute(sql,(p_name))
 			res=cursor.fetchall()
 			p_id=res[0]['id']
+			a_name=res[0]['apartment_name']
+			s_name=res[0]['style_name']
+			c_name=res[0]['client_name']
+
 			sql1="SELECT presentation_name from presentation_project"
 			cursor.execute(sql1)
 			result1=cursor.fetchall()
@@ -1055,7 +1059,7 @@ def subviewproject(request):
 	    print('An exception flew by!')
 	finally:
 		connection.close()
-	return render_to_response('templates/viewproject.jinja2',{'p_id':p_id,'p_name':p_name,'name':projectname1},request=request)
+	return render_to_response('templates/viewproject.jinja2',{'p_id':p_id,'p_name':p_name,'a_name':a_name,'s_name':s_name,'c_name':c_name,'name':projectname1},request=request)
 
 @view_config(route_name='subviewlist')
 @is_loggedin()

@@ -91,6 +91,13 @@ background-position: top center !important;
 background-repeat: no-repeat !important;
 background-attachment: fixed;
 }
+
+.client{
+       position: absolute;
+       bottom: 20px;
+       right: 40px;
+       color: black;
+     }
 </style>
 </head>
 
@@ -128,6 +135,13 @@ background-attachment: fixed;
   <div class="slides" id="slides">
   <!--revert it in case of get call does not work-->
     <section data-markdown data-state=intro>
+    <script type="text/template">
+     <div class="client" id="client">
+       {{s_name}}<br/>
+       {{c_name}}<br/>
+       {{a_name}}<br/>
+     </div>
+     </script>
     </section>
     <section data-markdown data-state=intro1>
     </section>

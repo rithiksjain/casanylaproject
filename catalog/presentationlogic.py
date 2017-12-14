@@ -25,6 +25,10 @@ def is_loggedin(is_loggedin_flag=0):
 
 
 def addproject():
+	pname = request.params['p_name']
+	style = request.params['s_name']
+	apartment = request.params['a_name']
+	client = request.params['c_name']
 	from catalog.connection_py import connection as conn
 	s_id_list=list()
 	conn=conn()
@@ -32,16 +36,12 @@ def addproject():
 	connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
-			sql="INSERT INTO presentation_project() values()"
-			cursor.execute(sql)
+			sql="INSERT INTO presentation_project(presentation_name,apartment_name,style_name,client_name) values(%s,%s,%s,%s)"
+			cursor.execute(sql,(pname,apartment,style,client))
 			sql1="SELECT LAST_INSERT_ID()";
 			cursor.execute(sql1)
 			pro_id=cursor.fetchall()
 			project_id=int(pro_id[0]['LAST_INSERT_ID()'])
-			name="project_"
-			name+=str(project_id)
-			sql2="UPDATE presentation_project set presentation_name=%s where id=%s"
-			cursor.execute(sql2,(name,project_id))
 			query_1='''insert into Presentation (pr_id) values (%s)'''
 			cursor.execute(query_1,(project_id))
 		connection.commit()
