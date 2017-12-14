@@ -141,6 +141,11 @@ def addpre(request):
 	url=request.application_url+'/presentation/'+str(id1)
 	return Response(status_int=302, location=url)
 
+@view_config(route_name='clientdet')
+@is_loggedin()
+def clientdet(request):
+	return render_to_response('templates/clientdetails.jinja2',{},request=request)
+
 @view_config(route_name='addslide', renderer='json')
 @is_loggedin()
 def add_slide(request):

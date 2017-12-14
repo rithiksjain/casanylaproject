@@ -54,6 +54,7 @@ def main(global_config, **settings):
 	config.add_route('itemadded','/itemadded')
 	config.add_route('presentation','/presentation/{p_id}')
 	config.add_route('addpre','/addpre')
+	config.add_route('clientdet','/clientdet')
 	config.add_route('addslide','/addslide')
 	config.add_route('saveslide','/saveslide')
 	config.add_route('delete_ele','/delete')
