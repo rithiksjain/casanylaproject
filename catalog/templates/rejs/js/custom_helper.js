@@ -455,9 +455,9 @@ function generateImagesForPDF(imagesToCapture, originalPresentationState) {
 
             if (Reveal.isLastSlide()) {
                 // If we are done, then send imagesToCapture off to PDF generation and cleanup.
-                var exportedPresentation = new jsPDF('p', 'mm', [450,600]);
+                var exportedPresentation = new jsPDF('l', 'mm', [450,600]);
                 for (var i = 0; i < imagesToCapture.length; i++) {
-                    exportedPresentation.addImage(imagesToCapture[i], 'JPEG', 15, 40, 420, 420);
+                    exportedPresentation.addImage(imagesToCapture[i], 'JPEG', 15, 40, 550, 400);
                     exportedPresentation.internal.scaleFactor = 30;
 
                     if (i < (imagesToCapture.length - 1)) {
