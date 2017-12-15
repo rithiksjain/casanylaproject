@@ -146,6 +146,58 @@ def addpre(request):
 def clientdet(request):
 	return render_to_response('templates/clientdetails.jinja2',{},request=request)
 
+
+@view_config(route_name='editclient')
+@is_loggedin()
+def editclient(request):
+	pr_id=request.params['prid']
+	from catalog.connection_py import connection as conn
+	conn=conn()
+	s = conn.connect()
+	connection=s["connection"]
+	try:
+		with connection.cursor() as cursor:
+			sql="SELECT apartment_name, presentation_name, style_name, client_name from presentation_project where id='%s'" %(pr_id)
+			cursor.execute(sql)
+			res=cursor.fetchall();
+			print(res)
+			a_name=res[0]['apartment_name']
+			p_name=res[0]['presentation_name']
+			s_name=res[0]['style_name']
+			c_name=res[0]['client_name']
+			connection.commit()
+	except Exception as e:
+		print(e)
+	finally:
+		connection.close()
+	return render_to_response('templates/editclient.jinja2',{'pr_id':pr_id, 'p_name':p_name, 'a_name':a_name, 's_name':s_name, 'c_name':c_name}, request=request)
+
+@view_config(route_name='subclient')
+@is_loggedin()
+def subclient(request):
+	pr_id = request.params['prid']
+	p_name = request.params['p_name']
+	a_name = request.params['a_name']
+	s_name = request.params['s_name']
+	c_name = request.params['c_name']
+	from catalog.connection_py import connection as conn
+	conn=conn()
+	s = conn.connect()
+	connection=s["connection"]
+	try:
+		with connection.cursor() as cursor:
+			sql="UPDATE presentation_project set presentation_name=%s, style_name=%s, apartment_name=%s, client_name=%s where id=%s"
+			cursor.execute(sql,(p_name,s_name,a_name,c_name,pr_id))
+			connection.commit()
+	except Exception as e:
+		print(e)
+	finally:
+		connection.close()
+	from pyramid.httpexceptions import HTTPFound
+	url=request.application_url+'/presentation/'+str(pr_id)
+	return Response(status_int=302, location=url)
+
+
 @view_config(route_name='addslide', renderer='json')
 @is_loggedin()
 def add_slide(request):

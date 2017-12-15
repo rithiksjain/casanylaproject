@@ -94,10 +94,11 @@ background-attachment: fixed;
 
 .client{
        position: absolute;
-       bottom: 20px;
-       right: 40px;
+       bottom: 40px;
+       right: 100px;
        color: black;
        text-align: left;
+       font-size: 80px;
      }
 </style>
 </head>
@@ -112,6 +113,9 @@ background-attachment: fixed;
     <button class="btn add-image" onclick="$('#uploaddiv').show(500);">Add an image</button>
     <button class="btn add-slide" onclick="test_func_slide()">Add a new slide</button>
     <button class="btn add-slide" onclick="RemoveValue()">Delete Element</button>
+    <form action="/editclient?prid={{pr_id}}" method="post">
+    <button type="Submit" class="btn add-slide">Edit Client Details</button>
+    </form>
     <div id="editor"></div>
     <button class="btn download" onclick="rewindAndBegin()">Download as PDF</button>
     <button class="btn save" onclick="save_func()">Save</button>
