@@ -416,7 +416,6 @@ def itemfetch(request):
 			for b in result1:
 				typename.append(b['ItemTypeName'])
 			typename1=[str(i) for i in typename]
-			typename1.append('Reset')
 
 			sql2="SELECT * from `Category`"
 			cursor.execute(sql2)
@@ -424,7 +423,6 @@ def itemfetch(request):
 			for c in res2:
 				catname.append(c['CategoryName'])
 			catname1=[str(i) for i in catname]
-			catname1.append('Reset')
 		connection.commit()
 	except NameError:
 			print('An exception')
@@ -640,22 +638,20 @@ def filter(request):
 			for b in result1:
 				typename.append(b['ItemTypeName'])
 			typename1=[str(i) for i in typename]
-			typename1.append('Reset')
-
+			
 			sql2="SELECT * from `Category`"
 			cursor.execute(sql2)
 			res2=cursor.fetchall()
 			for c in res2:
 				catname.append(c['CategoryName'])
 			catname2=[str(i) for i in catname]
-			catname2.append('Reset')
 		connection.commit()
 	except NameError:
 		print('An exception')
 	finally:
 		connection.close()
 
-	if((itemname!="") and (itemname!="Reset") and (catname1=="")):
+	if((itemname!="") and (catname1=="")):
 		connection = pymysql.connect(host='127.0.0.1',
                              user='root',
                              password='root',
@@ -683,7 +679,7 @@ def filter(request):
 			connection.close()
 		return render_to_response('templates/itemfetch.jinja2',{'itemname':itemname,'item':item,'typename':typename1,'catname':catname2},request=request)
 		
-	elif((catname1!="") and (catname1!="Reset") and (itemname=="")):
+	elif((catname1!="") and (itemname=="")):
 		connection = pymysql.connect(host='127.0.0.1',
                              user='root',
                              password='root',
@@ -743,10 +739,6 @@ def filter(request):
 		finally:
 			connection.close()
 		return render_to_response('templates/itemfetch.jinja2',{'itemname':itemname,'catname1':catname1,'item':item,'typename':typename1,'catname':catname2},request=request)
-
-	elif((itemname == "Reset") or (catname1 == "Reset")):
-		return render_to_response('templates/itemfetch.jinja2',{},request=request)
-
 	else:
 		return render_to_response('templates/itemfetch.jinja2',{},request=request)
 

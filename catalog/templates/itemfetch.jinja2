@@ -52,16 +52,16 @@
     <h1>Items</h1>
     <div>
     <form name="filter" id="filterform" method="post" action="filter">
-        <label for="tags">Item Type: </label>
+        <label for="tags" style="color: white;">Item Type: </label>
         <input type="text" id="tags" name="iditem" value="{{itemname}}" autocomplete="on" /><br /><br />
-        <label for="category">Category: </label>
+        <label for="category" style="color: white;">Category: </label>
         <input type="text" id="category" name="idcat" value="{{catname1}}" autocomplete="on" />
     </form>
     
 
     <div style="float: right;">
     <form action="/searchres" method="post">
-    <label> Search: </label>
+    <label style="color: white;"> Search: </label>
     <input type="text" name="search">
     <button type="submit" class="btn">Go</button>
     </form>
