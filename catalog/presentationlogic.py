@@ -160,7 +160,7 @@ def saveslide(request):
 	except:
 		id_cat=0
 	'''
-	id_cat=request.params['idcat']
+	id_cat=int(request.params['idcat'])
 	desc=request.params['desc']
 	pos_x=request.params['pos_y']
 	pos_y=request.params['pos_x']
@@ -188,8 +188,16 @@ def saveslide(request):
 				cursor.execute(sql1)
 				resp_dict['block_id']=block_id
 			else:
-				if(id_cat!=""):
-					sql2="INSERT INTO slide_elements (s_id,e_id, e_desc, position_x, position_y, object_length, object_breadth) values (%s,%s,%s,%s,%s,%s,%s)"
+				if((id_cat!=0) and (id_cat!=1)):
+					sql2="INSERT INTO slide_elements (s_id,e_id, position_x, position_y, object_length, object_breadth) values (%s,%s,%s,%s,%s,%s)"
+					cursor.execute(sql2,(int(slide_id),int(id_cat),int(pos_x),int(pos_y),int(obj_len),int(obj_wid)))
+					sql3="SELECT LAST_INSERT_ID()";
+					cursor.execute(sql3)
+					idblock=cursor.fetchall()
+					id_block=idblock[0]['LAST_INSERT_ID()']
+					resp_dict['block_id']=id_block
+				elif(id_cat==1):
+					sql2="INSERT INTO slide_elements (s_id,e_id,e_desc, position_x, position_y, object_length, object_breadth) values (%s,%s,%s,%s,%s,%s,%s)"
 					cursor.execute(sql2,(int(slide_id),int(id_cat),desc,int(pos_x),int(pos_y),int(obj_len),int(obj_wid)))
 					sql3="SELECT LAST_INSERT_ID()";
 					cursor.execute(sql3)

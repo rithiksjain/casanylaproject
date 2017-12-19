@@ -152,6 +152,7 @@ function upload(){
   console.log("upload");
   $('#uploaddiv').hide(500);
  localStorage.setItem('upload_img_added',0);
+ localStorage.setItem('id_cat',0);
  window.addEventListener('storage', StorageEvent);
 } 
 
@@ -170,9 +171,11 @@ function add_from_catalog(){
 function test_func_img(){
 var n = $(".slides .block").length;
 ++n;
-$(".slides .present").append("<div class='block' id='blocktemp_"+(n)+"' onclick='func($(this))' style='position:absolute; top:70px; left:70px;'><img src=''></div>");
+$(".slides .present").append("<div class='block' id='blocktemp_"+(n)+"' onclick='func($(this))' style='position:absolute; top:70px; left:70px;'><img src='' alt=''></div>");
 var imgurl= localStorage.getItem('url');
+var idcat = localStorage.getItem('id_cat')
 $($('#blocktemp_'+(n)).children()).attr("src",imgurl );
+$($('#blocktemp_'+(n)).children()).attr("alt",idcat );
 };
 
 // function test_func_slide(slide_id){
@@ -250,7 +253,7 @@ function post_call(data)
 
 function save_func(){
 arr=[];
-$.each($('#slides').children(),function(i,j)
+$.each($('#slides').not('#client').children(),function(i,j)
 {
   if($(j).hasClass('present'))
   { 
@@ -265,7 +268,6 @@ $.each($('#slides').children(),function(i,j)
 });
 
 console.log(arr);
-// var cat_id = localStorage.getItem('id_cat');
 final_array=[];
 $.each(arr,function(i)
 {
@@ -290,16 +292,20 @@ $.each(arr,function(i)
     dict["pos_y"] = parseInt($('#'+arr[i]).position().top);
     dict["height"] = parseInt($('#'+arr[i]).height());
     dict["width"] = parseInt($('#'+arr[i]).width());
-    
     if(dict["desc"]=="")
+    {
       dict["url"] = $($('#'+arr[i]).children()).attr('src');
+      dict["idcat"] = $($('#'+arr[i]).children()).attr('alt');
+    }
     else
+    {
       dict["url"]="";
+      dict["idcat"]=1;
+    }
 
-    if(dict["url"]=="")
-        dict["idcat"] = 1;
-    else
-      dict["idcat"] = "";
+    if(dict["idcat"]!=0)
+        dict["url"] = "";
+
     dict["s_id"]=c_slide;
 
     final_array.push(dict);
@@ -334,7 +340,7 @@ function slide_data(result){
   // this is for each slide rearrange slide elements here
   css_data = result.elements.data.text;
   css_url = result.elements.data.url;
-  // console.log(result);
+  // console.log(css_url);
   for (i= 0; i < css_data.length; ++i) {
   a = css_data[i]['id'];
   posx=css_data[i]['position_x'];
@@ -359,9 +365,16 @@ function slide_data(result){
   posy=css_url[j]['position_y'];
   wid=css_url[j]['object_breadth'];
   len=css_url[j]['object_length'];
-  url=css_url[j]['temp_url']
+  e_id=css_url[j]['e_id'];
+  if(css_url[j]['temp_url']==null){
+    url=css_url[j]['URL'];
+  }
+  else{
+    url=css_url[j]['temp_url'];
+  }
   $('#slide_'+css_url[j]['s_id']).append("<div class='block' id='blockdb_"+(b)+"' onclick='func($(this));' style='position:absolute;'><img src=''></div>");
   $($('#blockdb_'+(b)).children()).attr("src",url);
+  $($('#blockdb_'+(b)).children()).attr("alt",e_id);
   $("#blockdb_"+(b)+"").css('width', wid);
   $("#blockdb_"+(b)+"").css('height', len);
   $("#blockdb_"+(b)+"").css('top', posx);
