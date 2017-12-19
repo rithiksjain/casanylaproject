@@ -205,6 +205,13 @@ def add_slide(request):
 	print(add)
 	return add
 
+@view_config(route_name='getprice')
+@is_loggedin()
+def getprice(request):
+	print (request)
+	price=getprice_quote(request)
+	return render_to_response('templates/pricelist.jinja2',{'price':price},request=request)
+
 @view_config(route_name='saveslide' ,renderer='json')
 @is_loggedin()
 def save_slide(request):

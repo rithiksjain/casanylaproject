@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Presentation</title>
+</head>
+<body>
+<button onclick="exportTableToCSV('pricelist.csv')">Export HTML Table To CSV File</button>
+<table border="2" style="width: 50%;">
+	<tr>
+		<th>ItemName</th>
+		<th>Category</th>
+		<th>Price</th>
+	</tr>
+	{% if price %}
+	{% for i in price %}
+		<tr>
+			<td>{{i['ItemName']}}</td>
+			<td>{{i['CategoryName']}}</td>
+			<td>{{i['Quotation(Exc Taxes)']}}</td>
+		</tr>
+	{% endfor %}
+	{% endif %}
+</table>
+<script type="text/javascript">
+	function downloadCSV(csv, filename) {
+    var csvFile;
+    var downloadLink;
+
+    // CSV file
+    csvFile = new Blob([csv], {type: "text/csv"});
+
+    // Download link
+    downloadLink = document.createElement("a");
+
+    // File name
+    downloadLink.download = filename;
+
+    // Create a link to the file
+    downloadLink.href = window.URL.createObjectURL(csvFile);
+
+    // Hide download link
+    downloadLink.style.display = "none";
+
+    // Add the link to DOM
+    document.body.appendChild(downloadLink);
+
+    // Click download link
+    downloadLink.click();
+	}
+
+
+	function exportTableToCSV(filename) {
+    var csv = [];
+    var rows = document.querySelectorAll("table tr");
+    
+    for (var i = 0; i < rows.length; i++) {
+        var row = [], cols = rows[i].querySelectorAll("td, th");
+        
+        for (var j = 0; j < cols.length; j++) 
+            row.push(cols[j].innerText);
+        
+        csv.push(row.join(","));        
+    }
+
+    // Download CSV file
+    downloadCSV(csv.join("\n"), filename);
+}
+</script>
+</body>
+</html>

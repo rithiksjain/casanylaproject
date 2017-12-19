@@ -58,6 +58,7 @@ def main(global_config, **settings):
 	config.add_route('editclient','/editclient')
 	config.add_route('subclient','/subclient')
 	config.add_route('addslide','/addslide')
+	config.add_route('getprice','/getprice')
 	config.add_route('saveslide','/saveslide')
 	config.add_route('delete_ele','/delete')
 	config.add_route('viewlist','/viewlist')

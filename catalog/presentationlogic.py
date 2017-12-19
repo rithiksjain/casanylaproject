@@ -188,7 +188,7 @@ def saveslide(request):
 				cursor.execute(sql1)
 				resp_dict['block_id']=block_id
 			else:
-				if((id_cat!=0) and (id_cat!=1)):
+				if((id_cat!=0) and (id_cat!=-1)):
 					sql2="INSERT INTO slide_elements (s_id,e_id, position_x, position_y, object_length, object_breadth) values (%s,%s,%s,%s,%s,%s)"
 					cursor.execute(sql2,(int(slide_id),int(id_cat),int(pos_x),int(pos_y),int(obj_len),int(obj_wid)))
 					sql3="SELECT LAST_INSERT_ID()";
@@ -196,7 +196,7 @@ def saveslide(request):
 					idblock=cursor.fetchall()
 					id_block=idblock[0]['LAST_INSERT_ID()']
 					resp_dict['block_id']=id_block
-				elif(id_cat==1):
+				elif(id_cat==-1):
 					sql2="INSERT INTO slide_elements (s_id,e_id,e_desc, position_x, position_y, object_length, object_breadth) values (%s,%s,%s,%s,%s,%s,%s)"
 					cursor.execute(sql2,(int(slide_id),int(id_cat),desc,int(pos_x),int(pos_y),int(obj_len),int(obj_wid)))
 					sql3="SELECT LAST_INSERT_ID()";
@@ -284,3 +284,23 @@ def deleteslide():
 	finally:
 		connection.close()
 '''
+
+def getprice_quote(request):
+	pr_id=request.params['pr_id']
+	print(pr_id)
+	from catalog.connection_py import connection as conn
+	conn=conn()
+	s = conn.connect()
+	connection=s["connection"]
+	try:
+		with connection.cursor() as cursor:
+			sql="select c.ItemName, ca.CategoryName, v.`Quotation(Exc Taxes)` from  Presentation p inner join slide_elements s on p.s_id=s.s_id and s.flag=0 inner join Catalog c  on c.idCatalog=s.e_id inner join Category ca on ca.idCategory=c.idCategory left join VendorPieceQuotation v on c.idCatalog=v.idCatalog where p.pr_id={pr_id};".format(pr_id=int(pr_id)) 
+			cursor.execute(sql)
+			res=cursor.fetchall()
+			print(res)
+		connection.commit()
+	except Exception as e:
+		print(e)
+	finally:
+		connection.close()
+	return res

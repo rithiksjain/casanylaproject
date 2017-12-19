@@ -300,7 +300,7 @@ $.each(arr,function(i)
     else
     {
       dict["url"]="";
-      dict["idcat"]=1;
+      dict["idcat"]=-1;
     }
 
     if(dict["idcat"]!=0)
