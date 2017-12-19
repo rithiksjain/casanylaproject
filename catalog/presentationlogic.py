@@ -287,20 +287,22 @@ def deleteslide():
 
 def getprice_quote(request):
 	pr_id=request.params['pr_id']
-	print(pr_id)
 	from catalog.connection_py import connection as conn
 	conn=conn()
 	s = conn.connect()
 	connection=s["connection"]
+	sum_val=0
 	try:
 		with connection.cursor() as cursor:
-			sql="select c.ItemName, ca.CategoryName, v.`Quotation(Exc Taxes)` from  Presentation p inner join slide_elements s on p.s_id=s.s_id and s.flag=0 inner join Catalog c  on c.idCatalog=s.e_id inner join Category ca on ca.idCategory=c.idCategory left join VendorPieceQuotation v on c.idCatalog=v.idCatalog where p.pr_id={pr_id};".format(pr_id=int(pr_id)) 
+			sql="select c.ItemName, ca.CategoryName, coalesce(v.`Quotation(Exc Taxes)`,0) as `Quotation(Exc Taxes)` from  Presentation p inner join slide_elements s on p.s_id=s.s_id and s.flag=0 inner join Catalog c  on c.idCatalog=s.e_id inner join Category ca on ca.idCategory=c.idCategory left join VendorPieceQuotation v on c.idCatalog=v.idCatalog where p.pr_id={pr_id};".format(pr_id=int(pr_id)) 
 			cursor.execute(sql)
 			res=cursor.fetchall()
-			print(res)
-		connection.commit()
+			if res:
+				for i in res:
+					sum_val+=int(i["Quotation(Exc Taxes)"])
+		# connection.commit()
 	except Exception as e:
 		print(e)
 	finally:
 		connection.close()
-	return res
+	return dict(price = res,sum_val=sum_val)
