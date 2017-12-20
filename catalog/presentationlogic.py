@@ -2,6 +2,8 @@ import pymysql.cursors
 from pyramid.request import Request
 from pyramid.security import unauthenticated_userid
 from pyramid.httpexceptions import HTTPFound
+from catalog.connection_py import connection as conn
+conn=conn()
 
 def is_loggedin(is_loggedin_flag=0):
 	def deco_func(original):
@@ -29,9 +31,8 @@ def addproject(request):
 	style = request.params['s_name']
 	apartment = request.params['a_name']
 	client = request.params['c_name']
-	from catalog.connection_py import connection as conn
 	s_id_list=list()
-	conn=conn()
+	
 	s = conn.connect()
 	connection=s["connection"]
 	try:
@@ -53,8 +54,6 @@ def addproject(request):
 	return project_id
 
 def local_connector():
-	from catalog.connection_py import connection as conn
-	conn=conn()
 	resp = dict(status=True,con='')
 	
 	s = conn.connect()
@@ -88,9 +87,7 @@ def local_connector():
 # 	return resp
 
 def get_all_slides_id(p_id):
-	from catalog.connection_py import connection as conn
 	s_id_list=list()
-	conn=conn()
 	s = conn.connect()
 	resp = dict(status=True,s_id=s_id_list,pr_id=p_id,p_name="")
 	if not s["status"]:
@@ -128,12 +125,8 @@ def addslide(request):
 	resp_dict=dict(status=True)
 	id_p=request.params['id']
 	id_slide=[]
-	connection = pymysql.connect(host='127.0.0.1',
-							 user='root',
-							 password='root',
-							 db='Pieces',
-							 charset='utf8mb4',
-							 cursorclass=pymysql.cursors.DictCursor)
+	s = conn.connect()
+	connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
 			sql="INSERT INTO Presentation (pr_id) values(%s)"
@@ -169,12 +162,8 @@ def saveslide(request):
 	block_id=request.params['id']
 	#print("{},{},{},{},{},{},{},{}".format(slide_id,id_cat,desc,pos_x,pos_y,obj_len,obj_wid,block_id))
 	id_list=[]
-	connection = pymysql.connect(host='127.0.0.1',
-							 user='root',
-							 password='root',
-							 db='Pieces',
-							 charset='utf8mb4',
-							 cursorclass=pymysql.cursors.DictCursor)
+	s = conn.connect()
+	connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
 			sql="SELECT id from slide_elements where flag=0;"
@@ -228,19 +217,15 @@ def editslide():
 	pos_y=request.params['pos_x']
 	obj_len=request.params['height']
 	obj_wid=request.params['width']
-	connection = pymysql.connect(host='127.0.0.1',
-							 user='root',
-							 password='root',
-							 db='Pieces',
-							 charset='utf8mb4',
-							 cursorclass=pymysql.cursors.DictCursor)
+	s = conn.connect()
+	connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
 			sql="UPDATE slide_elements SET position_x=%d, position_y=%d, object_length=%d, object_breadth=%d where s_id=%d"
 			cursor.execute(sql,(int(pos_x),int(pos_y),int(obj_len),int(obj_wid),int(slide_id)))
 		connection.commit()
-	except NameError:
-		print('An exception')
+	except Exception as e:
+		print(e)
 	finally:
 		connection.close()
 
@@ -248,12 +233,8 @@ def delete_element(request):
 	resp_dict=dict(status=True)
 	id=request.params['id']
 	print(id)
-	connection = pymysql.connect(host='127.0.0.1',
-							 user='root',
-							 password='root',
-							 db='Pieces',
-							 charset='utf8mb4',
-							 cursorclass=pymysql.cursors.DictCursor)
+	s = conn.connect()
+	connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
 			sql="UPDATE slide_elements SET flag=1 where id=%d"%(int(id))
@@ -287,8 +268,7 @@ def deleteslide():
 
 def getprice_quote(request):
 	pr_id=request.params['pr_id']
-	from catalog.connection_py import connection as conn
-	conn=conn()
+	
 	s = conn.connect()
 	connection=s["connection"]
 	sum_val=0

@@ -9,6 +9,7 @@ from pyramid.view import render_view_to_response
 from pyramid.request import Request
 from catalog.presentationlogic import *
 from pyramid.httpexceptions import HTTPFound
+from catalog.connection_py import connection as conn
 import tempfile
 import pymysql.cursors
 import ast
@@ -22,7 +23,7 @@ from pyramid.security import (
 	forget,
 	unauthenticated_userid,
 )
-
+conn=conn()
 src_dir = "catalog/catalog/images"
 dst_dir = "catalog/catalog/listimages"
 dst_dir1 = "catalog/catalog/listimages/*"
@@ -97,8 +98,6 @@ def login(request,is_loggedin):
 	if request.method=="POST":
 		name=request.params['uname']
 		password=request.params['password']
-		from catalog.connection_py import connection as conn
-		conn=conn()
 		s = conn.connect()
 		connection=s["connection"]
 		try:
@@ -136,7 +135,6 @@ def logout(request):
 @view_config(route_name='addpre')
 @is_loggedin()
 def addpre(request):
-	from pyramid.httpexceptions import HTTPFound
 	id1=addproject(request)
 	url=request.application_url+'/presentation/'+str(id1)
 	return Response(status_int=302, location=url)
@@ -151,8 +149,6 @@ def clientdet(request):
 @is_loggedin()
 def editclient(request):
 	pr_id=request.params['prid']
-	from catalog.connection_py import connection as conn
-	conn=conn()
 	s = conn.connect()
 	connection=s["connection"]
 	try:
@@ -180,8 +176,6 @@ def subclient(request):
 	a_name = request.params['a_name']
 	s_name = request.params['s_name']
 	c_name = request.params['c_name']
-	from catalog.connection_py import connection as conn
-	conn=conn()
 	s = conn.connect()
 	connection=s["connection"]
 	try:
@@ -261,19 +255,15 @@ def createlist(request):
 def itemadded(request):
 	listid=request.params['idlist']
 	catalogid=request.params['id']
-	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+	s = conn.connect()
+	connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
 			sql="INSERT INTO `ListItems` (`idList`,`idCatalog`) VALUES (%s,%s)"
 			cursor.execute(sql, (listid,catalogid))
 		connection.commit()
-	except NameError:
-		print('An exception')
+	except Exception as e:
+		print(e)
 	finally:
 		connection.close()
 	request.session.pop_flash()
@@ -295,13 +285,8 @@ def presentation(request,is_loggedin):
 @view_config(route_name='catalog')
 @is_loggedin()
 def catalog(request):
-
-	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+	s = conn.connect()
+	connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
 			sql="SELECT * FROM `Category`"
@@ -321,23 +306,18 @@ def catalog(request):
 				item1.append(item)
 
 		connection.commit()
-	except NameError:
-		print('An exception')
+	except Exception as e:
+		print(e)
 	finally:
 		connection.close()
-
 	return render_to_response('templates/catalog.jinja2',{'cat1':cat1,'item1':item1},request=request)
 
 
 @view_config(route_name='quotation')
 @is_loggedin()
 def quotation(request):
-	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+	s = conn.connect()
+	connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
 			sql="SELECT * FROM `Vendor`"
@@ -356,8 +336,8 @@ def quotation(request):
 				name={'id':s['idCatalog'], 'name':s['ItemName']}
 				name1.append(name)
 		connection.commit()
-	except NameError:
-		print('An exception')
+	except Exception as e:
+		print(e)
 	finally:
 		connection.close()
 	return render_to_response('templates/vendorpiece.jinja2',{'ven1':ven1,'name1':name1},request=request)
@@ -367,12 +347,8 @@ def quotation(request):
 def quotation(request):
 	itemid=request.params['id']
 	nameitem=request.params['name']
-	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+	s = conn.connect()
+	connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
 			sql="SELECT * FROM `Vendor`"
@@ -387,8 +363,8 @@ def quotation(request):
 			res=cursor.fetchall()
 			sku=res[0]['SKU']
 		connection.commit()
-	except NameError:
-		print('An exception')
+	except Exception as e:
+		print(e)
 	finally:
 		connection.close()
 	return render_to_response('templates/addquote.jinja2',{'sku':sku,'itemid':itemid,'nameitem':nameitem,'ven1':ven1},request=request)
@@ -396,14 +372,9 @@ def quotation(request):
 @view_config(route_name='itemfetch')
 @is_loggedin()
 def itemfetch(request):
-
 	userid=request.params['id']
-	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+	s = conn.connect()
+	connection=s["connection"]
 	typename=[]
 	catname=[]
 	try:
@@ -430,8 +401,8 @@ def itemfetch(request):
 				catname.append(c['CategoryName'])
 			catname1=[str(i) for i in catname]
 		connection.commit()
-	except NameError:
-			print('An exception')
+	except Exception as e:
+			print(e)
 	finally:
 		connection.close()
 	return render_to_response('templates/itemfetch.jinja2',{'userid':userid,'item':item,'typename':typename1,'catname':catname1},request=request)
@@ -442,12 +413,8 @@ def itemdetails(request):
 	idcat=request.params['id']
 	userid=request.params['userid']
 	listname=[]
-	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+	s = conn.connect()
+	connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
 			details=[]
@@ -484,8 +451,8 @@ def itemdetails(request):
 
 			details={'categoryname':result4[0]['CategoryName'],'itemtypename':result4[0]['ItemTypeName'],'idcat':idcat,'itemdesc':result1[0]['ItemDescription'],'itemname':result1[0]['ItemName'],'width':result1[0]['Width(inch)'],'depth':result1[0]['Depth(inch)'],'height':result1[0]['Height(inch)'],'remarks':result1[0]['Remarks'],'url':result2[0]['URL']}		
 		connection.commit()	
-	except NameError:
-		print('An exception')
+	except Exception as e:
+		print(e)
 	finally:
 		connection.close()
 	return render_to_response('templates/itemdetailsnew.jinja2',{'userid':userid,'details':details,'detail':detail,'listname':listname},request=request)
@@ -495,12 +462,8 @@ def itemdetails(request):
 def editdetails(request):
 	details=request.params['det']
 	details1 = ast.literal_eval(details)
-	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+	s = conn.connect()
+	connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
 			sql1="SELECT * from `ItemType`"
@@ -520,8 +483,8 @@ def editdetails(request):
 				catname={'id':c['idCategory'], 'name':c['CategoryName']}
 				catname1.append(catname)
 		connection.commit()
-	except NameError:
-			print('An exception')
+	except Exception as e:
+			print(e)
 	finally:
 		connection.close()
 	return render_to_response('templates/edititem.jinja2',{'details1':details1,'typename':typename1,'catname':catname1},request=request)
@@ -541,12 +504,8 @@ def search(request):
 	res2=[]
 	search=request.params['search']
 	words=search.split()
-	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+	s = conn.connect()
+	connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
 			ItemStrings=["ItemName like '%"+x+"%' or ItemDescription like '%"+x+"%'" for x in words]
@@ -564,6 +523,8 @@ def search(request):
 				item1={'idcat':c['idCatalog'],'itemtypename':c['ItemTypeName'],'url':c['URL'] , 'itemname':c['ItemName'], 'catname':c['CategoryName']}
 				item4.append(item1)
 		connection.commit()
+	except Exception as e:
+		print(e)
 	finally:
 		connection.close()
 	return render_to_response('templates/itemfetch.jinja2',{'item':item4},request=request)
@@ -572,12 +533,9 @@ def search(request):
 @is_loggedin()
 def viewlist(request):
 	userid=request.params['id']
-	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+
+	s = conn.connect()
+	connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
 			sql="SELECT ListName FROM List where idUser='%s'" %(userid)
@@ -589,8 +547,8 @@ def viewlist(request):
 				namelist.append(namelist1)
 			namelist2=[str(i) for i in namelist]
 		connection.commit()
-	except NameError:
-		print('An exception')
+	except Exception as e:
+		print(e)
 	finally:
 		connection.close()
 	return render_to_response('templates/viewlist.jinja2',{'namelist':namelist2,'userid':userid},request=request)
@@ -599,12 +557,8 @@ def viewlist(request):
 @is_loggedin()
 def viewpresentation(request):
 	projectname=[]
-	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+	s = conn.connect()
+	connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
 			sql="SELECT id,presentation_name from presentation_project"
@@ -615,27 +569,21 @@ def viewpresentation(request):
 			projectname1=[str(i) for i in projectname]
 			projectname1=[x for x in projectname1 if x!='None']
 		connection.commit()
-	except NameError:
-		print('An exception')
+	except Exception as e:
+		print(e)
 	finally:
 		connection.close()
 	return render_to_response('templates/viewproject.jinja2',{'name':projectname1},request=request)
 
-
-
 @view_config(route_name='filter')
 @is_loggedin()
 def filter(request):
-	itemname=request.params['iditem']
-	catname1=request.params['idcat']
+	itemname=request.params['item']
+	catname1=request.params['cat']
 	typename=[]
 	catname=[]
-	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+	s = conn.connect()
+	connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
 			sql1="SELECT * from `ItemType`"
@@ -652,22 +600,18 @@ def filter(request):
 				catname.append(c['CategoryName'])
 			catname2=[str(i) for i in catname]
 		connection.commit()
-	except NameError:
-		print('An exception')
+	except Exception as e:
+		print(e)
 	finally:
 		connection.close()
 
 	if((itemname!="") and (catname1=="")):
-		connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+		s = conn.connect()
+		connection=s["connection"]
 		try:
 			with connection.cursor() as cursor:
-				sql1="SELECT `idItemType` FROM `ItemType` WHERE `ItemTypeName`='%s'" %(itemname)
-				cursor.execute(sql1)
+				sql1="SELECT `idItemType` FROM `ItemType` WHERE `ItemTypeName`=%s"
+				cursor.execute(sql1,(itemname))
 				res1=cursor.fetchall()
 				iditem=res1[0]['idItemType']
 
@@ -679,23 +623,19 @@ def filter(request):
 					item1={'itemtypename':a['ItemTypeName'], 'idcat':a['idCatalog'] ,'url':a['URL'], 'itemname':a['ItemName'], 'catname':a['CategoryName']}
 					item.append(item1)
 			connection.commit()
-		except NameError:
-			print('An exception')
+		except Exception as e:
+			print(e)
 		finally:
 			connection.close()
 		return render_to_response('templates/itemfetch.jinja2',{'itemname':itemname,'item':item,'typename':typename1,'catname':catname2},request=request)
 		
 	elif((catname1!="") and (itemname=="")):
-		connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+		s = conn.connect()
+		connection=s["connection"]
 		try:
 			with connection.cursor() as cursor:
-				sql1="SELECT `idCategory` FROM `Category` WHERE `CategoryName`='%s'" %(catname1)
-				cursor.execute(sql1)
+				sql1="SELECT `idCategory` FROM `Category` WHERE `CategoryName`=%s"
+				cursor.execute(sql1,(catname1))
 				res1=cursor.fetchall()
 				idcat=res1[0]['idCategory']
 
@@ -707,28 +647,24 @@ def filter(request):
 					item1={'itemtypename':a['ItemTypeName'], 'idcat':a['idCatalog'] ,'url':a['URL'], 'itemname':a['ItemName'], 'catname':a['CategoryName']}
 					item.append(item1)
 			connection.commit()
-		except NameError:
-			print('An exception')
+		except Exception as e:
+			print(e)
 		finally:
 			connection.close()
 		return render_to_response('templates/itemfetch.jinja2',{'catname1':catname1,'item':item,'typename':typename1,'catname':catname2},request=request)
 
 	elif((catname1!="") and (itemname!="")):
-		connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+		s = conn.connect()
+		connection=s["connection"]
 		try:
 			with connection.cursor() as cursor:
-				sql1="SELECT `idItemType` FROM `ItemType` WHERE `ItemTypeName`='%s'" %(itemname)
-				cursor.execute(sql1)
+				sql1="SELECT `idItemType` FROM `ItemType` WHERE `ItemTypeName`=%s"
+				cursor.execute(sql1,(itemname))
 				res1=cursor.fetchall()
 				iditem=res1[0]['idItemType']
 
-				sql2="SELECT `idCategory` FROM `Category` WHERE `CategoryName`='%s'" %(catname1)
-				cursor.execute(sql2)
+				sql2="SELECT `idCategory` FROM `Category` WHERE `CategoryName`=%s"
+				cursor.execute(sql2,(catname1))
 				res2=cursor.fetchall()
 				idcat=res2[0]['idCategory']
 
@@ -740,8 +676,8 @@ def filter(request):
 					item1={'itemtypename':a['ItemTypeName'], 'idcat':a['idCatalog'] ,'url':a['URL'], 'itemname':a['ItemName'], 'catname':a['CategoryName']}
 					item.append(item1)
 			connection.commit()
-		except NameError:
-			print('An exception')
+		except Exception as e:
+			print(e)
 		finally:
 			connection.close()
 		return render_to_response('templates/itemfetch.jinja2',{'itemname':itemname,'catname1':catname1,'item':item,'typename':typename1,'catname':catname2},request=request)
@@ -754,20 +690,15 @@ def vendorsubmit(request):
 	name=request.params['name']
 	address=request.params['address']
 	contactno=request.params['contactno']
-	
-	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+	s = conn.connect()
+	connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
 			sql = "INSERT INTO `Vendor` (`Name`, `Address`,`Contact_No`) VALUES (%s, %s, %s)"
 			cursor.execute(sql, (name,address,contactno))
 		connection.commit()
-	except NameError:
-		print('An exception')
+	except Exception as e:
+		print(e)
 	finally:
 		connection.close()
 	request.session.pop_flash()
@@ -780,19 +711,15 @@ def submitcat(request):
 	catname=request.params['name']
 	desc=request.params['description']
 
-	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+	s = conn.connect()
+	connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
 			sql = "INSERT INTO `Category` (`CategoryName`,`CategoryDescription`) VALUES (%s,%s)"
 			cursor.execute(sql, (catname,desc))
 		connection.commit()
-	except NameError:
-	    print('An exception flew by!')
+	except Exception as e:
+	    print(e)
 	finally:
 		connection.close()
 	request.session.pop_flash()
@@ -815,12 +742,8 @@ def submitcatalog(request):
 	request.storage.save(request.POST['image'])
 	urlimage=request.storage.url(imagename)
 
-	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+	s = conn.connect()
+	connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
 			sql = "INSERT INTO `Catalog` (`idCategory`,`idItemType`,`SKU`,`ItemName`,`ItemDescription`,`Width(inch)`,`Depth(inch)`,`Height(inch)`,`Remarks`) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
@@ -834,8 +757,8 @@ def submitcatalog(request):
 			cursor.execute(sql2, (urlimage,catid1))
 
 		connection.commit()
-	except NameError:
-	    print('An exception flew by!')
+	except Exception as e:
+	    print(e)
 	finally:
 		connection.close()
 	request.session.pop_flash()
@@ -848,19 +771,15 @@ def submitmat(request):
 	name=request.params['name']
 	quantity=request.params['quantity']
 
-	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+	s = conn.connect()
+	connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
 			sql = "INSERT INTO `Material` (`Name`,`Quantity`) VALUES (%s)"
 			cursor.execute(sql, (name,quantity))
 		connection.commit()
-	except NameError:
-	    print('An exception flew by!')
+	except Exception as e:
+	    print(e)
 	finally:
 		connection.close()
 	request.session.pop_flash()
@@ -875,19 +794,15 @@ def submitfab(request):
 	cost=request.params['cost']
 	code=request.params['code']
 
-	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+	s = conn.connect()
+	connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
 			sql = "INSERT INTO `Fabric` (`Length(metre)`,`Type`,`Cost/metre`,`Fabric Code`) VALUES (%s,%s,%s,%s)"
 			cursor.execute(sql, (length,fabtype,cost,code))
 		connection.commit()
-	except NameError:
-	    print('An exception flew by!')
+	except Exception as e:
+	    print(e)
 	finally:
 		connection.close()
 	request.session.pop_flash()
@@ -900,19 +815,15 @@ def submititem(request):
 	typename=request.params['typename']
 	typedesc=request.params['typedesc']
 
-	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+	s = conn.connect()
+	connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
 			sql = "INSERT INTO `ItemType` (`ItemTypeName`,`ItemTypeDescription`) VALUES (%s,%s)"
 			cursor.execute(sql, (typename,typedesc))
 		connection.commit()
-	except NameError:
-	    print('An exception flew by!')
+	except Exception as e:
+	    print(e)
 	finally:
 		connection.close()
 	request.session.pop_flash()
@@ -935,19 +846,15 @@ def submitquot(request):
 	warranty=request.params['warranty']
 	exciseduty=request.params['exciseduty']
 
-	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+	s = conn.connect()
+	connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
 			sql = "INSERT INTO `VendorPieceQuotation` (`idVendor`,`idCatalog`,`Quotation(Exc Taxes)`,`Excise Duty`,`Taxes`,`Quotation(Inc Taxes)`,`Shipping Charges`,`Total Cost Price`,`Warranty`,`Delivery Time`,`PaymentTerms`,`Comments`) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
 			cursor.execute(sql, (idven,idcat2,quotationex,exciseduty,taxes,quotationin,shippingcharge,totalcost,warranty,delivery,payment,comments))
 		connection.commit()
-	except NameError:
-	    print('An exception flew by!')
+	except Exception as e:
+	    print(e)
 	finally:
 		connection.close()
 	request.session.pop_flash()
@@ -970,19 +877,15 @@ def submitaddquote(request):
 	warranty=request.params['warranty']
 	exciseduty=request.params['exciseduty']
 
-	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+	s = conn.connect()
+	connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
 			sql = "INSERT INTO `VendorPieceQuotation` (`idVendor`,`idCatalog`,`Quotation(Exc Taxes)`,`Excise Duty`,`Taxes`,`Quotation(Inc Taxes)`,`Shipping Charges`,`Total Cost Price`,`Warranty`,`Delivery Time`,`PaymentTerms`,`Comments`) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
 			cursor.execute(sql, (idven,idcat2,quotationex,exciseduty,taxes,quotationin,shippingcharge,totalcost,warranty,delivery,payment,comments))
 		connection.commit()
-	except NameError:
-	    print('An exception flew by!')
+	except Exception as e:
+	    print(e)
 	finally:
 		connection.close()
 	request.session.pop_flash()
@@ -1001,19 +904,15 @@ def submitedititem(request):
 	depth=request.params['depth']
 	height=request.params['height']
 	remarks=request.params['remarks']
-	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+	s = conn.connect()
+	connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
 			sql1="UPDATE `Catalog` SET `idCategory`=%s, `idItemType`=%s, `ItemName`=%s, `ItemDescription`=%s, `Width(inch)`=%s, `Depth(inch)`=%s, `Height(inch)`=%s, `Remarks`=%s where `idCatalog`=%s" 
 			cursor.execute(sql1,(idcategory,iditemtype,itemname,itemdesc,width,depth,height,remarks,idcat))
 		connection.commit()
-	except NameError:
-	    print('An exception flew by!')
+	except Exception as e:
+	    print(e)
 	finally:
 		connection.close()
 	request.session.pop_flash()
@@ -1035,20 +934,15 @@ def submiteditquote(request):
 	warranty=request.params['warranty']
 	exciseduty=request.params['exciseduty']
 
-	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
-
+	s = conn.connect()
+	connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
 			sql = "UPDATE `VendorPieceQuotation` SET `Quotation(Exc Taxes)`=%s, `Excise Duty`=%s,`Taxes`=%s,`Quotation(Inc Taxes)`=%s,`Shipping Charges`=%s,`Total Cost Price`=%s,`Warranty`=%s,`Delivery Time`=%s,`PaymentTerms`=%s,`Comments`=%s where `idVendorPieceQuotation`=%s" 
 			cursor.execute(sql,(quotationex,exciseduty,taxes,quotationin,shippingcharge,totalcost,warranty,delivery,payment,comments,idvenpiece))
 		connection.commit()
-	except NameError:
-	    print('An exception flew by!')
+	except Exception as e:
+	    print(e)
 	finally:
 		connection.close()
 	request.session.pop_flash()
@@ -1061,19 +955,16 @@ def submitaddlist(request):
 	listname=request.params['name']
 	listdesc=request.params['description']
 	userid=request.params['id']
-	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+
+	s = conn.connect()
+	connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
 			sql = "INSERT INTO `List` (`idUser`,`ListName`,`ListDescription`) VALUES (%s,%s,%s)"
 			cursor.execute(sql,(userid,listname,listdesc))
 		connection.commit()
-	except NameError:
-	    print('An exception flew by!')
+	except Exception as e:
+	    print(e)
 	finally:
 		connection.close()
 	request.session.pop_flash()
@@ -1086,12 +977,9 @@ def subviewproject(request):
 	p_name=request.params['name']
 	projectname1=[]
 	projectname=[]
-	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+
+	s = conn.connect()
+	connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
 			sql="SELECT id, apartment_name, style_name, client_name from presentation_project where presentation_name=%s"
@@ -1110,8 +998,8 @@ def subviewproject(request):
 			projectname1=[str(i) for i in projectname]
 			projectname1=[x for x in projectname1 if x!='None']
 		connection.commit()
-	except NameError:
-	    print('An exception flew by!')
+	except Exception as e:
+	    print(e)
 	finally:
 		connection.close()
 	return render_to_response('templates/viewproject.jinja2',{'p_id':p_id,'p_name':p_name,'a_name':a_name,'s_name':s_name,'c_name':c_name,'name':projectname1},request=request)
@@ -1127,12 +1015,9 @@ def subviewlist(request):
 	images=[]
 	filename=[]
 	newList=[]
-	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+	
+	s = conn.connect()
+	connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
 			sql="SELECT idList from List where ListName=%s"
@@ -1161,14 +1046,15 @@ def subviewlist(request):
 				cursor.execute(sql2)
 				res2=cursor.fetchall()
 				res3.extend(res2)
+
 			for c in res3:
 				item1={'idcat':c['idCatalog'],'itemtypename':c['ItemTypeName'],'url':c['URL'] , 'itemname':c['ItemName'], 'catname':c['CategoryName']}
 				item.append(item1)
 				images1=[c['URL']]
 				images.extend(images1)
 		connection.commit()
-	except NameError:
-	    print('An exception flew by!')
+	except Exception as e:
+	    print(e)
 	finally:
 		connection.close()
 	return render_to_response('templates/viewlist.jinja2',{'listname':listname,'item':item,'namelist':namelist2,'userid':userid},request=request)
@@ -1181,12 +1067,9 @@ def download(request):
 	images=[]
 	listid=[]
 	ids=[]
-	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+	
+	s = conn.connect()
+	connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
 			sql6="SELECT idList from List where ListName=%s"
@@ -1209,9 +1092,7 @@ def download(request):
 					images.extend(images1)
 			for i in images:
 				newList.append(i.split("/")[-1])
-			src_dir = "/home/rithik/catalog/catalog/images"
-			dst_dir = "/home/rithik/catalog/catalog/listimages"
-			dst_dir1 = "/home/rithik/catalog/catalog/listimages/*"
+			
 			r = glob.glob(dst_dir1)
 			for i in r:
 				os.remove(i)
@@ -1222,7 +1103,7 @@ def download(request):
 		fp = tempfile.NamedTemporaryFile('w+b', dir=src_dir, delete=True)
 		compression=zipfile.ZIP_DEFLATED
 		zf = zipfile.ZipFile(fp, mode='w')
-		for folder,subfolder,files in os.walk('/home/rithik/catalog/catalog/listimages'):
+		for folder,subfolder,files in os.walk('catalog/catalog/listimages'):
 			for file in files:
 				zf.write(os.path.join(folder, file),file,compress_type=compression)
 		zf.close()
@@ -1230,8 +1111,8 @@ def download(request):
 		response = request.response
 		response.content_type = 'application/zip'
 		response.app_iter = FileIter(fp)
-	except NameError:
-	    print('An exception flew by!')
+	except Exception as e:
+	    print(e)
 	finally:
 		connection.close()
 	return response
@@ -1270,12 +1151,9 @@ def uploadimage(request):
 def slide(request):
 	pid=request.matchdict['p_id']
 	sid=request.matchdict['s_id']
-	connection = pymysql.connect(host='127.0.0.1',
-                             user='root',
-                             password='root',
-                             db='Pieces',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+
+	s = conn.connect()
+	connection=s["connection"]
 	resp_text=list()
 	resp_url=list()
 	slides=list()
@@ -1286,10 +1164,9 @@ def slide(request):
 				sql2="select p.s_id,p.pr_id,a.id,b.URL,a.temp_url,a.position_x,a.position_y,a.object_length,a.object_breadth,a.e_desc,a.e_id from Presentation p left join slide_elements a on p.s_id=a.s_id and p.flag=0 and a.flag=0 left join Images b on a.e_id=b.idCatalog where a.s_id={s_id} and p.pr_id={p_id}  order by p.s_id;".format(s_id=int(sid),p_id=int(pid))
 			else:
 				sql2="select p.s_id,p.pr_id,a.id,b.URL,a.temp_url,a.position_x,a.position_y,a.object_length,a.object_breadth,a.e_desc,a.e_id from Presentation p left join slide_elements a on p.s_id=a.s_id and p.flag=0 and a.flag=0 left join Images b on a.e_id=b.idCatalog where p.pr_id={p_id}  order by p.s_id;".format(p_id=int(pid))
-			# print(sql2)
 			cursor.execute(sql2)
 			res=cursor.fetchall()
-		# required_fields=("URL","temp_url","s_id","e_id","position_x","position_y","object_length","object_breadth","id")
+
 		p_s_id=0
 		for i in res:
 			c_s_id=int(i["s_id"])
@@ -1299,7 +1176,6 @@ def slide(request):
 				else:
 					resp_text.append(i)
 			if c_s_id!=p_s_id:
-				# s = dict(s_id=c_s_id,p_id=i["p_id"])#p_id = page id ,s_id=slide id
 				s=c_s_id
 				slides.append(s)
 				p_s_id=c_s_id
@@ -1310,4 +1186,3 @@ def slide(request):
 	finally:
 		connection.close()
 	return resp
-	
