@@ -118,7 +118,7 @@ def get_all_slides_id(p_id):
 		resp["status"]=False
 	finally:
 		connection.close()
-	print(resp)
+	#print(resp)
 	return resp
 
 def addslide(request):

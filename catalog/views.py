@@ -280,6 +280,7 @@ def presentation(request,is_loggedin):
 		return dict(status=False,s_id=[],is_loggedin=is_loggedin)
 	resp = get_all_slides_id(p_id)
 	resp.update({'is_loggedin':is_loggedin})
+	print(resp)
 	return resp
 
 @view_config(route_name='catalog')
@@ -1103,7 +1104,7 @@ def download(request):
 		fp = tempfile.NamedTemporaryFile('w+b', dir=src_dir, delete=True)
 		compression=zipfile.ZIP_DEFLATED
 		zf = zipfile.ZipFile(fp, mode='w')
-		for folder,subfolder,files in os.walk('catalog/catalog/listimages'):
+		for folder,subfolder,files in os.walk(dst_dir):
 			for file in files:
 				zf.write(os.path.join(folder, file),file,compress_type=compression)
 		zf.close()
@@ -1147,7 +1148,7 @@ def uploadimage(request):
 	return render_to_response('templates/imgdisplay.html',{'url':urlimage},request=request)
 
 @view_config(route_name='slide', renderer='json')
-@is_loggedin()
+#@is_loggedin()
 def slide(request):
 	pid=request.matchdict['p_id']
 	sid=request.matchdict['s_id']
