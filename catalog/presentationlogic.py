@@ -269,13 +269,13 @@ def deleteslide():
 def getprice_quote(request):
 	pr_id=request.params['pr_id']
 	cat_name=[]
+	sum_val=0
+	cost=[]
+	sum_value=0
+	total_sum={}
 
 	s = conn.connect()
 	connection=s["connection"]
-	sum_val=0
-	cost=[]
-	tmp_cost={}
-	sum_value=0
 	try:
 		with connection.cursor() as cursor:
 			sql="select c.ItemName, ca.CategoryName, coalesce(v.`Quotation(Exc Taxes)`,0) as `Quotation(Exc Taxes)` from  Presentation p inner join slide_elements s on p.s_id=s.s_id and s.flag=0 inner join Catalog c  on c.idCatalog=s.e_id inner join Category ca on ca.idCategory=c.idCategory left join VendorPieceQuotation v on c.idCatalog=v.idCatalog where p.pr_id={pr_id};".format(pr_id=int(pr_id)) 
@@ -288,32 +288,27 @@ def getprice_quote(request):
 			sql1="select CategoryName from Category"
 			cursor.execute(sql1)
 			res1=cursor.fetchall()
-			print(res1)
 			for i in res1:
 				cat_name.append(i['CategoryName'])
-
-			'''
-			for a in res:
-				for c in cat_name:
-					if(c==a['CategoryName']):
-						cost+=int(a['Quotation(Exc Taxes)'])
-			print(cost)
-			'''
+			
 			for j in cat_name:
-				print(j)
-				sql1="select ca.CategoryName,coalesce(v.`Quotation(Exc Taxes)`,0) as `Quotation(Exc Taxes)` from  Presentation p inner join slide_elements s on p.s_id=s.s_id and s.flag=0 inner join Catalog c  on c.idCatalog=s.e_id inner join Category ca on ca.idCategory=c.idCategory left join VendorPieceQuotation v on c.idCatalog=v.idCatalog where p.pr_id='%s' and ca.CategoryName='%s'"%(pr_id,j)
+				sql1="select ca.CategoryName,sum(v.`Quotation(Exc Taxes)`) as `Quotation(Exc Taxes)` from  Presentation p inner join slide_elements s on p.s_id=s.s_id and s.flag=0 inner join Catalog c  on c.idCatalog=s.e_id inner join Category ca on ca.idCategory=c.idCategory left join VendorPieceQuotation v on c.idCatalog=v.idCatalog where p.pr_id='%s' and ca.CategoryName='%s'"%(pr_id,j)
 				cursor.execute(sql1)
 				res2=cursor.fetchall()
-				cost=0
+
 				if res2:
 					for r in res2:
-						sum_value+=int(r['Quotation(Exc Taxes)'])
-						tmp_cost=(dict(j=0))
-						cost.extend(tmp_cost)
-			print(cost)
-		# connection.commit()
+						if(r['Quotation(Exc Taxes)']!=None):
+							sum_value=int(r['Quotation(Exc Taxes)'])
+							total_sum=(dict(cat_name=j,cost=sum_value))
+							cost.append(total_sum.copy())
+						else:
+							sum_value=0
+
+			total_cost=dict(price = res,sum_val = sum_val)
+		connection.commit()
 	except Exception as e:
 		print(e)
 	finally:
 		connection.close()
-	return dict(price = res,sum_val=sum_val)
+	return dict(cat_cost=cost,total_cost=total_cost)

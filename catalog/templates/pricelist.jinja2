@@ -12,20 +12,24 @@
 		<th>Category</th>
 		<th>Price</th>
 	</tr>
-	{% if price %}
-	{% for i in price %}
+    {% if total_cost %}
+	{% for i in total_cost['price'] %}
 		<tr>
 			<td>{{i['ItemName']}}</td>
 			<td>{{i['CategoryName']}}</td>
 			<td>{{i['Quotation(Exc Taxes)']}}</td>
-		</tr>
-	{% endfor %}
-	{% endif %}
-
+        </tr>
+    {% endfor %}
+    {% endif %}
+{% if cat_cost %}
+{% for j in cat_cost %}  
+<tr><td></td><td><b>Cost for {{j['cat_name']}}:</b></td>
+<td>{{j['cost']}}</td></tr>
+{% endfor %}
+{% endif %}
 <tr><td></td><td><b>Total Sum:</b></td>
-<td>{{sum_val}}</td>
+<td>{{total_cost['sum_val']}}</td>
 </tr>
-
 </table>
 <script type="text/javascript">
 	function downloadCSV(csv, filename) {
