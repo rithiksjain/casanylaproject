@@ -278,7 +278,7 @@ def getprice_quote(request):
 	connection=s["connection"]
 	try:
 		with connection.cursor() as cursor:
-			sql="select c.ItemName, ca.CategoryName, coalesce(v.`Quotation(Exc Taxes)`,0) as `Quotation(Exc Taxes)` from  Presentation p inner join slide_elements s on p.s_id=s.s_id and s.flag=0 inner join Catalog c  on c.idCatalog=s.e_id inner join Category ca on ca.idCategory=c.idCategory left join VendorPieceQuotation v on c.idCatalog=v.idCatalog where p.pr_id={pr_id};".format(pr_id=int(pr_id)) 
+			sql="select c.idCatalog, c.ItemName, ca.CategoryName, coalesce(v.`Quotation(Exc Taxes)`,0) as `Quotation(Exc Taxes)` from  Presentation p inner join slide_elements s on p.s_id=s.s_id and s.flag=0 inner join Catalog c  on c.idCatalog=s.e_id inner join Category ca on ca.idCategory=c.idCategory left join VendorPieceQuotation v on c.idCatalog=v.idCatalog where p.pr_id={pr_id};".format(pr_id=int(pr_id)) 
 			cursor.execute(sql)
 			res=cursor.fetchall()
 			if res:

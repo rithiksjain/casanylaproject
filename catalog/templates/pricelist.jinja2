@@ -3,36 +3,70 @@
 <head>
     <meta charset="utf-8">
     <title>Presentation</title>
+<style type="text/css">
+    table {
+        border-collapse: collapse;
+    }
+    table, th, td {
+        border :1px solid black;
+    }
+</style>
 </head>
 <body>
-<button onclick="exportTableToCSV('pricelist.csv')">Export HTML Table To CSV File</button>
-<table border="2" style="width: 50%;">
+<button onclick="exportAll('xls');" href="javascript://">Export Table To Excel File</button><br/>
+<br/>
+<br/>
+<table class="table" style="width: 50%;">
 	<tr>
-		<th>ItemName</th>
-		<th>Category</th>
-		<th>Price</th>
+		<th colspan="2" style="font-size: 24px;"><b>Estimate</b></th>
+        <th><img src="https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAncAAAAJDhlNzY3NWYxLTI0OTQtNDk4ZC1iNGIwLThiN2RiZDMxMjFkNg.png" style="height:60px; width:80px; padding-top: 20px;" /></th>
 	</tr>
     {% if total_cost %}
 	{% for i in total_cost['price'] %}
 		<tr>
-			<td>{{i['ItemName']}}</td>
-			<td>{{i['CategoryName']}}</td>
-			<td>{{i['Quotation(Exc Taxes)']}}</td>
+            <td><b>Category ({{i['CategoryName']}})</b></td>
+            <td></td>
+            <td></td>
         </tr>
+        <tr>
+            <td><b>Product Code</b></td>
+            <td><b>Item</b></td>
+            <td><b>Price</b></td>
+        </tr>
+        <tr>
+            <td>{{i['idCatalog']}}</td>
+            <td>{{i['ItemName']}}</td>
+            <td>{{i['Quotation(Exc Taxes)']}}</td>
+        </tr>
+        <tr></tr>
     {% endfor %}
     {% endif %}
+
 {% if cat_cost %}
 {% for j in cat_cost %}  
-<tr><td></td><td><b>Cost for {{j['cat_name']}}:</b></td>
-<td>{{j['cost']}}</td></tr>
+<tr style="background:  yellow;">
+    <td><b>Category Total for {{j['cat_name']}}</b></td>
+    <td>{{j['cost']}}</td>
+    <td></td>
+</tr>
 {% endfor %}
 {% endif %}
-<tr><td></td><td><b>Total Sum:</b></td>
-<td>{{total_cost['sum_val']}}</td>
+
+<tr style="background: orange;">
+    <td><b>Grand Total</b></td>
+    <td><b>{{total_cost['sum_val']}}</b></td>
+    <td></td>
+</tr>
+<tr>
+    <td rowspan="3" colspan="3">
+        Note: <br/>
+        All prices Exclusive of GST;to changed on actuals based on prevailing Govt rules. <br/>
+        Payment schedule: 10% for ordering, 50% at production, 40% when ready for installation.
+    </td>
 </tr>
 </table>
 <script type="text/javascript">
-	function downloadCSV(csv, filename) {
+	/*function downloadCSV(csv, filename) {
     var csvFile;
     var downloadLink;
 
@@ -74,7 +108,11 @@
 
     // Download CSV file
     downloadCSV(csv.join("\n"), filename);
-}
+}*/
 </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="templates/rejs/js/tableExport.js"></script>
+<script src="templates/rejs/js/main.js"></script>
 </body>
 </html>
